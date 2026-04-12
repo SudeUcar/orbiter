@@ -818,14 +818,14 @@ void schreier_vector::init_from_schreier(
 
 	if (f_trivial_group) {
 		svec = NEW_int(n + 1);
-		}
+	}
 	else {
 		svec = NEW_int(3 * n + 1);
-		}
+	}
 	svec[0] = n;
 	for (i = 0; i < n; i++) {
 		svec[1 + i] = point_list[i];
-		}
+	}
 	if (!f_trivial_group) {
 		for (i = 0; i < n; i++) {
 			p = point_list[i];
@@ -834,8 +834,8 @@ void schreier_vector::init_from_schreier(
 			la = S->Forest->label[j];
 			svec[1 + n + i] = pr;
 			svec[1 + 2 * n + i] = la;
-			}
 		}
+	}
 	FREE_int(point_list);
 
 	set_sv(svec, verbose_level - 1);
@@ -1108,7 +1108,7 @@ void schreier_vector::export_tree_as_layered_graph(
 	if (f_v) {
 		cout << "schreier_vector::export_tree_as_layered_graph "
 				"after LG->place" << endl;
-		}
+	}
 	for (i = 0; i <= max_depth; i++) {
 		if (f_vv) {
 			cout << "schreier_vector::export_tree_as_layered_graph "

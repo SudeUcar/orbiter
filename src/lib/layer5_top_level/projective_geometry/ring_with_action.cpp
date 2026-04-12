@@ -48,6 +48,7 @@ void ring_with_action::ring_with_action_init(
 		projective_geometry::projective_space_with_action *PA,
 		algebra::ring_theory::homogeneous_polynomial_domain *Poly_ring,
 		int verbose_level)
+// creates an induced_actions::action_on_homogeneous_polynomials
 {
 	int f_v = (verbose_level >= 1);
 

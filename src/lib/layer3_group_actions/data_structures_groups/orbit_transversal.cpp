@@ -30,7 +30,7 @@ orbit_transversal::~orbit_transversal()
 	Record_death();
 	if (Reps) {
 		FREE_OBJECTS(Reps);
-		}
+	}
 }
 
 void orbit_transversal::init_from_schreier(

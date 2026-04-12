@@ -386,6 +386,8 @@ public:
 	int *Elt_phi; // [Classifier->PA->A->elt_size_in_int]
 	// Elt_phi is the isomorphism to the equation in the classification
 	// = gamma_inv * delta
+	int *Elt_phi_inv; // [Classifier->PA->A->elt_size_in_int]
+	// Elt_phi inverse
 	int *eqn2; // [Classifier->Poly_ring->get_nb_monomials()]
 		// used by canonical_form_of_variety::find_equation
 

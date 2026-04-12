@@ -280,7 +280,7 @@ action *induced_action::induced_action_by_representation_on_conic(
 	if (f_v) {
 		cout << "induced_action::induced_action_by_representation_on_conic "
 				"f_induce_action=" << f_induce_action << endl;
-		}
+	}
 
 	action *A;
 

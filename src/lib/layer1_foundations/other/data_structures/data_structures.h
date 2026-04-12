@@ -1682,6 +1682,7 @@ public:
 			int i, long int a);
 	void print();
 	void print_table();
+	std::string stringify();
 	void print_table_tex(
 			std::ostream &ost);
 	void print_table_latex_simple(

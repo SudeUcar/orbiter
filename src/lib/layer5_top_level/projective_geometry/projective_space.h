@@ -269,6 +269,7 @@ public:
 			projective_geometry::projective_space_with_action *PA,
 			algebra::ring_theory::homogeneous_polynomial_domain *Poly_ring,
 			int verbose_level);
+	// creates an induced_actions::action_on_homogeneous_polynomials
 	void lift_mapping(
 			int *gamma, int *Elt, int verbose_level);
 	// turn the permutation gamma into a semilinear mapping

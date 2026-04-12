@@ -421,8 +421,10 @@ public:
 			int verbose_level);
 	void do_conjugacy_classes_Sym_n(
 			int n, int verbose_level);
+#if 0
 	void do_conjugacy_classes_Sym_n_file(
 			int n, int verbose_level);
+#endif
 	void do_Delandtsheer_Doyen(
 			layer5_applications::apps_combinatorics::delandtsheer_doyen_description *Descr,
 			int verbose_level);

@@ -486,6 +486,46 @@ void orbits_activity::do_report(
 
 	}
 
+	else if (OC->f_has_arcs) {
+
+		if (f_v) {
+			cout << "orbits_activity::do_report f_has_arcs" << endl;
+		}
+
+
+
+		poset_classification::poset_classification_report_options *report_options;
+
+		if (Descr->f_report_options) {
+			report_options = Get_poset_classification_report_options(Descr->report_options_label);
+		}
+		else {
+			cout << "orbits_activity::do_report please use -report_options" << endl;
+			exit(1);
+		}
+
+
+		if (f_v) {
+			cout << "orbits_activity::do_report "
+					"before OC->Arc_generator->report_easy" << endl;
+		}
+		OC->Arc_generator->report_easy(
+				options,
+				report_options,
+				verbose_level - 1);
+		if (f_v) {
+			cout << "orbits_activity::do_report "
+					"after OC->Arc_generator->report_easy" << endl;
+		}
+
+
+		if (!Descr->f_report_options) {
+			FREE_OBJECT(report_options);
+		}
+
+	}
+
+
 	else if (OC->f_has_semifields) {
 
 		if (f_v) {

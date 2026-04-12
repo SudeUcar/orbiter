@@ -30,10 +30,10 @@ action_on_k_subsets::~action_on_k_subsets()
 	Record_death();
 	if (set1) {
 		FREE_int(set1);
-		}
+	}
 	if (set2) {
 		FREE_int(set2);
-		}
+	}
 }
 
 void action_on_k_subsets::init(

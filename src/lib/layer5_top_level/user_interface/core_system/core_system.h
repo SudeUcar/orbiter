@@ -35,28 +35,8 @@ public:
 
 	orbiter_top_level_session();
 	~orbiter_top_level_session();
-#if 0
-	void execute_command_line(
-			int argc, const char **argv, int verbose_level);
-	// called from do_orbiter_session in the front-end orbiter.cpp
-	int startup_and_read_arguments(
-			int argc,
-			std::string *argv, int i0, int verbose_level);
-	void handle_everything(
-			int argc, std::string *Argv, int i, int verbose_level);
-	// called from execute_command_line
-#endif
 	void finish_session(
 			int verbose_level);
-#if 0
-	void parse_and_execute(
-			int argc, std::string *Argv, int i, int verbose_level);
-	// called from handle_everything
-	void parse(
-			int argc, std::string *Argv, int &i,
-			std::vector<void * > &program, int verbose_level);
-	// called from parse_and_execute
-#endif
 	void *get_object(
 			int idx);
 	layer1_foundations::other::orbiter_kernel_system::symbol_table_object_type get_object_type(

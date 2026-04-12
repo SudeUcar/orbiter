@@ -44,22 +44,22 @@ union_find_on_k_subsets::~union_find_on_k_subsets()
 	Record_death();
 	if (Ar) {
 		FREE_OBJECT(Ar);
-		}
+	}
 	if (Ar_perm) {
 		FREE_OBJECT(Ar_perm);
-		}
+	}
 	if (Ark) {
 		FREE_OBJECT(Ark);
-		}
+	}
 	if (Arkr) {
 		FREE_OBJECT(Arkr);
-		}
+	}
 	if (gens_perm) {
 		FREE_OBJECT(gens_perm);
-		}
+	}
 	if (UF) {
 		FREE_OBJECT(UF);
-		}
+	}
 }
 
 void union_find_on_k_subsets::init(
@@ -294,10 +294,10 @@ int union_find_on_k_subsets::is_minimal(
 	rk0 = UF->ancestor(rk);
 	if (rk0 == rk) {
 		return true;
-		}
+	}
 	else {
 		return false;
-		}
+	}
 }
 
 

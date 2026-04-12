@@ -367,18 +367,28 @@ void variety_object_with_action::apply_transformation_to_self(
 
 	Variety_object->Point_sets->sort();
 
-	if (f_v) {
-		cout << "variety_object_with_action::apply_transformation_to_self "
-				"before AG.set_of_sets_copy_and_apply, Line_sets" << endl;
+
+	if (old_Variety_object->Line_sets) {
+		if (f_v) {
+			cout << "variety_object_with_action::apply_transformation_to_self "
+					"before AG.set_of_sets_copy_and_apply, Line_sets" << endl;
+		}
+		Variety_object->Line_sets = AG.set_of_sets_copy_and_apply(
+				A_on_lines,
+				Elt,
+				old_Variety_object->Line_sets,
+				verbose_level - 2);
+		if (f_v) {
+			cout << "variety_object_with_action::apply_transformation_to_self "
+					"after AG.set_of_sets_copy_and_apply, Line_sets" << endl;
+		}
 	}
-	Variety_object->Line_sets = AG.set_of_sets_copy_and_apply(
-			A_on_lines,
-			Elt,
-			old_Variety_object->Line_sets,
-			verbose_level - 2);
-	if (f_v) {
-		cout << "variety_object_with_action::apply_transformation_to_self "
-				"after AG.set_of_sets_copy_and_apply, Line_sets" << endl;
+	else {
+		if (f_v) {
+			cout << "variety_object_with_action::apply_transformation_to_self "
+					"no lines given, so not transforming lines." << endl;
+		}
+
 	}
 
 	// We are not sorting the lines because the lines are often in the Schlaefli ordering

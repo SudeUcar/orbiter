@@ -155,7 +155,12 @@ public:
 		// compute the incidence matrix of tangent lines 
 		// versus candidate points
 		// extended by external lines versus candidate points
-	void report(
+	void report_easy(
+			std::string &options,
+			poset_classification::poset_classification_report_options *report_options,
+			int verbose_level);
+	void report_with_isomorph(
+			std::string &options,
 			layer4_classification::isomorph::isomorph &Iso,
 			int verbose_level);
 	void report_do_the_work(

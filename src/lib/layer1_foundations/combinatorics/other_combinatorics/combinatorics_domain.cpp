@@ -312,6 +312,7 @@ int combinatorics_domain::int_vec_first_regular_word(
 #endif
 }
 
+
 int combinatorics_domain::int_vec_next_regular_word(
 		int *v, int len, int q)
 {
@@ -343,6 +344,37 @@ int combinatorics_domain::int_vec_next_regular_word(
 
 #endif
 }
+
+
+void combinatorics_domain::all_regular_words(
+		int len, int q, int verbose_level)
+{
+	geometry::other_geometry::geometry_global Gg;
+	layer1_foundations::algebra::number_theory::number_theory_domain NT;
+
+	int *v;
+	long int a, Q, cnt;
+
+	v = NEW_int(len);
+
+	Q = NT.i_power_j_safe(
+			q, len);
+	a = Gg.AG_element_rank(q, v, 1, len);
+	cnt = 0;
+	//cout << "int_vec_next_regular_word current rank = " << a << endl;
+	for (a = 0; a < Q; a++) {
+		Gg.AG_element_unrank(q, v, 1, len, a);
+		//cout << "int_vec_next_regular_word testing ";
+		//int_vec_print(cout, v, len);
+		//cout << endl;
+		if (int_vec_is_regular_word(v, len, q)) {
+			cnt++;
+		}
+	}
+	cout << "Number of regular words of length " << len << " over an alphabet of size " << q << " is " << cnt << endl;
+	FREE_int(v);
+}
+
 
 void combinatorics_domain::int_vec_splice(
 		int *v, int *w, int len, int p)
@@ -3124,6 +3156,209 @@ void combinatorics_domain::make_decomposition_diagram(
 	}
 }
 
+
+void combinatorics_domain::conjugacy_classes_Sym_n_file(
+		int n, int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "combinatorics_domain::conjugacy_classes_Sym_n_file" << endl;
+	}
+
+	int i;
+	int cnt;
+	algebra::ring_theory::longinteger_object class_size, centralizer_order, S, F, A;
+	algebra::ring_theory::longinteger_domain D;
+	combinatorics::special_functions::permutations Perm;
+
+
+	cnt = count_partitions(n);
+
+	int *Part;
+	int *part_list;
+	int *class_rep;
+
+	Part = NEW_int(cnt * n);
+	part_list = NEW_int(n);
+	class_rep = NEW_int(n);
+
+
+	make_partitions(n, Part, cnt);
+
+	D.factorial(F, n);
+
+
+	int nb_rows;
+	int nb_cols;
+	string *Table;
+	string *Col_headings;
+
+
+	nb_rows = cnt;
+	nb_cols = 7;
+
+	Col_headings = new string[nb_cols];
+	Table = new string[nb_rows * nb_cols];
+
+	S.create(0);
+
+	Col_headings[0] = "Row";
+	Col_headings[1] = "CycleType";
+	Col_headings[2] = "CyclePartition";
+	Col_headings[3] = "ClassRepList";
+	Col_headings[4] = "CycleSetPartition";
+	Col_headings[5] = "ClassSize";
+	Col_headings[6] = "CentralizerOrder";
+
+	for (i = 0; i < cnt; i++) {
+
+		if (f_v) {
+			cout << i << " : ";
+			Int_vec_print(cout, Part + i * n, n);
+			cout << " : ";
+			cout << endl;
+		}
+
+		Table[i * nb_cols + 0] = std::to_string(i);
+
+
+		Table[i * nb_cols + 1] =  "\"" + Int_vec_stringify(Part + i * n, n) + "\"";
+
+		int j, a, l, h;
+
+		l = 0;
+		for (j = n; j > 0; j--) {
+			a = Part[i * n + j - 1];
+			for (h = 0; h < a; h++) {
+				part_list[l++] = j;
+			}
+		}
+
+		int u, u0, k;
+		u = 0;
+		for (j = n; j > 0; j--) {
+			a = Part[i * n + j - 1];
+			for (h = 0; h < a; h++) {
+				// create an j-cycle starting at u:
+				u0 = u;
+				for (k = 0; k < j - 1; k++) {
+					class_rep[u++] = u + 1;
+				}
+				class_rep[u++] = u0;
+			}
+		}
+		if (u != n) {
+			cout << "combinatorics_domain::conjugacy_classes_Sym_n_file u != n";
+			exit(1);
+		}
+
+
+		Table[i * nb_cols + 2] =  "\"" + Int_vec_stringify(part_list, l) + "\"";
+
+		Table[i * nb_cols + 3] =  "\"" + Int_vec_stringify(class_rep, n) + "\"";
+
+		size_of_conjugacy_class_in_sym_n(class_size, n, Part + i * n);
+
+		D.integral_division_exact(F, class_size, centralizer_order);
+
+
+		other::data_structures::set_of_sets *Cycles;
+
+		Perm.cycle_decomposition(
+				class_rep, n,
+				Cycles,
+				verbose_level);
+
+		Table[i * nb_cols + 4] = "\"" + Cycles->stringify() + "\"";
+
+		Table[i * nb_cols + 5] = class_size.stringify();
+		Table[i * nb_cols + 6] = centralizer_order.stringify();
+
+
+		FREE_OBJECT(Cycles);
+
+		D.add_in_place(S, class_size);
+	}
+
+	D.integral_division_exact(F, S, A);
+	if (!A.is_one()) {
+		cout << "the class sizes do not add up" << endl;
+		exit(1);
+	}
+
+
+
+#if 0
+	string fname;
+
+	fname = "classes_Sym_" + std::to_string(n) + ".csv";
+
+	{
+		ofstream fp(fname);
+
+		fp << "ROW,CYCLETYPE,CLASSSIZE" << endl;
+		//cout << "The conjugacy classes in Sym_" << n << " are:" << endl;
+		for (i = 0; i < cnt; i++) {
+			//cout << i << " : ";
+			//Int_vec_print(cout, Parts + i * n, n);
+			//cout << " : ";
+
+			fp << i;
+
+			std::string part;
+
+
+			Int_vec_create_string_with_quotes(part, Parts + i * n, n);
+
+			fp << "," << part;
+
+			C.size_of_conjugacy_class_in_sym_n(class_size, n, Parts + i * n);
+			fp << "," << class_size;
+			fp << endl;
+
+			D.add_in_place(S, class_size);
+		}
+
+		D.factorial(F, n);
+		D.integral_division_exact(F, S, A);
+		if (!A.is_one()) {
+			cout << "the class sizes do not add up" << endl;
+			exit(1);
+		}
+		cout << "The sum of the class sizes is n!" << endl;
+		fp << "END" << endl;
+	}
+#endif
+
+	string fname;
+
+	fname = "classes_Sym_" + std::to_string(n) + ".csv";
+
+	other::orbiter_kernel_system::file_io Fio;
+
+	cout << "Written file " << fname << " of size " << Fio.file_size(fname) << endl;
+
+	Fio.Csv_file_support->write_table_of_strings_with_col_headings(
+			fname,
+			nb_rows, nb_cols, Table,
+			Col_headings,
+			verbose_level);
+
+
+
+	delete [] Table;
+	delete [] Col_headings;
+	FREE_int(Part);
+	FREE_int(part_list);
+	FREE_int(class_rep);
+
+
+
+	if (f_v) {
+		cout << "combinatorics_domain::conjugacy_classes_Sym_n_file done" << endl;
+	}
+}
 
 
 

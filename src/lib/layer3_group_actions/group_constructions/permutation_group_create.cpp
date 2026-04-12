@@ -25,26 +25,26 @@ namespace group_constructions {
 permutation_group_create::permutation_group_create()
 {
 	Record_birth();
-		Descr = NULL;
+	Descr = NULL;
 
-		//std::string label;
-		//std::string label_tex;
+	//std::string label;
+	//std::string label_tex;
 
-		//initial_strong_gens = NULL;
-		A_initial = NULL;
+	//initial_strong_gens = NULL;
+	A_initial = NULL;
 
-		f_has_strong_generators = false;
-		Strong_gens = NULL;
-		A2 = NULL;
+	f_has_strong_generators = false;
+	Strong_gens = NULL;
+	A2 = NULL;
 
-		f_has_nice_gens = false;
-		nice_gens = NULL;
+	f_has_nice_gens = false;
+	nice_gens = NULL;
 }
 
 permutation_group_create::~permutation_group_create()
 {
 	Record_death();
-		Descr = NULL;
+	Descr = NULL;
 }
 
 

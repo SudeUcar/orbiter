@@ -19,7 +19,6 @@ namespace poset_classification {
 
 
 #define MAX_NODES_FOR_TREEFILE 25000
-//#define MAX_NODES_FOR_TREEFILE 6500
 
 
 pc_tree_interface::pc_tree_interface()

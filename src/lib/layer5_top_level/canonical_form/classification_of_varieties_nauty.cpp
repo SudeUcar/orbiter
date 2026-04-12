@@ -63,6 +63,7 @@ classification_of_varieties_nauty::classification_of_varieties_nauty()
 	Elt_gamma_inv = NULL;
 	Elt_delta = NULL;
 	Elt_phi = NULL;
+	Elt_phi_inv = NULL;
 	eqn2 = NULL;
 
 
@@ -124,6 +125,9 @@ classification_of_varieties_nauty::~classification_of_varieties_nauty()
 	if (Elt_phi) {
 		FREE_int(Elt_phi);
 	}
+	if (Elt_phi_inv) {
+		FREE_int(Elt_phi_inv);
+	}
 
 }
 
@@ -165,6 +169,7 @@ void classification_of_varieties_nauty::prepare_for_classification(
 	Elt_gamma_inv = NEW_int(Classifier->Ring_with_action->PA->A->elt_size_in_int);
 	Elt_delta = NEW_int(Classifier->Ring_with_action->PA->A->elt_size_in_int);
 	Elt_phi = NEW_int(Classifier->Ring_with_action->PA->A->elt_size_in_int);
+	Elt_phi_inv = NEW_int(Classifier->Ring_with_action->PA->A->elt_size_in_int);
 	eqn2 = NEW_int(Classifier->Ring_with_action->Poly_ring->get_nb_monomials());
 
 
@@ -696,10 +701,23 @@ void classification_of_varieties_nauty::handle_one_input_case(
 					Elt_phi, cout);
 
 			cout << "classification_of_varieties_nauty::handle_one_input_case "
+					"the inverse isomorphism is phi_inverse=" << endl;
+
+			A->Group_element->element_print(
+					Elt_phi_inv, cout);
+
+			cout << "classification_of_varieties_nauty::handle_one_input_case "
 					"an isomorphism is given by phi=";
 			A->Group_element->element_print_for_make_element(
 					Elt_phi, cout);
 			cout << endl;
+
+			cout << "classification_of_varieties_nauty::handle_one_input_case "
+					"the inverse is phi_inv=";
+			A->Group_element->element_print_for_make_element(
+					Elt_phi_inv, cout);
+			cout << endl;
+
 		}
 
 

@@ -54,7 +54,7 @@ void action_on_set_partitions::init(
 		cout << "action_on_set_partitions::init "
 				"universal_set_size=" << A->degree
 				<< " partition_size=" << partition_class_size << endl;
-		}
+	}
 	action_on_set_partitions::universal_set_size = A->degree;
 	action_on_set_partitions::partition_class_size = partition_class_size;
 	action_on_set_partitions::A = A;
@@ -80,7 +80,7 @@ void action_on_set_partitions::init(
 
 	if (f_v) {
 		cout << "action_on_set_partitions::init finished" << endl;
-		}
+	}
 }
 
 long int action_on_set_partitions::compute_image(
@@ -94,12 +94,12 @@ long int action_on_set_partitions::compute_image(
 	if (f_v) {
 		cout << "action_on_set_partitions::compute_image "
 				"a = " << a << endl;
-		}
+	}
 	if (a < 0 || a >= nb_set_partitions) {
 		cout << "action_on_set_partitions::compute_image "
 				"a = " << a << " out of range" << endl;
 		exit(1);
-		}
+	}
 	if (universal_set_size == 6 && partition_class_size == 2) {
 		Combi.unordered_triple_pair_unrank(a, v1[0], v1[1], v1[2],
 			v1[3], v1[4], v1[5]);
@@ -134,11 +134,11 @@ long int action_on_set_partitions::compute_image(
 		cout << "action_on_set_partitions::compute_image "
 				"b = " << b << " out of range" << endl;
 		exit(1);
-		}
+	}
 	if (f_v) {
 		cout << "action_on_set_partitions::compute_image "
 				"a = " << a << " -> " << b << endl;
-		}
+	}
 	return b;
 }
 

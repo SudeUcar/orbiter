@@ -348,7 +348,8 @@ void arc_generator::compute_starter(
 			cout << "arc_generator::compute_starter "
 					"problem_label_with_path=" << gen->get_problem_label_with_path() << endl;
 		}
-		depth = gen->poset_classification_main(t0,
+		depth = gen->poset_classification_main(
+				t0,
 			schreier_depth,
 			f_use_invariant_subset_if_available,
 			f_debug,
@@ -846,7 +847,119 @@ void arc_generator::lifting_prepare_function_new(
 }
 
 
-void arc_generator::report(
+void arc_generator::report_easy(
+		std::string &options,
+		poset_classification::poset_classification_report_options *report_options,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+	string fname;
+	other::orbiter_kernel_system::file_io Fio;
+
+	if (f_v) {
+		cout << "arc_generator::report_easy" << endl;
+	}
+	if (Descr->target_size == PA->q + 2) {
+		fname = "hyperovals_" + std::to_string(PA->q) + ".tex";
+	}
+	else {
+		fname = "arcs_" + std::to_string(PA->q)
+				+ "_" + std::to_string(Descr->target_size) + ".tex";
+	}
+
+	{
+		ofstream f(fname);
+		int f_book = true;
+		int f_title = true;
+		string title, author, extra_praeamble;
+
+
+		author = "Orbiter";
+		int f_toc = true;
+		int f_landscape = false;
+		int f_12pt = false;
+		int f_enlarged_page = true;
+		int f_pagenumbers = true;
+		other::l1_interfaces::latex_interface L;
+
+		if (Descr->target_size == PA->q + 2) {
+			title = "Hyperovals over ${\\mathbb F}_{" + std::to_string(PA->q) + "}$";
+		}
+		else {
+			title = "Arcs over  ${\\mathbb F}_{" + std::to_string(PA->q) + "}$ "
+					"of size $" + std::to_string(Descr->target_size) + "$";
+		}
+#if 0
+		cout << "Writing file " << fname << " with "
+				<< Iso.Folding->Reps->count << " arcs:" << endl;
+#endif
+
+		L.head(
+				f, f_book, f_title,
+			title, author,
+			f_toc, f_landscape, f_12pt, f_enlarged_page, f_pagenumbers,
+			extra_praeamble /* extra_praeamble */);
+
+
+
+		//layer4_classification::poset_classification::poset_classification *gen;
+
+
+		poset_classification::poset_classification_report_options Opt;
+
+		poset_classification::pc_latex_interface Pc_latex_interface;
+
+		if (f_v) {
+			cout << "arc_generator::report_easy "
+					"depth = " << gen->get_depth() << endl;
+		}
+
+		if (f_v) {
+			cout << "arc_generator::report_easy "
+					"before Pc_latex_interface.init" << endl;
+		}
+		Pc_latex_interface.init(
+				gen,
+				gen->get_depth(),
+				report_options /*poset_classification_report_options *Opt*/,
+				verbose_level);
+		if (f_v) {
+			cout << "arc_generator::report_easy "
+					"after Pc_latex_interface.init" << endl;
+		}
+
+		if (f_v) {
+			cout << "arc_generator::report_easy "
+					"before Pc_latex_interface.report" << endl;
+		}
+		Pc_latex_interface.report(verbose_level);
+		if (f_v) {
+			cout << "arc_generator::report_easy "
+					"after Pc_latex_interface.report" << endl;
+		}
+
+
+
+
+		L.foot(f);
+
+	}
+
+	if (f_v) {
+
+		cout << "arc_generator::report_easy Written file " << fname << " of size "
+				<< Fio.file_size(fname) << endl;
+	}
+
+	if (f_v) {
+		cout << "arc_generator::report_easy done" << endl;
+	}
+}
+
+
+
+void arc_generator::report_with_isomorph(
+		std::string &options,
 		layer4_classification::isomorph::isomorph &Iso,
 		int verbose_level)
 {
@@ -855,7 +968,7 @@ void arc_generator::report(
 	other::orbiter_kernel_system::file_io Fio;
 
 	if (f_v) {
-		cout << "arc_generator::report" << endl;
+		cout << "arc_generator::report_with_isomorph" << endl;
 	}
 	if (Descr->target_size == PA->q + 2) {
 		fname = "hyperovals_" + std::to_string(PA->q) + ".tex";
@@ -889,7 +1002,8 @@ void arc_generator::report(
 		}
 		cout << "Writing file " << fname << " with "
 				<< Iso.Folding->Reps->count << " arcs:" << endl;
-		L.head(f, f_book, f_title,
+		L.head(
+				f, f_book, f_title,
 			title, author,
 			f_toc, f_landscape, f_12pt, f_enlarged_page, f_pagenumbers,
 			extra_praeamble /* extra_praeamble */);
@@ -907,6 +1021,9 @@ void arc_generator::report(
 	cout << "Written file " << fname << " of size "
 			<< Fio.file_size(fname) << endl;
 
+	if (f_v) {
+		cout << "arc_generator::report_with_isomorph done" << endl;
+	}
 }
 
 void arc_generator::report_do_the_work(

@@ -11653,6 +11653,8 @@ SECTION_ORBITS_ON_SUBSETS:
 
 
 test_8_3:
+	make poset_of_subsets_under_C6
+	make orbits_on_subsets_in_action_on_pairs
 	make PG_2_2_subsets
 	make PG_3_2_subsets
 	make PGL_3_2_singer
@@ -11667,6 +11669,111 @@ test_8_3:
 	make PG_3_4_subsets
 	make PGGL_2_9_orbits
 	make PGO_5_2_on_subsets
+
+
+
+poset_of_subsets_under_C6:
+	$(ORBITER) -v 3 \
+		-orbiter_path $(ORBITER_EXE_PATH) \
+		-define Control -poset_classification_control \
+			-problem_label poset_C6 \
+			-W -depth 6 \
+		-end \
+		-define Do -draw_options -radius 150 \
+		-end \
+		-define DoA -draw_options \
+			-radius 200 -line_width 1.0 \
+			-poset_orbits_x_stretch 750 \
+			-embedded \
+			-poset_with_horizontal_lines \
+		-end \
+		-define G -permutation_group -cyclic_group 6 -end \
+		-define Orb -orbits \
+			-group G \
+			-group_action G \
+			-generators G \
+			-on_subsets 6 Control \
+		-end \
+		-define ro \
+			-poset_classification_report_options \
+				-draw_poset -type_detailed \
+			-draw_options Do \
+		-end \
+		-with Orb -do -orbits_activity \
+			-report "" \
+			-report_options ro \
+		-end \
+		-define PC_Activity -poset_classification_activity \
+			-draw_full_poset DoA \
+		-end \
+		-with Orb -do -orbits_activity \
+			-poset_classification_activity PC_Activity \
+		-end
+	$(ORBITER) -v 3 \
+		-draw_factor_poset \
+			poset_C6_poset_full_lvl_6.factor_poset \
+		-radius 50 -embedded \
+			-line_width 0.2 -x_stretch 1.4 -scale 0.5 \
+		-end
+	pdflatex poset_C6_poset_full_lvl_6_draw.tex
+	open poset_C6_poset_full_lvl_6_draw.pdf
+
+
+
+orbits_on_subsets_in_action_on_pairs:
+	$(ORBITER) -v 3 \
+		-orbiter_path $(ORBITER_EXE_PATH) \
+		-define Do -draw_options \
+			-radius 200 -embedded \
+		-end \
+		-define DoA -draw_options \
+			-radius 200 -line_width 1.0 \
+			-poset_orbits_x_stretch 750 \
+			-embedded \
+			-poset_with_horizontal_lines \
+		-end \
+		-define Control -poset_classification_control \
+			-problem_label graphs4 \
+			-depth 6 \
+			-draw_options Do \
+		-end \
+		-define G -permutation_group -symmetric_group 4 -end \
+		-define G_on_2subsets -modified_group -from G \
+			-on_k_subsets 2 \
+		-end \
+		-define Orb -orbits \
+			-group G \
+			-group_action G_on_2subsets \
+			-generators G \
+			-on_subsets 6 Control \
+		-end \
+		-define ro \
+			-poset_classification_report_options \
+				-draw_poset -type_detailed \
+				-draw_options Do \
+		-end \
+		-with Orb -do -orbits_activity \
+			-report "" \
+			-report_options ro \
+		-end \
+		-define PC_Activity -poset_classification_activity \
+			-draw_full_poset DoA \
+		-end \
+		-with Orb -do -orbits_activity \
+			-poset_classification_activity PC_Activity \
+		-end \
+		-with G_on_2subsets -do \
+		-group_theoretic_activity \
+			-stats "graphs4" \
+		-end
+	$(ORBITER) -v 3 \
+		-draw_factor_poset \
+			graphs4_poset_full_lvl_6.factor_poset \
+		-radius 50 -embedded \
+			-line_width 0.2 -x_stretch 1.4 -scale 0.5 \
+		-end
+	pdflatex graphs4_poset_full_lvl_6_draw.tex
+	open graphs4_poset_full_lvl_6_draw.pdf
 
 
 

@@ -70,6 +70,8 @@ public:
 			int *v, int len, int q);
 	int int_vec_next_regular_word(
 			int *v, int len, int q);
+	void all_regular_words(
+			int len, int q, int verbose_level);
 	void int_vec_splice(
 			int *v, int *w, int len, int p);
 	int is_subset_of(
@@ -264,6 +266,8 @@ public:
 			std::string &po_label, std::string &f_fst_label, std::string &iso_idx_label,
 			std::string &node_label1, std::string &node_label2, std::string &node_label3,
 			int verbose_level);
+	void conjugacy_classes_Sym_n_file(
+			int n, int verbose_level);
 
 
 };

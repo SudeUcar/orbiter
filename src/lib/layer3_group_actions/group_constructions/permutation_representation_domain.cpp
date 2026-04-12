@@ -132,7 +132,8 @@ void permutation_representation_domain::init_product_action(
 }
 
 	
-void permutation_representation_domain::init(int degree,
+void permutation_representation_domain::init(
+		int degree,
 		int page_length_log, int verbose_level)
 {
 	int f_v = (verbose_level >= 1);

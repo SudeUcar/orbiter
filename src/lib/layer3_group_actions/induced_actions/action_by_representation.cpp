@@ -38,13 +38,13 @@ action_by_representation::~action_by_representation()
 	Record_death();
 	if (v1) {
 		FREE_int(v1);
-		}
+	}
 	if (v2) {
 		FREE_int(v2);
-		}
+	}
 	if (v3) {
 		FREE_int(v3);
-		}
+	}
 }
 
 
@@ -92,7 +92,7 @@ long int action_by_representation::compute_image_int(
 	
 	if (f_v) {
 		cout << "action_by_representation::compute_image_int" << endl;
-		}
+	}
 	F->Projective_space_basic->PG_element_unrank_modified_lint(
 			v1, 1, dimension, a);
 	if (f_vv) {
@@ -100,21 +100,21 @@ long int action_by_representation::compute_image_int(
 				"a = " << a << " v1 = ";
 		Int_vec_print(cout, v1, dimension);
 		cout << endl;
-		}
+	}
 	
 	compute_image_int_low_level(Elt, v1, v2, verbose_level);
 	if (f_vv) {
 		cout << " v2=v1 * A=";
 		Int_vec_print(cout, v2, dimension);
 		cout << endl;
-		}
+	}
 
 	F->Projective_space_basic->PG_element_rank_modified_lint(
 			v2, 1, dimension, b, 0 /* verbose_level */);
 	if (f_v) {
 		cout << "action_by_representation::compute_image_int "
 				"done " << a << "->" << b << endl;
-		}
+	}
 	return b;
 }
 
@@ -131,13 +131,13 @@ void action_by_representation::compute_image_int_low_level(
 	if (f_v) {
 		cout << "action_by_representation::compute_image_int_low_level"
 				<< endl;
-		}
+	}
 	if (f_vv) {
 		cout << "action_by_representation::compute_image_int_low_level: "
 				"x=";
 		Int_vec_print(cout, x, dimension);
 		cout << endl;
-		}
+	}
 	int a, b, c, d;
 
 	a = Elt[0];
@@ -163,7 +163,7 @@ void action_by_representation::compute_image_int_low_level(
 		cout << "A=" << endl;
 		Int_vec_print_integer_matrix_width(cout,
 				AA, 3, 3, 3, F->log10_of_q);
-		}
+	}
 	F->Linear_algebra->mult_matrix_matrix(x, AA, xA, 1, 3, 3,
 			0 /* verbose_level */);
 	if (f_vv) {
@@ -171,22 +171,22 @@ void action_by_representation::compute_image_int_low_level(
 				"xA=";
 		Int_vec_print(cout, xA, dimension);
 		cout << endl;
-		}
+	}
 	if (M->f_semilinear) {
 		f = Elt[n * n];
 		for (i = 0; i < dimension; i++) {
 			xA[i] = F->frobenius_power(xA[i], f, 0 /* verbose_level */);
-			}
+		}
 		if (f_vv) {
 			cout << "after " << f << " field automorphisms: xA=";
 			Int_vec_print(cout, xA, dimension);
 			cout << endl;
-			}
 		}
+	}
 	if (f_v) {
 		cout << "action_by_representation::compute_image_int_low_level "
 				"done" << endl;
-		}
+	}
 }
 
 void action_by_representation::unrank_point(

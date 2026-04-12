@@ -734,10 +734,17 @@ int variety_compute_canonical_form::find_equation(
 				Canonical_form_classifier->Classification_of_varieties_nauty->Elt_gamma,
 				Canonical_form_classifier->Classification_of_varieties_nauty->Elt_gamma_inv);
 #endif
+
+		// compute Elt_phi and Elt_phi_inv:
+
 		Canonical_form_classifier->Ring_with_action->PA->A->Group_element->mult(
 				Canonical_form_classifier->Classification_of_varieties_nauty->Elt_gamma_inv,
 				Canonical_form_classifier->Classification_of_varieties_nauty->Elt_delta,
 				Canonical_form_classifier->Classification_of_varieties_nauty->Elt_phi);
+
+		Canonical_form_classifier->Ring_with_action->PA->A->Group_element->invert(
+				Canonical_form_classifier->Classification_of_varieties_nauty->Elt_phi,
+				Canonical_form_classifier->Classification_of_varieties_nauty->Elt_phi_inv);
 
 #endif
 

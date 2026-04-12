@@ -929,6 +929,7 @@ void pc_combinatorics::test_for_multi_edge_in_classification_graph(
 	}
 }
 
+
 void pc_combinatorics::Kramer_Mesner_matrix_neighboring(
 		int level,
 		other::data_structures::lint_matrix *&M,
@@ -1265,7 +1266,7 @@ void pc_combinatorics::Mtk_from_Matrix_stack(
 				}
 
 				Mtk_via_Mtr_Mrk(
-						t, i - 1, i,
+					t, i - 1, i,
 					T, Matrix_stack[i - 1]->Data, T2,
 					Tr, Tc,
 					Matrix_stack[i - 1]->m,

@@ -656,6 +656,359 @@ void permutations::perm_cycle_type(
 	FREE_int(have_seen);
 }
 
+
+int permutations::number_of_cycles(
+		int *perm, long int degree)
+{
+	int *have_seen;
+	long int i, l, l1, first, next, len;
+	int nb_cycles;
+
+	//cout << "perm_cycle_type degree=" << degree << endl;
+	nb_cycles = 0;
+	have_seen = NEW_int(degree);
+	for (l = 0; l < degree; l++) {
+		have_seen[l] = false;
+	}
+	l = 0;
+	while (l < degree) {
+		if (have_seen[l]) {
+			l++;
+			continue;
+		}
+		// work on a next cycle, starting at position l:
+		first = l;
+		//cout << "perm_cycle_type cycle starting
+		//"with " << first << endl;
+		l1 = l;
+		len = 1;
+		while (true) {
+			if (l1 >= degree) {
+				cout << "permutations::number_of_cycles "
+						"cycle starting with "
+						<< first << endl;
+				cout << "l1 = " << l1 << " >= degree" << endl;
+				exit(1);
+			}
+			have_seen[l1] = true;
+			next = perm[l1];
+			if (next >= degree) {
+				cout << "permutations::number_of_cycles "
+						"next = " << next
+						<< " >= degree = " << degree << endl;
+				// print_list(ost);
+				exit(1);
+			}
+			if (next == first) {
+				break;
+			}
+			if (have_seen[next]) {
+				cout << "permutations::number_of_cycles "
+						"have_seen[next]" << endl;
+				cout << "first=" << first << endl;
+				cout << "len=" << len << endl;
+				cout << "l1=" << l1 << endl;
+				cout << "next=" << next << endl;
+				for (i = 0; i < degree; i++) {
+					cout << i << " : " << perm[i] << endl;
+				}
+				exit(1);
+			}
+			l1 = next;
+			len++;
+		}
+		//cout << "perm_print_offset cycle starting with "
+		//<< first << " has length " << len << endl;
+		//cout << "nb_orbits=" << nb_orbits << endl;
+
+		nb_cycles++;
+	}
+	FREE_int(have_seen);
+
+	return nb_cycles;
+}
+
+int permutations::number_of_cycles_and_cycle_type(
+		int *perm, long int degree, int *cycle_type)
+{
+	int *have_seen;
+	long int i, l, l1, first, next, len;
+	int nb_cycles;
+
+	//cout << "perm_cycle_type degree=" << degree << endl;
+	nb_cycles = 0;
+	have_seen = NEW_int(degree);
+	Int_vec_zero(cycle_type, degree);
+	for (l = 0; l < degree; l++) {
+		have_seen[l] = false;
+	}
+	l = 0;
+	while (l < degree) {
+		if (have_seen[l]) {
+			l++;
+			continue;
+		}
+		// work on a next cycle, starting at position l:
+		first = l;
+		//cout << "perm_cycle_type cycle starting
+		//"with " << first << endl;
+		l1 = l;
+		len = 1;
+		while (true) {
+			if (l1 >= degree) {
+				cout << "permutations::number_of_cycles_and_cycle_type "
+						"cycle starting with "
+						<< first << endl;
+				cout << "l1 = " << l1 << " >= degree" << endl;
+				exit(1);
+			}
+			have_seen[l1] = true;
+			next = perm[l1];
+			if (next >= degree) {
+				cout << "permutations::number_of_cycles_and_cycle_type "
+						"next = " << next
+						<< " >= degree = " << degree << endl;
+				// print_list(ost);
+				exit(1);
+			}
+			if (next == first) {
+				break;
+			}
+			if (have_seen[next]) {
+				cout << "permutations::number_of_cycles_and_cycle_type "
+						"have_seen[next]" << endl;
+				cout << "first=" << first << endl;
+				cout << "len=" << len << endl;
+				cout << "l1=" << l1 << endl;
+				cout << "next=" << next << endl;
+				for (i = 0; i < degree; i++) {
+					cout << i << " : " << perm[i] << endl;
+				}
+				exit(1);
+			}
+			l1 = next;
+			len++;
+		}
+
+		cycle_type[len - 1]++;
+
+		//cout << "perm_print_offset cycle starting with "
+		//<< first << " has length " << len << endl;
+		//cout << "nb_orbits=" << nb_orbits << endl;
+
+		nb_cycles++;
+	}
+	FREE_int(have_seen);
+
+	return nb_cycles;
+}
+
+int permutations::number_of_cycles_and_cycle_partition(
+		int *perm, long int degree, int *cycle_partition, int &cycle_partition_len)
+{
+	int *have_seen;
+	long int i, l, l1, first, next, len;
+	int nb_cycles;
+
+	//cout << "perm_cycle_type degree=" << degree << endl;
+	nb_cycles = 0;
+	have_seen = NEW_int(degree);
+
+	cycle_partition_len = 0;
+	for (l = 0; l < degree; l++) {
+		have_seen[l] = false;
+	}
+	l = 0;
+	while (l < degree) {
+		if (have_seen[l]) {
+			l++;
+			continue;
+		}
+		// work on a next cycle, starting at position l:
+		first = l;
+		//cout << "perm_cycle_type cycle starting
+		//"with " << first << endl;
+		l1 = l;
+		len = 1;
+		while (true) {
+			if (l1 >= degree) {
+				cout << "permutations::number_of_cycles_and_cycle_partition "
+						"cycle starting with "
+						<< first << endl;
+				cout << "l1 = " << l1 << " >= degree" << endl;
+				exit(1);
+			}
+			have_seen[l1] = true;
+			next = perm[l1];
+			if (next >= degree) {
+				cout << "permutations::number_of_cycles_and_cycle_partition "
+						"next = " << next
+						<< " >= degree = " << degree << endl;
+				// print_list(ost);
+				exit(1);
+			}
+			if (next == first) {
+				break;
+			}
+			if (have_seen[next]) {
+				cout << "permutations::number_of_cycles_and_cycle_partition "
+						"have_seen[next]" << endl;
+				cout << "first=" << first << endl;
+				cout << "len=" << len << endl;
+				cout << "l1=" << l1 << endl;
+				cout << "next=" << next << endl;
+				for (i = 0; i < degree; i++) {
+					cout << i << " : " << perm[i] << endl;
+				}
+				exit(1);
+			}
+			l1 = next;
+			len++;
+		}
+
+		cycle_partition[cycle_partition_len++] = len;
+
+		//cout << "perm_print_offset cycle starting with "
+		//<< first << " has length " << len << endl;
+		//cout << "nb_orbits=" << nb_orbits << endl;
+
+		nb_cycles++;
+	}
+	FREE_int(have_seen);
+
+	return nb_cycles;
+}
+
+
+
+
+void permutations::cycle_decomposition(
+		int *perm, long int n,
+		other::data_structures::set_of_sets *&SoS,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "permutations::cycle_decomposition" << endl;
+	}
+
+	int nb_cycles;
+	int *cycle_type;
+	int *cycle_part;
+	int cycle_part_len;
+
+	nb_cycles = number_of_cycles(perm, n);
+
+	cycle_type = NEW_int(n);
+	cycle_part = NEW_int(n);
+
+	nb_cycles = number_of_cycles_and_cycle_partition(
+			perm, n, cycle_part, cycle_part_len);
+
+
+
+	SoS = NEW_OBJECT(other::data_structures::set_of_sets);
+
+	SoS->init_basic_with_Sz_in_int(
+					n /* underlying_set_size */,
+					cycle_part_len /* nb_sets */, cycle_part,
+					0 /* verbose_level */);
+
+
+
+	int degree = n;
+	int *have_seen;
+	long int l, l1, first, next, len;
+	int cur_cycle;
+
+	//cout << "perm_cycle_type degree=" << degree << endl;
+	nb_cycles = 0;
+	have_seen = NEW_int(degree);
+
+
+	//Int_vec_zero(cycle_type, degree);
+
+	for (l = 0; l < degree; l++) {
+		have_seen[l] = false;
+	}
+
+	cur_cycle = 0;
+	l = 0;
+	while (l < degree) {
+		if (have_seen[l]) {
+			l++;
+			continue;
+		}
+		// work on a next cycle, starting at position l:
+		first = l;
+		//cout << "perm_cycle_type cycle starting
+		//"with " << first << endl;
+		l1 = l;
+		len = 1;
+
+		SoS->Sets[cur_cycle][len - 1] = l1;
+
+		while (true) {
+			if (l1 >= degree) {
+				cout << "permutations::cycle_decomposition "
+						"cycle starting with "
+						<< first << endl;
+				cout << "l1 = " << l1 << " >= degree" << endl;
+				exit(1);
+			}
+			have_seen[l1] = true;
+			next = perm[l1];
+			if (next >= degree) {
+				cout << "permutations::cycle_decomposition "
+						"next = " << next
+						<< " >= degree = " << degree << endl;
+				// print_list(ost);
+				exit(1);
+			}
+			if (next == first) {
+				break;
+			}
+
+			SoS->Sets[cur_cycle][len] = next;
+
+			if (have_seen[next]) {
+				cout << "permutations::cycle_decomposition "
+						"have_seen[next]" << endl;
+				cout << "first=" << first << endl;
+				cout << "len=" << len << endl;
+				cout << "l1=" << l1 << endl;
+				cout << "next=" << next << endl;
+				int i;
+				for (i = 0; i < degree; i++) {
+					cout << i << " : " << perm[i] << endl;
+				}
+				exit(1);
+			}
+			l1 = next;
+			len++;
+		}
+
+		//cycle_type[len - 1]++;
+
+		//cout << "perm_print_offset cycle starting with "
+		//<< first << " has length " << len << endl;
+		//cout << "nb_orbits=" << nb_orbits << endl;
+
+		cur_cycle++;
+	}
+	FREE_int(have_seen);
+
+
+
+	FREE_int(cycle_type);
+	FREE_int(cycle_part);
+
+	if (f_v) {
+		cout << "permutations::cycle_decomposition done" << endl;
+	}
+}
+
 int permutations::perm_order(
 		int *a, long int n)
 {

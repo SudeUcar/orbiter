@@ -158,7 +158,7 @@ void group_container::init_strong_generators_by_hdl(
 	
 	if (f_v) {
 		cout << "group::init_strong_generators_by_hdl" << endl;
-		}
+	}
 	if (f_v) {
 		cout << "gen_hdl=";
 		Int_vec_print(cout, gen_hdl, nb_gen);

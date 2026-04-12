@@ -391,31 +391,9 @@ public:
 			crc_object *Crc, long int Nb_test, int k, int verbose_level);
 	void char_vec_zero(
 			unsigned char *p, int len);
-#if 0
-	void crc256_test_k_subsets(
-			int message_length, int R, int k, int verbose_level);
-#endif
-#if 0
-	void crc32_remainders(
-			int message_length, int verbose_level);
-	void crc32_remainders_compute(
-			int message_length, int R,
-			uint32_t *&Crc, int verbose_level);
-#endif
 	void introduce_errors(
 			crc_options_description *Crc_options_description,
 			int verbose_level);
-#if 0
-	void crc_encode_file_based(
-			std::string &fname_in,
-			std::string &fname_out,
-			std::string &crc_type,
-			int block_length, int verbose_level);
-	void crc_general_file_based(
-			std::string &fname_in, std::string &fname_out,
-			CRC_type type,
-			int block_length, int verbose_level);
-#endif
 	void split_binary_file_to_ascii_polynomials_256(
 			std::string &fname_in, std::string &fname_out,
 			int block_length, int verbose_level);

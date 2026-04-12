@@ -41,19 +41,19 @@ orbit_rep::~orbit_rep()
 	Record_death();
 	if (rep) {
 		FREE_lint(rep);
-		}
+	}
 	if (Stab) {
 		FREE_OBJECT(Stab);
-		}
+	}
 	if (Strong_gens) {
 		FREE_OBJECT(Strong_gens);
-		}
+	}
 	if (candidates) {
 		FREE_lint(candidates);
-		}
+	}
 	if (stab_go) {
 		FREE_OBJECT(stab_go);
-		}
+	}
 }
 
 void orbit_rep::init_from_file(
@@ -129,7 +129,7 @@ void orbit_rep::init_from_file(
 		cout << "orbit_rep::init_from_file orbit_at_level="
 				<< orbit_at_level << " done, "
 				"stabilizer order = " << *stab_go << endl;
-		}
+	}
 
 }
 

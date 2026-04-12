@@ -40,17 +40,17 @@ void action_on_bricks::init(
 	if (f_v) {
 		cout << "action_on_bricks::init q=" << B->q
 				<< " f_linear_action=" << f_linear_action << endl;
-		}
+	}
 	action_on_bricks::A = A;
 	action_on_bricks::B = B;
 	action_on_bricks::f_linear_action = f_linear_action;
 	degree = B->nb_bricks;
 	if (f_v) {
 		cout << "action_on_bricks::init degree=" << degree << endl;
-		}
+	}
 	if (f_v) {
 		cout << "action_on_bricks::init done" << endl;
-		}
+	}
 }
 
 long int action_on_bricks::compute_image(
@@ -61,10 +61,10 @@ long int action_on_bricks::compute_image(
 
 	if (f_linear_action) {
 		j = compute_image_linear_action(Elt, i, verbose_level);
-		}
+	}
 	else {
 		j = compute_image_permutation_action(Elt, i, verbose_level);
-		}
+	}
 	return j;
 }
 
@@ -84,12 +84,12 @@ long int action_on_bricks::compute_image_linear_action(
 	if (f_v) {
 		cout << "action_on_bricks::compute_image "
 				"i = " << i << endl;
-		}
+	}
 	if (i < 0 || i >= degree) {
 		cout << "action_on_bricks::compute_image "
 				"i = " << i << " out of range" << endl;
 		exit(1);
-		}
+	}
 	B->unrank_coordinates(i, v[0], v[1], w[0], w[1], 0);
 	v[2] = 1;
 	w[2] = 1;
@@ -100,7 +100,7 @@ long int action_on_bricks::compute_image_linear_action(
 		cout << "action_on_bricks::compute_image w=";
 		Int_vec_print(cout, w, 3);
 		cout << endl;
-		}
+	}
 	
 	B->F->Projective_space_basic->PG_element_rank_modified(
 			v, 1, 3, rk_v);
@@ -111,13 +111,13 @@ long int action_on_bricks::compute_image_linear_action(
 		cout << "action_on_bricks::compute_image rk_w=" << rk_w << endl;
 		cout << "action_on_bricks::compute_image A=" << endl;
 		A->Group_element->element_print_quick(Elt, cout);
-		}
+	}
 	rk_vv = A->Group_element->image_of(Elt, rk_v);
 	rk_ww = A->Group_element->image_of(Elt, rk_w);
 	if (f_v) {
 		cout << "action_on_bricks::compute_image rk_vv=" << rk_vv << endl;
 		cout << "action_on_bricks::compute_image rk_ww=" << rk_ww << endl;
-		}
+	}
 	B->F->Projective_space_basic->PG_element_unrank_modified(
 			vv, 1, 3, rk_vv);
 	B->F->Projective_space_basic->PG_element_unrank_modified(
@@ -129,15 +129,15 @@ long int action_on_bricks::compute_image_linear_action(
 		cout << "action_on_bricks::compute_image ww=";
 		Int_vec_print(cout, ww, 3);
 		cout << endl;
-		}
+	}
 	if (vv[2] == 0) {
 		cout << "action_on_bricks::compute_image vv[2] == 0" << endl;
 		exit(1);
-		}
+	}
 	if (ww[2] == 0) {
 		cout << "action_on_bricks::compute_image ww[2] == 0" << endl;
 		exit(1);
-		}
+	}
 	B->F->Projective_space_basic->PG_element_normalize(
 			vv, 1, 3, 0 /* verbose_level */);
 	B->F->Projective_space_basic->PG_element_normalize(
@@ -149,13 +149,13 @@ long int action_on_bricks::compute_image_linear_action(
 		cout << "action_on_bricks::compute_image after normalize ww=";
 		Int_vec_print(cout, ww, 3);
 		cout << endl;
-		}
+	}
 	j = B->rank_coordinates(vv[0], vv[1], ww[0], ww[1], 0);
 	if (j < 0 || j >= degree) {
 		cout << "action_on_bricks::compute_image "
 				"j = " << j << " out of range" << endl;
 		exit(1);
-		}
+	}
 	return j;
 }
 
@@ -172,12 +172,12 @@ long int action_on_bricks::compute_image_permutation_action(
 	if (f_v) {
 		cout << "action_on_bricks::compute_image_permutation_action "
 				"i = " << i << endl;
-		}
+	}
 	if (i < 0 || i >= degree) {
 		cout << "action_on_bricks::compute_image_permutation_action "
 				"i = " << i << " out of range" << endl;
 		exit(1);
-		}
+	}
 	B->unrank_coordinates(i, x0, y0, x1, y1, 0);
 	a = x0 * B->q + y0;
 	b = x1 * B->q + y1;
@@ -190,7 +190,7 @@ long int action_on_bricks::compute_image_permutation_action(
 		cout << "action_on_bricks::compute_image_permutation_action "
 				"A=" << endl;
 		A->Group_element->element_print_quick(Elt, cout);
-		}
+	}
 	c = A->Group_element->image_of(Elt, a);
 	d = A->Group_element->image_of(Elt, b);
 	if (f_v) {
@@ -198,7 +198,7 @@ long int action_on_bricks::compute_image_permutation_action(
 				"c=" << c << endl;
 		cout << "action_on_bricks::compute_image_permutation_action "
 				"d=" << d << endl;
-		}
+	}
 	y2 = c % B->q;
 	x2 = c / B->q;
 	y3 = d % B->q;
@@ -209,7 +209,7 @@ long int action_on_bricks::compute_image_permutation_action(
 		cout << "action_on_bricks::compute_image_permutation_action "
 				"j = " << j << " out of range" << endl;
 		exit(1);
-		}
+	}
 	return j;
 }
 

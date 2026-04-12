@@ -782,6 +782,25 @@ void set_of_sets::print_table()
 	cout << "end set of sets" << endl;
 }
 
+std::string set_of_sets::stringify()
+{
+	string s, t;
+	int i;
+
+	for (i = 0; i < nb_sets; i++) {
+
+		t = Lint_vec_stringify(Sets[i], Set_size[i]);
+
+		s += t;
+
+		if (i < nb_sets - 1) {
+			s += "|";
+		}
+	}
+	return s;
+}
+
+
 void set_of_sets::print_table_tex(
 		std::ostream &ost)
 {

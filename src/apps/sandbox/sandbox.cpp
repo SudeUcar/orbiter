@@ -40,6 +40,18 @@ void rabbit_and_wolves_euler_step(
 int main()
 {
 
+	int verbose_level = 2;
+	int f_v = (verbose_level >= 1);
+
+	orbiter::layer5_applications::user_interface::core_system::orbiter_top_level_session Top_level_session;
+	orbiter::layer5_applications::user_interface::core_system::The_Orbiter_top_level_session = &Top_level_session;
+
+	orbiter::layer1_foundations::combinatorics::other_combinatorics::combinatorics_domain Combi;
+
+	Combi.all_regular_words(
+			12 /*len*/, 2 /*q*/, verbose_level);
+
+#if 0
 
 	int verbose_level = 2;
 	int f_v = (verbose_level >= 1);
@@ -78,7 +90,7 @@ int main()
 	cout << "Y[" << N << "]=" << Y[N] << endl;
 
 	}
-
+#endif
 
 
 #if 0

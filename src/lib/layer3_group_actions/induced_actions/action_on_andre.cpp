@@ -37,13 +37,13 @@ action_on_andre::~action_on_andre()
 	Record_death();
 	if (coords1) {
 		FREE_int(coords1);
-		}
+	}
 	if (coords2) {
 		FREE_int(coords2);
-		}
+	}
 	if (coords3) {
 		FREE_int(coords3);
-		}
+	}
 }
 
 void action_on_andre::init(
@@ -56,7 +56,7 @@ void action_on_andre::init(
 	
 	if (f_v) {
 		cout << "action_on_andre::init" << endl;
-		}
+	}
 	action_on_andre::An = An;
 	action_on_andre::An1 = An1;
 	action_on_andre::Andre = Andre;
@@ -72,10 +72,10 @@ void action_on_andre::init(
 	coords3 = NEW_int(k * n);
 	if (f_v) {
 		cout << "action_on_andre::init degree=" << degree << endl;
-		}
+	}
 	if (f_v) {
 		cout << "action_on_andre::init done" << endl;
-		}
+	}
 }
 
 long int action_on_andre::compute_image(
@@ -86,18 +86,18 @@ long int action_on_andre::compute_image(
 	
 	if (f_v) {
 		cout << "action_on_andre::compute_image" << endl;
-		}
+	}
 	if (i < N) {
 		a = compute_image_of_point(Elt, i, verbose_level);
 		j = a;
-		}
+	}
 	else {
 		a = compute_image_of_line(Elt, i - N, verbose_level);
 		j = N + a;
-		}
+	}
 	if (f_v) {
 		cout << "action_on_andre::compute_image done" << endl;
-		}
+	}
 	return j;
 }
 
@@ -113,7 +113,7 @@ long int action_on_andre::compute_image_of_point(
 
 	if (f_v) {
 		cout << "action_on_andre::compute_image_of_point" << endl;
-		}
+	}
 	Pt.init(Andre, 0 /* verbose_level*/);
 	Pt.unrank(pt_idx, 0 /* verbose_level*/);
 	if (Pt.f_is_at_infinity) {
@@ -121,51 +121,51 @@ long int action_on_andre::compute_image_of_point(
 			cout << "action_on_andre::compute_image_of_point "
 					"point is at infinity, at_infinity_idx="
 					<< Pt.at_infinity_idx << endl;
-			}
+		}
 		for (i = 0; i < k; i++) {
 			Int_vec_copy(Andre->spread_elements_genma +
 					Pt.at_infinity_idx * k * n + i * n, coords1 + i * n1, n);
 			coords1[i * n1 + n] = 0;
-			}
+		}
 		if (f_v) {
 			cout << "Spread element embedded:" << endl;
 			Int_matrix_print(coords1, k, n1);
-			}
+		}
 		for (i = 0; i < k; i++) {
 			An1->Group_element->element_image_of_low_level(coords1 + i * n1,
 					coords2 + i * n1, Elt, verbose_level - 1);
-			}
+		}
 		if (f_v) {
 			cout << "Image of spread element:" << endl;
 			Int_matrix_print(coords2, k, n1);
-			}
+		}
 		for (i = 0; i < k; i++) {
 			Int_vec_copy(coords2 + i * n1, coords3 + i * n, n);
-			}
+		}
 		if (f_v) {
 			cout << "Reduced:" << endl;
 			Int_matrix_print(coords3, k, n);
-			}
+		}
 		rk = Andre->Grass->rank_lint_here(coords3, 0 /* verbose_level*/);
 		if (f_v) {
 			cout << "rk=" << rk << endl;
-			}
+		}
 		if (!Sorting.lint_vec_search(
 				Andre->spread_elements_numeric_sorted,
 				Andre->spread_size, rk, idx, 0)) {
 			cout << "andre_construction_line_element::rank "
 					"cannot find the spread element in the sorted list" << endl;
 			exit(1);
-			}
+		}
 		if (f_v) {
 			cout << "idx=" << idx << endl;
-			}
+		}
 		parallel_class_idx = Andre->spread_elements_perm_inv[idx];
 		if (f_v) {
 			cout << "parallel_class_idx=" << parallel_class_idx << endl;
-			}
-		image = parallel_class_idx;
 		}
+		image = parallel_class_idx;
+	}
 	else {
 		Int_vec_copy(Pt.coordinates, coords1, n);
 		coords1[n] = 1;
@@ -177,11 +177,11 @@ long int action_on_andre::compute_image_of_point(
 				coords2, 1, n1, 0 /* verbose_level */);
 		Int_vec_copy(coords2, Pt.coordinates, n);
 		image = Pt.rank(0 /* verbose_level*/);
-		}
+	}
 	
 	if (f_v) {
 		cout << "action_on_andre::compute_image_of_point done" << endl;
-		}
+	}
 	return image;
 }
 
@@ -195,37 +195,37 @@ long int action_on_andre::compute_image_of_line(
 	
 	if (f_v) {
 		cout << "action_on_andre::compute_image_of_line" << endl;
-		}
+	}
 	Line.init(Andre, 0 /* verbose_level*/);
 	Line.unrank(line_idx, 0 /* verbose_level*/);
 	if (Line.f_is_at_infinity) {
 		image = 0;
-		}
+	}
 	else {
 		for (i = 0; i < k1; i++) {
 			for (j = 0; j < n; j++) {
 				coords1[i * n1 + j] = Line.coordinates[i * n + j];
-				}
+			}
 			if (i < k) {
 				coords1[i * n1 + n] = 0;
-				}
+			}
 			else {
 				coords1[i * n1 + n] = 1;
-				}
 			}
+		}
 
 		for (i = 0; i < k1; i++) {
 			An1->Group_element->element_image_of_low_level(coords1 + i * n1,
 					coords2 + i * n1, Elt, verbose_level - 1);
-			}
+		}
 
 		for (i = 0; i < k; i++) {
 			if (coords2[i * n1 + n]) {
 				cout << "action_on_andre::compute_image_of_line "
 						"coords2[i * n1 + n]" << endl;
 				exit(1);
-				}
 			}
+		}
 
 		Andre->F->Projective_space_basic->PG_element_normalize(
 				coords2 + k * n1, 1, n1, 0 /* verbose_level */);
@@ -233,14 +233,14 @@ long int action_on_andre::compute_image_of_line(
 		for (i = 0; i < k1; i++) {
 			for (j = 0; j < n; j++) {
 				Line.coordinates[i * n + j] = coords2[i * n1 + j];
-				}
 			}
-		image = Line.rank(0 /* verbose_level*/);
 		}
+		image = Line.rank(0 /* verbose_level*/);
+	}
 	
 	if (f_v) {
 		cout << "action_on_andre::compute_image_of_line done" << endl;
-		}
+	}
 	return image;
 }
 

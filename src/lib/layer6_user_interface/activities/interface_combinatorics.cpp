@@ -982,9 +982,17 @@ void interface_combinatorics::worker(
 
 		do_conjugacy_classes_Sym_n(conjugacy_classes_Sym_n_n, verbose_level);
 
-		do_conjugacy_classes_Sym_n_file(conjugacy_classes_Sym_n_n, verbose_level);
+		//do_conjugacy_classes_Sym_n_file(conjugacy_classes_Sym_n_n, verbose_level);
+
+		combinatorics::other_combinatorics::combinatorics_domain Combi;
+
+
+		Combi.conjugacy_classes_Sym_n_file(
+				conjugacy_classes_Sym_n_n, verbose_level);
+
 
 	}
+
 	else if (f_tree_of_all_k_subsets) {
 
 		combinatorics::other_combinatorics::combinatorics_domain Combi;
@@ -1436,6 +1444,7 @@ void interface_combinatorics::do_conjugacy_classes_Sym_n(
 
 	cout << "The conjugacy classes in Sym_" << n << " are:" << endl;
 	for (i = 0; i < cnt; i++) {
+
 		cout << i << " : ";
 		Int_vec_print(cout, Parts + i * n, n);
 		cout << " : ";
@@ -1445,14 +1454,14 @@ void interface_combinatorics::do_conjugacy_classes_Sym_n(
 		cout << endl;
 
 		D.add_in_place(S, class_size);
-		}
+	}
 
 	D.factorial(F, n);
 	D.integral_division_exact(F, S, A);
 	if (!A.is_one()) {
 		cout << "the class sizes do not add up" << endl;
 		exit(1);
-		}
+	}
 	cout << "The sum of the class sizes is n!" << endl;
 
 	if (f_v) {
@@ -1460,6 +1469,7 @@ void interface_combinatorics::do_conjugacy_classes_Sym_n(
 	}
 }
 
+#if 0
 void interface_combinatorics::do_conjugacy_classes_Sym_n_file(
 		int n, int verbose_level)
 {
@@ -1471,21 +1481,88 @@ void interface_combinatorics::do_conjugacy_classes_Sym_n_file(
 
 	int i;
 	int cnt;
-	algebra::ring_theory::longinteger_object class_size, S, F, A;
+	algebra::ring_theory::longinteger_object class_size, centralizer_order, S, F, A;
 	algebra::ring_theory::longinteger_domain D;
-	combinatorics::other_combinatorics::combinatorics_domain C;
 	combinatorics::other_combinatorics::combinatorics_domain Combi;
 
 	cnt = Combi.count_partitions(n);
 
-	int *Parts;
+	int *Part;
+	int *part_list;
 
-	Parts = NEW_int(cnt * n);
-	Combi.make_partitions(n, Parts, cnt);
+	Part = NEW_int(cnt * n);
+	part_list = NEW_int(n);
 
+
+	Combi.make_partitions(n, Part, cnt);
+
+	D.factorial(F, n);
+
+
+	int nb_rows;
+	int nb_cols;
+	string *Table;
+	string *Col_headings;
+
+
+	nb_rows = cnt;
+	nb_cols = 5;
+
+	Col_headings = new string[nb_cols];
+	Table = new string[nb_rows * nb_cols];
 
 	S.create(0);
 
+	Col_headings[0] = "Row";
+	Col_headings[1] = "PartitionExp";
+	Col_headings[2] = "PartitionList";
+	Col_headings[3] = "ClassSize";
+	Col_headings[4] = "CentralizerOrder";
+
+	for (i = 0; i < cnt; i++) {
+		//cout << i << " : ";
+		//Int_vec_print(cout, Parts + i * n, n);
+		//cout << " : ";
+
+		Table[i * nb_cols + 0] = std::to_string(i);
+
+
+		Table[i * nb_cols + 1] =  "\"" + Int_vec_stringify(Part + i * n, n) + "\"";
+
+		int j, a, l, h;
+
+		l = 0;
+		for (j = n; j > 0; j--) {
+			a = Part[i * n + j - 1];
+			for (h = 0; h < a; h++) {
+				part_list[l++] = j;
+			}
+		}
+
+		Table[i * nb_cols + 2] =  "\"" + Int_vec_stringify(part_list, l) + "\"";
+
+
+		Combi.size_of_conjugacy_class_in_sym_n(class_size, n, Part + i * n);
+
+		D.integral_division_exact(F, class_size, centralizer_order);
+
+
+		Table[i * nb_cols + 3] = class_size.stringify();
+		Table[i * nb_cols + 4] = centralizer_order.stringify();
+
+
+		D.add_in_place(S, class_size);
+	}
+
+	D.integral_division_exact(F, S, A);
+	if (!A.is_one()) {
+		cout << "the class sizes do not add up" << endl;
+		exit(1);
+	}
+
+
+
+#if 0
 	string fname;
 
 	fname = "classes_Sym_" + std::to_string(n) + ".csv";
@@ -1514,7 +1591,7 @@ void interface_combinatorics::do_conjugacy_classes_Sym_n_file(
 			fp << endl;
 
 			D.add_in_place(S, class_size);
-			}
+		}
 
 		D.factorial(F, n);
 		D.integral_division_exact(F, S, A);
@@ -1525,15 +1602,36 @@ void interface_combinatorics::do_conjugacy_classes_Sym_n_file(
 		cout << "The sum of the class sizes is n!" << endl;
 		fp << "END" << endl;
 	}
+#endif
+
+	string fname;
+
+	fname = "classes_Sym_" + std::to_string(n) + ".csv";
 
 	other::orbiter_kernel_system::file_io Fio;
 
 	cout << "Written file " << fname << " of size " << Fio.file_size(fname) << endl;
 
+	Fio.Csv_file_support->write_table_of_strings_with_col_headings(
+			fname,
+			nb_rows, nb_cols, Table,
+			Col_headings,
+			verbose_level);
+
+
+
+	delete [] Table;
+	delete [] Col_headings;
+	FREE_int(Part);
+	FREE_int(part_list);
+
+
+
 	if (f_v) {
 		cout << "interface_combinatorics::do_conjugacy_classes_Sym_n_file done" << endl;
 	}
 }
+#endif
 
 
 

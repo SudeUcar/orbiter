@@ -57,7 +57,7 @@ void action_by_conjugation::init(
 	
 	if (f_v) {
 		cout << "action_by_conjugation::init" << endl;
-		}
+	}
 	action_by_conjugation::Base_group = Base_group;
 	action_by_conjugation::f_ownership = f_ownership;
 	A = Base_group->A;

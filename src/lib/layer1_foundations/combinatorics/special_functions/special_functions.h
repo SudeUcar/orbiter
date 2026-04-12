@@ -231,6 +231,16 @@ public:
 		std::string *Point_labels, void *data);
 	void perm_cycle_type(
 			int *perm, long int degree, int *cycles, int &nb_cycles);
+	int number_of_cycles(
+			int *perm, long int degree);
+	int number_of_cycles_and_cycle_type(
+			int *perm, long int degree, int *cycle_type);
+	int number_of_cycles_and_cycle_partition(
+			int *perm, long int degree, int *cycle_partition, int &cycle_partition_len);
+	void cycle_decomposition(
+			int *perm, long int n,
+			other::data_structures::set_of_sets *&SoS,
+			int verbose_level);
 	int perm_order(
 			int *a, long int n);
 	int perm_signum(
