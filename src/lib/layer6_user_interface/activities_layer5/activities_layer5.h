@@ -278,6 +278,15 @@ public:
 
 	int f_sweep_Cayley;
 
+	int f_sweep_Sylvester;
+	std::string sweep_Sylvester_fname;
+	std::string sweep_Sylvester_col_label;
+	std::string sweep_Sylvester_options;
+
+	int f_Sylvester_pentahedral_form_after_sweep;
+	std::string Sylvester_pentahedral_form_after_sweep_surface_label;
+	std::string Sylvester_pentahedral_form_after_sweep_fname;
+	std::string Sylvester_pentahedral_form_after_sweep_col_label;
 
 	classification_of_cubic_surfaces_with_double_sixes_activity_description();
 	~classification_of_cubic_surfaces_with_double_sixes_activity_description();
@@ -312,10 +321,13 @@ public:
 			int verbose_level);
 	void perform_activity(
 			int verbose_level);
+	void get_plane5_ranks(
+			std::string &fname, std::string &col_label,
+			long int *&Plane5_ranks,
+			int &nb_types,
+			int verbose_level);
 	void report(
 			std::string &options,
-			//poset_classification::poset_classification_report_options
-			//	*report_options,
 			int verbose_level);
 	void do_write_source_code(
 			int verbose_level);
@@ -2132,6 +2144,8 @@ public:
 
 class plesken_ring_activity_description {
 public:
+
+	// doc/tables/commands/plesken_ring_activity.csv
 
 	int f_report;
 	std::string report_draw_options_label;

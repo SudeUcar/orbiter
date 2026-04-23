@@ -601,6 +601,34 @@ int surface_create::create_surface_from_description(
 		}
 
 	}
+	else if (Descr->f_Pentahedral_form) {
+
+		if (f_v) {
+			cout << "surface_create::create_surface_from_description "
+					"before create_surface_Pentahedral_form" << endl;
+		}
+
+		int *param25;
+		int len;
+
+		Int_vec_scan(Descr->Pentahedral_form_params25_text, param25, len);
+
+		if (len != 25) {
+			cout << "surface_create::create_surface_from_description "
+					"number of parameters must be 25" << endl;
+		}
+
+		create_surface_Pentahedral_form(
+				param25,
+				verbose_level - 1);
+
+		if (f_v) {
+			cout << "surface_create::create_surface_from_description "
+					"after create_surface_Pentahedral_form" << endl;
+		}
+
+	}
+
 	else if (Descr->f_by_equation) {
 
 		if (f_v) {
@@ -749,6 +777,11 @@ int surface_create::create_surface_from_description(
 				"coeffs = ";
 		Int_vec_print(cout, SO->Variety_object->eqn, 20);
 		cout << endl;
+	}
+
+	if (f_v) {
+		cout << "surface_create::create_surface_from_description "
+				"nb_lines = " << SO->Variety_object->Line_sets->Set_size[0] << endl;
 	}
 
 	if (f_v) {
@@ -1605,7 +1638,7 @@ void surface_create::create_surface_Cayley_form(
 
 
 	if (f_v) {
-		cout << "surface_create::create_surface_by_arc_lifting_with_two_lines "
+		cout << "surface_create::create_surface_Cayley_form "
 				"before SO->init_equation_points_and_lines_only" << endl;
 	}
 
@@ -1615,7 +1648,7 @@ void surface_create::create_surface_Cayley_form(
 			verbose_level - 2);
 
 	if (f_v) {
-		cout << "surface_create::create_surface_by_arc_lifting_with_two_lines "
+		cout << "surface_create::create_surface_Cayley_form "
 				"after SO->init_equation_points_and_lines_only" << endl;
 	}
 
@@ -1633,6 +1666,84 @@ void surface_create::create_surface_Cayley_form(
 }
 
 
+
+void surface_create::create_surface_Pentahedral_form(
+		int *param25,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "surface_create::create_surface_Pentahedral_form" << endl;
+	}
+
+
+	int coeffs20[20];
+
+	if (f_v) {
+		cout << "surface_create::create_surface_Pentahedral_form "
+				"param25 = ";
+		Int_vec_print(cout, param25, 25);
+		cout << endl;
+	}
+
+	if (f_v) {
+		cout << "surface_create::create_surface_Pentahedral_form "
+				"before Surf->create_equation_Pentahedral_form" << endl;
+	}
+	Surf->create_equation_Pentahedral_form(
+			param25, coeffs20,
+			verbose_level - 2);
+	if (f_v) {
+		cout << "surface_create::create_surface_Pentahedral_form "
+				"after Surf->create_equation_Pentahedral_form" << endl;
+	}
+	if (f_v) {
+		cout << "surface_create::create_surface_Pentahedral_form "
+				"coeffs20 = ";
+		Int_vec_print(cout, coeffs20, 20);
+		cout << endl;
+	}
+
+
+	string label_txt, label_tex;
+
+	label_txt = "Pentahedral_q" + std::to_string(F->q);
+
+	label_tex = "Pentahedral\\_q" + std::to_string(F->q);
+
+
+
+	SO = NEW_OBJECT(geometry::algebraic_geometry::surface_object);
+
+
+	if (f_v) {
+		cout << "surface_create::create_surface_Pentahedral_form "
+				"before SO->init_equation_points_and_lines_only" << endl;
+	}
+
+	SO->init_equation_points_and_lines_only(
+			Surf, coeffs20,
+			label_txt, label_tex,
+			verbose_level - 2);
+
+	if (f_v) {
+		cout << "surface_create::create_surface_Pentahedral_form "
+				"after SO->init_equation_points_and_lines_only" << endl;
+	}
+
+
+	f_has_group = false;
+
+
+
+
+
+
+	if (f_v) {
+		cout << "surface_create::create_surface_Pentahedral_form done" << endl;
+	}
+}
 
 
 void surface_create::create_surface_by_equation(
@@ -2583,21 +2694,21 @@ void surface_create::export_something_with_group_element(
 
 			int *perm;
 
-			perm = NEW_int(SOG->A_on_tritangent_planes->degree);
+			perm = NEW_int(SOG->SOO->A_on_tritangent_planes->degree);
 
 
 			ost << "ROW,OnTriP" << endl;
 			for (i = 0; i < gens_builder->V->len; i++) {
 				ost << i << ",";
 
-				SOG->A_on_tritangent_planes->Group_element->compute_permutation(
+				SOG->SOO->A_on_tritangent_planes->Group_element->compute_permutation(
 						gens_builder->V->ith(i),
 						perm, 0 /* verbose_level */);
 
 				ost << "\"[";
-				for (j = 0; j < SOG->A_on_tritangent_planes->degree; j++) {
+				for (j = 0; j < SOG->SOO->A_on_tritangent_planes->degree; j++) {
 					ost << perm[j];
-					if (j < SOG->A_on_tritangent_planes->degree - 1) {
+					if (j < SOG->SOO->A_on_tritangent_planes->degree - 1) {
 						ost << ",";
 					}
 				}
@@ -2629,21 +2740,21 @@ void surface_create::export_something_with_group_element(
 
 			int *perm;
 
-			perm = NEW_int(SOG->A_double_sixes->degree);
+			perm = NEW_int(SOG->SOO->A_double_sixes->degree);
 
 
 			ost << "ROW,OnDoubleSixes" << endl;
 			for (i = 0; i < gens_builder->V->len; i++) {
 				ost << i << ",";
 
-				SOG->A_double_sixes->Group_element->compute_permutation(
+				SOG->SOO->A_double_sixes->Group_element->compute_permutation(
 						gens_builder->V->ith(i),
 						perm, 0 /* verbose_level */);
 
 				ost << "\"[";
-				for (j = 0; j < SOG->A_double_sixes->degree; j++) {
+				for (j = 0; j < SOG->SOO->A_double_sixes->degree; j++) {
 					ost << perm[j];
-					if (j < SOG->A_double_sixes->degree - 1) {
+					if (j < SOG->SOO->A_double_sixes->degree - 1) {
 						ost << ",";
 					}
 				}
@@ -2678,21 +2789,21 @@ void surface_create::export_something_with_group_element(
 
 			int *perm;
 
-			perm = NEW_int(SOG->A_on_the_lines->degree);
+			perm = NEW_int(SOG->SOO->A_on_the_lines->degree);
 
 
 			ost << "ROW,OnLines" << endl;
 			for (i = 0; i < gens_builder->V->len; i++) {
 				ost << i << ",";
 
-				SOG->A_on_the_lines->Group_element->compute_permutation(
+				SOG->SOO->A_on_the_lines->Group_element->compute_permutation(
 						gens_builder->V->ith(i),
 						perm, 0 /* verbose_level */);
 
 				ost << "\"[";
-				for (j = 0; j < SOG->A_on_the_lines->degree; j++) {
+				for (j = 0; j < SOG->SOO->A_on_the_lines->degree; j++) {
 					ost << perm[j];
-					if (j < SOG->A_on_the_lines->degree - 1) {
+					if (j < SOG->SOO->A_on_the_lines->degree - 1) {
 						ost << ",";
 					}
 				}
@@ -2766,7 +2877,7 @@ void surface_create::action_on_module(
 	}
 	AM->init_action_on_module(
 			SO,
-			SOG->A_on_the_lines,
+			SOG->SOO->A_on_the_lines,
 			module_type,
 			module_basis, module_dimension_m, module_dimension_n,
 			verbose_level - 2);
@@ -3188,7 +3299,7 @@ void surface_create::do_report_group_elements2(
 	}
 	else {
 
-		SOG->cheat_sheet_group_elements(
+		SOG->SOO->cheat_sheet_group_elements(
 				ost, fname_csv, col_heading,
 				verbose_level);
 

@@ -1240,16 +1240,16 @@ void quartic_curve_create::create_quartic_curve_from_cubic_surface(
 
 	if (f_v) {
 		cout << "quartic_curve_create::create_quartic_curve_from_cubic_surface "
-				"before SC->SOG->compute_orbits_of_automorphism_group" << endl;
+				"before SC->SOG->SOO->compute_orbits_of_automorphism_group" << endl;
 	}
-	SC->SOG->compute_orbits_of_automorphism_group(
+	SC->SOG->SOO->compute_orbits_of_automorphism_group(
 			verbose_level);
 	if (f_v) {
 		cout << "quartic_curve_create::create_quartic_curve_from_cubic_surface "
-				"after SC->SOG->compute_orbits_of_automorphism_group" << endl;
+				"after SC->SOG->SOO->compute_orbits_of_automorphism_group" << endl;
 	}
 
-	if (pt_orbit_idx >= SC->SOG->Orbits_on_points_not_on_lines->Forest->nb_orbits) {
+	if (pt_orbit_idx >= SC->SOG->SOO->Orbits_on_points_not_on_lines->Forest->nb_orbits) {
 		cout << "quartic_curve_create::create_quartic_curve_from_cubic_surface "
 				"pt_orbit_idx is out of range" << endl;
 		exit(1);
@@ -1259,7 +1259,7 @@ void quartic_curve_create::create_quartic_curve_from_cubic_surface(
 	if (f_v) {
 		cout << "Quartic curve associated with surface " << SC->SO->label_txt
 				<< " and with orbit " << pt_orbit_idx
-				<< " / " << SC->SOG->Orbits_on_points_not_on_lines->Forest->nb_orbits << "}" << endl;
+				<< " / " << SC->SOG->SOO->Orbits_on_points_not_on_lines->Forest->nb_orbits << "}" << endl;
 	}
 
 

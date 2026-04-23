@@ -548,7 +548,7 @@ void factor_poset::draw_orbit_info(
 			coordinates(
 					i, j,
 					O->xin, O->yin,
-					O->f_rotated, x, y);
+					O->f_rotated, O->f_upside_down, x, y);
 
 
 			string label;
@@ -587,12 +587,12 @@ void factor_poset::draw_orbit_info(
 				n = LG->L[i].group_start[j];
 				LG->coordinates_direct(
 						LG->L[i].Nodes[n].x_coordinate,
-						LG->L[i].y_coordinate, O->xin, O->yin, O->f_rotated, x1, y1);
+						LG->L[i].y_coordinate, O->xin, O->yin, O->f_rotated, O->f_upside_down, x1, y1);
 
 				n = LG->L[i].group_start[j + 1] - 1;
 				LG->coordinates_direct(
 						LG->L[i].Nodes[n].x_coordinate,
-						LG->L[i].y_coordinate, O->xin, O->yin, O->f_rotated, x2, y2);
+						LG->L[i].y_coordinate, O->xin, O->yin, O->f_rotated, O->f_upside_down, x2, y2);
 
 				Px[0] = x1;
 				Px[1] = x2;
@@ -620,7 +620,7 @@ void factor_poset::draw_orbit_info(
 
 void factor_poset::coordinates(
 		int layer, int orbit,
-		int x_max, int y_max, int f_rotated,
+		int x_max, int y_max, int f_rotated, int f_upside_down,
 		int &x, int &y)
 {
 	//int l, n;
@@ -633,7 +633,7 @@ void factor_poset::coordinates(
 	}
 	LG->coordinates_direct(
 			LG->L[layer].group_x[orbit],
-			LG->L[layer].y_coordinate, x_max, y_max, f_rotated, x, y);
+			LG->L[layer].y_coordinate, x_max, y_max, f_rotated, f_upside_down, x, y);
 }
 
 

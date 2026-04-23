@@ -6629,6 +6629,12 @@ void action_global::report_strong_generators_GAP(
 	if (f_v) {
 		cout << "action_global::report_strong_generators_GAP" << endl;
 	}
+
+
+	ost << endl;
+	ost << "\\bigskip" << endl;
+	ost << endl;
+
 	ost << "GAP export: \\\\" << endl;
 	ost << "\\begin{verbatim}" << endl;
 	if (f_v) {

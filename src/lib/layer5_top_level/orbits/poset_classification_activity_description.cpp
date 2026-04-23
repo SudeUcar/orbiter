@@ -23,6 +23,7 @@ poset_classification_activity_description::poset_classification_activity_descrip
 
 	f_export_level_to_cpp = false;
 	export_level_to_cpp_level = 0;
+
 	f_export_history_to_cpp = false;
 	export_history_to_cpp_level = 0;
 

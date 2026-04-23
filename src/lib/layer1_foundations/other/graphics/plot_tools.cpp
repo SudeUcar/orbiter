@@ -461,6 +461,7 @@ void plot_tools::draw_something(
 
 	int f_mod_n = false;
 	int f_desargues = false;
+	int f_vector_decomposition = false;
 
 	if (options.length()) {
 
@@ -498,7 +499,7 @@ void plot_tools::draw_something(
 					}
 					else {
 						cout << "plot_tools::draw_something unknown value of option "
-								<< label << " value " << val << endl;
+								<< label << " value " << val << " expected: 'on'" << endl;
 						exit(1);
 					}
 					if (f_v) {
@@ -514,11 +515,27 @@ void plot_tools::draw_something(
 					}
 					else {
 						cout << "plot_tools::draw_something unknown value of option "
-								<< label << " value " << val << endl;
+								<< label << " value " << val << " expected: 'on'" << endl;
 						exit(1);
 					}
 					if (f_v) {
 						cout << "plot_tools::draw_something f_desargues = true" << endl;
+					}
+				}
+				else if (label == "vector_decomposition" /*ST.stringcmp(label, "dense") == 0*/) {
+					if (val == "on" /*ST.stringcmp(val, "on") == 0*/) {
+						f_vector_decomposition = true;
+						if (f_v) {
+							cout << "plot_tools::draw_something f_vector_decomposition = true" << endl;
+						}
+					}
+					else {
+						cout << "plot_tools::draw_something unknown value of option "
+								<< label << " value " << val << " expected: 'on'" << endl;
+						exit(1);
+					}
+					if (f_v) {
+						cout << "plot_tools::draw_something f_vector_decomposition = true" << endl;
 					}
 				}
 
@@ -572,6 +589,22 @@ void plot_tools::draw_something(
 			if (f_v) {
 				cout << "plot_tools::draw_something "
 						"after draw_desargues" << endl;
+			}
+
+		}
+		else if (f_vector_decomposition) {
+			if (f_v) {
+				cout << "plot_tools::draw_something "
+						"before draw_vector_decomposition" << endl;
+			}
+			draw_vector_decomposition(
+					G,
+					O,
+					Descr,
+					verbose_level);
+			if (f_v) {
+				cout << "plot_tools::draw_something "
+						"after draw_vector_decomposition" << endl;
 			}
 
 		}
@@ -1249,6 +1282,190 @@ void plot_tools::draw_desargues(
 
 }
 
+
+void plot_tools::draw_vector_decomposition(
+		mp_graphics &G,
+		draw_options *O,
+		draw_mod_n_description *Descr,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+	double *Dx, *Dy;
+	int *Px, *Py;
+	int N = 1000;
+	int i;
+
+
+
+	if (f_v) {
+		cout << "plot_tools::draw_vector_decomposition" << endl;
+	}
+
+
+	G.sl_thickness(100);
+	//G.sf_color(1);
+	//G.sf_interior(10);
+	Px = new int[N];
+	Py = new int[N];
+	Dx = new double[N];
+	Dy = new double[N];
+
+	Dx[0] = 0;
+	Dy[0] = 0;
+	Dx[1] = 0;
+	Dy[1] = 0;
+
+	double F, alpha, beta;
+	double Fx, Fy, Gy, h, u, v, Hx, Hy;
+
+
+	F = 5000.;
+	alpha = 40. * M_PI / 180.;
+	beta = 25. * M_PI / 180.;
+
+	Fx = F * sin(alpha);
+	Fy = F * cos(alpha);
+	Gy = Fx / tan(beta);
+
+	cout << "F=" << F << endl;
+	cout << "sin(alpha)=" << sin(alpha) << endl;
+	cout << "cos(alpha)=" << cos(alpha) << endl;
+	cout << "Fx=" << Fx << endl;
+	cout << "Fy=" << Fy << endl;
+	cout << "Gy=" << Gy << endl;
+	cout << "sin(beta)=" << sin(beta) << endl;
+	cout << "cos(beta)=" << cos(beta) << endl;
+
+	h = Fx * cos(beta);
+	u = Fx * sin(beta);
+	v = Gy * cos(beta);
+
+	cout << "h=" << h << endl;
+	cout << "u=" << u << endl;
+	cout << "v=" << v << endl;
+
+	cout << "h^2 + u^2 = " << h * h + u * u << endl;
+	cout << "Fx^2 = " << Fx * Fx << endl;
+
+
+	Hx = u * sin(beta);
+	Hy = u * cos(beta);
+
+	cout << "Hx=" << Hx << endl;
+	cout << "Hy=" << Hy << endl;
+
+	Dx[2] = 0;
+	Dy[2] = -Fy;
+
+	Dx[3] = Fx;
+	Dy[3] = -Fy;
+
+
+	Dx[4] = Fx;
+	Dy[4] = 0;
+
+	Dx[5] = Fx;
+	Dy[5] = Gy;
+
+	cout << "P5=" << Dx[5] << "," << Dy[5] << endl;
+
+	Dx[6] = -Fx;
+	Dy[6] = -Gy;
+
+	Dx[7] = Hx;
+	Dy[7] = Hy;
+
+	cout << "P5=" << Dx[5] << "," << Dy[5] << endl;
+	cout << "P7=" << Dx[7] << "," << Dy[7] << endl;
+
+	Dx[9] = 1.2 * Dx[6];
+	Dy[9] = 1.2 * Dy[6];
+
+	Dx[10] = 2 * Dx[3];
+	Dy[10] = 2 * Dy[3];
+
+	Dx[11] = 1.2 * Dx[5];
+	Dy[11] = 1.2 * Dy[5];
+
+	Dx[12] = Dx[8];
+	Dy[12] = -Dy[8];
+
+	Dx[13] = 1.5 * Dx[4];
+	Dy[13] = 1.5 * Dy[4];
+
+
+	Dx[14] = 0;
+	Dy[14] = -Gy;
+
+	Dx[15] = Hx;
+	Dy[15] = 0;
+
+	Dx[8] = 1.2 * Dx[14];
+	Dy[8] = 1.2 * Dy[14];
+
+
+	for (i = 0; i <= 15; i++) {
+		Px[i] = Dx[i];
+		Py[i] = Dy[i];
+	}
+
+
+	cout << "P5=" << Px[5] << "," << Py[5] << endl;
+	cout << "P7=" << Px[7] << "," << Py[7] << endl;
+
+	G.sl_udsty(
+			100 /* line_dashing */);
+
+	G.sl_ends(0, 0); // without arrow
+
+
+	G.polygon2(Px, Py, 12, 8);
+	G.polygon2(Px, Py, 9, 11);
+
+	G.polygon2(Px, Py, 0, 10);
+	G.polygon2(Px, Py, 0, 13);
+	G.polygon2(Px, Py, 15, 7);
+
+	G.sl_udsty(
+			0 /* line_dashing */);
+
+
+
+
+	G.sl_thickness(
+			100 /*line_thickness*/);
+
+
+	G.polygon2(Px, Py, 2, 3);
+	G.polygon2(Px, Py, 6, 14);
+	G.polygon2(Px, Py, 4, 7);
+
+
+	G.sl_ends(0, 1); // with arrow
+
+
+	G.polygon2(Px, Py, 0, 3);
+	G.polygon2(Px, Py, 0, 4);
+	G.polygon2(Px, Py, 0, 2);
+	G.polygon2(Px, Py, 0, 7);
+	G.polygon2(Px, Py, 7, 5);
+	G.polygon2(Px, Py, 5, 4);
+	G.polygon2(Px, Py, 4, 3);
+
+
+#if 0
+	string s;
+
+	for (i = 1; i <= 13; i++) {
+		s = std::to_string(i);
+		G.circle_text_array(Px, Py, i, O->rad, s);
+	}
+#endif
+
+	if (f_v) {
+		cout << "plot_tools::draw_vector_decomposition done" << endl;
+	}
+}
 
 
 void plot_tools::draw_point_set_in_plane(

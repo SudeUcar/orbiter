@@ -1893,6 +1893,7 @@ public:
 
 
 	// surface_domain_families.cpp:
+	// the coefficient vector is in the modified partition ordering.
 	void create_equation_general_abcd(
 			int a, int b, int c, int d,
 			int *coeff, int verbose_level);
@@ -1915,6 +1916,11 @@ public:
 	void create_equation_Cayley_klmn(
 			int k, int l, int m, int n,
 			int *coeff, int verbose_level);
+	// l,m,n must be nonzero
+	void create_equation_Pentahedral_form(
+			int *param25,
+			int *coeff,
+			int verbose_level);
 	void create_equation_bes(
 			int a, int c, int *coeff, int verbose_level);
 	void create_equation_F13(

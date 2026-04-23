@@ -134,6 +134,9 @@ public:
 	void create_surface_Cayley_form(
 			int k, int l, int m, int n,
 			int verbose_level);
+	void create_surface_Pentahedral_form(
+			int *param25,
+			int verbose_level);
 	void create_surface_by_equation(
 			std::string &ring_label,
 			std::string &name_of_formula,
@@ -298,6 +301,8 @@ public:
 	int Cayley_form_m;
 	int Cayley_form_n;
 
+	int f_Pentahedral_form;
+	std::string Pentahedral_form_params25_text; // 25 parameters
 
 	int f_by_equation;
 	std::string equation_ring_label;
@@ -454,33 +459,20 @@ public:
 
 
 // #############################################################################
-// surface_object_with_group.cpp
+// surface_object_orbits.cpp
 // #############################################################################
 
 
-//! an instance of a cubic surface together with its stabilizer
+//! orbits of the group of the surface on various objects attached to the surface
 
 
-class surface_object_with_group {
+class surface_object_orbits {
 
 public:
 
-	geometry::algebraic_geometry::surface_domain *Surf; // do not free
-	surface_with_action *Surf_A; // do not free
 
-	geometry::algebraic_geometry::surface_object *SO; // do not free
-	groups::strong_generators *Aut_gens;
-		// generators for the automorphism group
+	surface_object_with_group *SOG;
 
-	int f_has_nice_gens;
-	data_structures_groups::vector_ge *nice_gens;
-
-	groups::strong_generators *projectivity_group_gens;
-	groups::sylow_structure *Syl;
-
-
-
-	apps_combinatorics::variety_with_TDO_and_TDA *TD;
 
 	actions::action *A_on_points;
 	actions::action *A_on_Eckardt_points;
@@ -510,6 +502,168 @@ public:
 	groups::schreier *Orbits_on_points_not_on_lines;
 
 	int print_interval;
+
+
+	surface_object_orbits();
+	~surface_object_orbits();
+	void init(
+			surface_object_with_group *SOG,
+			int verbose_level);
+	void compute_orbits_of_automorphism_group(
+			int verbose_level);
+	void init_orbits_on_points(
+			int verbose_level);
+	void init_orbits_on_Eckardt_points(
+			int verbose_level);
+	void init_orbits_on_Double_points(
+			int verbose_level);
+	void init_orbits_on_Single_points(
+			int verbose_level);
+	void init_orbits_on_lines(
+			int verbose_level);
+	void init_orbits_on_half_double_sixes(
+			int verbose_level);
+	void init_orbits_on_double_sixes(
+			int verbose_level);
+	void init_orbits_on_tritangent_planes(
+			int verbose_level);
+	void init_orbits_on_Hesse_planes(
+			int verbose_level);
+	void init_orbits_on_axes(
+			int verbose_level);
+	void init_orbits_on_trihedral_pairs(
+			int verbose_level);
+	void init_orbits_on_points_not_on_lines(
+			int verbose_level);
+
+	void report_orbits_on_lines(
+			std::ostream &ost,
+			int verbose_level);
+	void report_orbits_on_points(
+			std::ostream &ost,
+			int verbose_level);
+	void report_orbits_on_Eckardt_points(
+			std::ostream &ost,
+			int verbose_level);
+	void report_orbits_on_Double_points(
+			std::ostream &ost,
+			int verbose_level);
+	void report_orbits_on_Single_points(
+			std::ostream &ost,
+			int verbose_level);
+	void report_orbits_on_Zero_points(
+			std::ostream &ost,
+			int verbose_level);
+	void report_orbits_on_Hesse_planes(
+			std::ostream &ost,
+			int verbose_level);
+	void report_orbits_on_axes(
+			std::ostream &ost,
+			int verbose_level);
+	void report_orbits_on_Single_Sixes(
+			std::ostream &ost,
+			int verbose_level);
+	void report_orbits_on_Double_Sixes(
+			std::ostream &ost,
+			int verbose_level);
+	void report_orbits_on_tritangent_planes(
+			std::ostream &ost,
+			int verbose_level);
+	void report_orbits_on_trihedral_pairs(
+			std::ostream &ost,
+			int verbose_level);
+
+	void print_summary(
+			std::ostream &ost, int verbose_level);
+
+
+	void print_generators_on_lines(
+			std::ostream &ost,
+			groups::strong_generators *Aut_gens,
+			int verbose_level);
+	void print_elements_on_lines(
+			std::ostream &ost,
+			groups::strong_generators *Aut_gens,
+			int max_nb_elements_printed,
+			int verbose_level);
+	void print_elements_on_tritangent_planes(
+			std::ostream &ost,
+			groups::strong_generators *Aut_gens,
+			int max_nb_elements_printed,
+			int verbose_level);
+	void print_automorphism_group(
+			std::ostream &ost,
+		int verbose_level);
+	void print_orbits_of_automorphism_group(
+		std::ostream &ost,
+		int f_print_orbits, std::string &fname_mask,
+		other::graphics::draw_options *Opt,
+		int max_nb_elements_printed,
+		int verbose_level);
+	void print_orbits_on_schlaefli_related_things(
+		std::ostream &ost,
+		int f_print_orbits, std::string &fname_mask,
+		other::graphics::draw_options *Opt,
+		int max_nb_elements_printed,
+		int verbose_level);
+	void cheat_sheet_basic(
+			std::ostream &ost, int verbose_level);
+	void cheat_sheet_group_elements(
+			std::ostream &ost,
+			std::string &fname_csv,
+			std::string &col_heading,
+			int verbose_level);
+	void print_automorphism_group_generators(
+			std::ostream &ost,
+			int max_nb_elements_printed,
+			int verbose_level);
+	void print_projectivity_group(
+			std::ostream &ost,
+			int max_nb_elements_printed,
+			int verbose_level);
+	void print_element_in_different_actions(
+			std::ostream &ost,
+			int *Elt,
+			int verbose_level);
+
+
+};
+
+
+
+
+// #############################################################################
+// surface_object_with_group.cpp
+// #############################################################################
+
+
+//! an instance of a cubic surface together with its stabilizer
+
+
+class surface_object_with_group {
+
+public:
+
+	geometry::algebraic_geometry::surface_domain *Surf; // do not free
+	surface_with_action *Surf_A; // do not free
+
+	geometry::algebraic_geometry::surface_object *SO; // do not free
+	groups::strong_generators *Aut_gens;
+		// generators for the automorphism group
+
+	int f_has_nice_gens;
+	data_structures_groups::vector_ge *nice_gens;
+
+	groups::strong_generators *projectivity_group_gens;
+	groups::sylow_structure *Syl;
+
+
+
+	apps_combinatorics::variety_with_TDO_and_TDA *TD;
+
+
+	surface_object_orbits *SOO;
+
 
 
 
@@ -556,76 +710,17 @@ public:
 			orbits::orbits_create *Classification_of_arcs,
 			int &a, int &b, int &c, int &d, int &e, int &f,
 			int verbose_level);
-	void compute_orbits_of_automorphism_group(
-			int verbose_level);
-	void init_orbits_on_points(
-			int verbose_level);
-	void init_orbits_on_Eckardt_points(
-			int verbose_level);
-	void init_orbits_on_Double_points(
-			int verbose_level);
-	void init_orbits_on_Single_points(
-			int verbose_level);
-	void init_orbits_on_lines(
-			int verbose_level);
-	void init_orbits_on_half_double_sixes(
-			int verbose_level);
-	void init_orbits_on_double_sixes(
-			int verbose_level);
-	void init_orbits_on_tritangent_planes(
-			int verbose_level);
-	void init_orbits_on_Hesse_planes(
-			int verbose_level);
-	void init_orbits_on_axes(
-			int verbose_level);
-	void init_orbits_on_trihedral_pairs(
-			int verbose_level);
-	void init_orbits_on_points_not_on_lines(
-			int verbose_level);
-	void print_generators_on_lines(
-			std::ostream &ost,
-			groups::strong_generators *Aut_gens,
-			int verbose_level);
-	void print_elements_on_lines(
-			std::ostream &ost,
-			groups::strong_generators *Aut_gens,
-			int max_nb_elements_printed,
-			int verbose_level);
-	void print_elements_on_tritangent_planes(
-			std::ostream &ost,
-			groups::strong_generators *Aut_gens,
-			int max_nb_elements_printed,
-			int verbose_level);
-	void print_automorphism_group(
-			std::ostream &ost,
-		int verbose_level);
-	void print_orbits_of_automorphism_group(
-		std::ostream &ost,
-		int f_print_orbits, std::string &fname_mask,
-		other::graphics::draw_options *Opt,
-		int max_nb_elements_printed,
-		int verbose_level);
-	void print_orbits_on_schlaefli_related_things(
-		std::ostream &ost,
-		int f_print_orbits, std::string &fname_mask,
-		other::graphics::draw_options *Opt,
-		int max_nb_elements_printed,
-		int verbose_level);
-	void cheat_sheet_basic(
-			std::ostream &ost, int verbose_level);
-	void cheat_sheet_group_elements(
-			std::ostream &ost,
-			std::string &fname_csv,
-			std::string &col_heading,
-			int verbose_level);
-	void print_automorphism_group_generators(
-			std::ostream &ost,
-			int max_nb_elements_printed,
-			int verbose_level);
-	void print_projectivity_group(
-			std::ostream &ost,
-			int max_nb_elements_printed,
-			int verbose_level);
+	// computes a,b,c,d coordinates of the arc associated with the surface
+	// using the standard double-six (in the present labeling of lines)
+	// and using the tritangent plane 30 = \pi_{12,34,56},
+	// after mapping the plane to
+	// the plane X3 = 0.
+	// if f_extra_point is true, computes e,f also,
+	// where e,f are the coordinates of the image of the extra point
+	// in this arc.
+	// The arc may not be the canonical arc from the classification of arcs.
+
+
 	void print_sylow_groups_of_projectivity_group(
 			std::ostream &ost,
 			int verbose_level);
@@ -664,6 +759,19 @@ public:
 			int pt_orbit,
 			std::vector<std::string> &v,
 			int verbose_level);
+	void print_full_del_Pezzo(
+			std::ostream &ost, int verbose_level);
+	void print_everything(
+			std::ostream &ost, int verbose_level);
+
+
+	void print_action_on_surface(
+			std::string &label_of_elements,
+			data_structures_groups::vector_ge *Elements,
+			int verbose_level);
+	void compute_tactical_decompositions(
+			int verbose_level);
+
 	void create_heading(
 			std::string &heading, int &nb_cols);
 	void create_vector_of_strings(
@@ -672,59 +780,6 @@ public:
 			geometry::algebraic_geometry::quartic_curve_object *QO,
 			std::vector<std::string> &v,
 			int verbose_level);
-	void print_full_del_Pezzo(
-			std::ostream &ost, int verbose_level);
-	void print_everything(
-			std::ostream &ost, int verbose_level);
-	void print_summary(
-			std::ostream &ost, int verbose_level);
-	void print_action_on_surface(
-			std::string &label_of_elements,
-			data_structures_groups::vector_ge *Elements,
-			int verbose_level);
-	void compute_tactical_decompositions(
-			int verbose_level);
-	void report_orbits_on_lines(
-			std::ostream &ost,
-			int verbose_level);
-	void report_orbits_on_points(
-			std::ostream &ost,
-			int verbose_level);
-	void report_orbits_on_Eckardt_points(
-			std::ostream &ost,
-			int verbose_level);
-	void report_orbits_on_Double_points(
-			std::ostream &ost,
-			int verbose_level);
-	void report_orbits_on_Single_points(
-			std::ostream &ost,
-			int verbose_level);
-	void report_orbits_on_Zero_points(
-			std::ostream &ost,
-			int verbose_level);
-	void report_orbits_on_Hesse_planes(
-			std::ostream &ost,
-			int verbose_level);
-	void report_orbits_on_axes(
-			std::ostream &ost,
-			int verbose_level);
-	void report_orbits_on_Single_Sixes(
-			std::ostream &ost,
-			int verbose_level);
-	void report_orbits_on_Double_Sixes(
-			std::ostream &ost,
-			int verbose_level);
-	void report_orbits_on_tritangent_planes(
-			std::ostream &ost,
-			int verbose_level);
-	void report_orbits_on_trihedral_pairs(
-			std::ostream &ost,
-			int verbose_level);
-#if 0
-	void report_orbits(
-			std::ostream &ost,
-			int verbose_level);
-#endif
 
 };
 

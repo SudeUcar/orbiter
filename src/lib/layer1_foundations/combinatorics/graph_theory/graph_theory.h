@@ -741,7 +741,7 @@ public:
 			int verbose_level);
 	void coordinates(
 			int layer, int orbit,
-			int x_max, int y_max, int f_rotated,
+			int x_max, int y_max, int f_rotated, int f_upside_down,
 			int &x, int &y);
 
 };
@@ -1185,11 +1185,12 @@ public:
 			int verbose_level);
 	void coordinates_direct(
 			double x_in, double y_in,
-		int x_max, int y_max, int f_rotated,
+		int x_max, int y_max,
+		int f_rotated, int f_upside_down,
 		int &x, int &y);
 	void coordinates(
 			int id, int x_max, int y_max,
-		int f_rotated,
+		int f_rotated, int f_upside_down,
 		int &x, int &y);
 	void find_node_by_id(
 			int id, int &l, int &n);

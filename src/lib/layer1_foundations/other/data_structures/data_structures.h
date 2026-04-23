@@ -931,6 +931,8 @@ public:
 			std::ostream &ost, std::vector<int> &v);
 	void print_stl(
 			std::ostream &ost, std::vector<int> &v);
+	std::string stringify_stl(
+			std::vector<int> &v);
 	void print(
 			std::ostream &ost, int *v, int len);
 	void print_str(
@@ -1187,6 +1189,8 @@ public:
 			std::ostream &ost, long int *v, int len);
 	void print(
 			std::ostream &ost, long int *v, int len);
+	std::string stringify_stl(
+			std::vector<long int> &v);
 	void print(
 			std::ostream &ost, std::vector<long int> &v);
 	void print_stl(

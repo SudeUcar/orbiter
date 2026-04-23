@@ -547,6 +547,7 @@ ORBITER_MODULES= \
 		layer5_top_level/applications_in_algebraic_geometry/cubic_surfaces_in_general/surface_create_description.o \
 		layer5_top_level/applications_in_algebraic_geometry/cubic_surfaces_in_general/surface_create.o \
 		layer5_top_level/applications_in_algebraic_geometry/cubic_surfaces_in_general/surface_domain_high_level.o \
+		layer5_top_level/applications_in_algebraic_geometry/cubic_surfaces_in_general/surface_object_orbits.o \
 		layer5_top_level/applications_in_algebraic_geometry/cubic_surfaces_in_general/surface_object_with_group.o \
 		layer5_top_level/applications_in_algebraic_geometry/cubic_surfaces_in_general/surface_study.o \
 		layer5_top_level/applications_in_algebraic_geometry/cubic_surfaces_in_general/surface_with_action.o \

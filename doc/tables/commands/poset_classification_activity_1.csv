@@ -1,6 +1,6 @@
 ROW,C1,C2,C3
-0,"tab:pc:activity",,
-1,"Activities for Posets of Orbits",,
+0,"tab:pc:activity:1",,
+1,"Activities for Posets of Orbits (Part 1)",,
 1,"\verb'-report' "," options  "," Produce a latex report. For options, see Table~\ref{tab:pc:report:options}. Requires \verb'-orbiter_path' option from Section~\ref{sec:session}. "
 1,"\verb'-export_level_to_cpp' "," i  "," Export level i to cpp file. "
 1,"\verb'-export_history_to_cpp' "," i  "," Export history up to level i to cpp file. "
@@ -8,7 +8,7 @@ ROW,C1,C2,C3
 1,"\verb'-find_node_by_stabilizer_order' "," k  "," Search for all nodes whose stabilizer has order k. "
 1,"\verb'-draw_poset' "," options  "," Draw the poset of orbits. Uses the given draw options."
 1,"\verb'-draw_full_poset' ","  options "," Draw the poset of orbits in full. Uses the given draw options. "
-1,"\verb'-plesken' ","   "," Compute the Plesken matrix of the poset of orbits. See~\cite{Plesken82}. "
+1,"\verb'-plesken_ring' ","   "," Compute the Plesken matrix of the poset of orbits. See~\cite{Plesken82}. This command returns an object of type Plesken\_ring. "
 1,"\verb'-print_data_structure' ","   "," Print the data structure of the poset of orbits. "
 1,"\verb'-list' ","   "," List the nodes in the poset of orbits.  "
 1,"\verb'-list_all' ","   "," List all nodes in the poset of orbits.  "
@@ -24,8 +24,4 @@ ROW,C1,C2,C3
 1,"\verb'-show_whole_orbits' ","   "," Show the whole orbits. "
 1,"\verb'-export_schreier_trees' ","   "," Export all Schreier trees. "
 1,"\verb'-draw_schreier_trees' ","   "," Draw all Schreier trees.  "
-1,"\verb'-test_multi_edge_in_' \verb'decomposition_matrix' ","   "," "
-1,"\verb'-recognize' "," set  "," Recognizes the given set in the poset of orbits. This option can be repeated."
-1,"\verb'-pair_relations_within_orbit' "," orbit  "," Computes the pairwise join of elements in the given orbit and identifies the orbit in the poset. A matrix is written. "
-1,"\verb'-export_orbits_long' ","   "," Exports all orbits in long form. This means, each element of each orbit is listed."
 END

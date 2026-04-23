@@ -10,6 +10,7 @@ MODULES = \
 	surface_create_description.o \
 	surface_create.o \
 	surface_domain_high_level.o \
+	surface_object_orbits.o \
 	surface_object_with_group.o \
 	surface_study.o \
 	surface_with_action.o \

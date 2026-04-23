@@ -75,6 +75,7 @@ namespace orbiter {
 				class surface_create_description;
 				class surface_create;
 				class surface_domain_high_level;
+				class surface_object_orbits;
 				class surface_object_with_group;
 				class surface_study;
 				class surface_with_action;

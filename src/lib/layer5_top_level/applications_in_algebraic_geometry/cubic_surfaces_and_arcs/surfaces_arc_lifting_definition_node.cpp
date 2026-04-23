@@ -171,7 +171,7 @@ void surfaces_arc_lifting_definition_node::report2(
 	report_Clebsch_maps(ost, verbose_level);
 
 	if (SOA) {
-		SOA->cheat_sheet_basic(ost, verbose_level);
+		SOA->SOO->cheat_sheet_basic(ost, verbose_level);
 	}
 }
 

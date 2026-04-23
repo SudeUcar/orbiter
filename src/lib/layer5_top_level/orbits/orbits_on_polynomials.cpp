@@ -126,7 +126,6 @@ void orbits_on_polynomials::init(
 
 	f_has_Sch = true;
 
-	//int print_interval = 1000000;
 
 	Sch = A->Strong_gens->compute_all_point_orbits_schreier(
 			A2, print_interval, verbose_level - 2);
@@ -468,6 +467,7 @@ void orbits_on_polynomials::orbit_of_one_polynomial(
 
 void orbits_on_polynomials::compute_points(
 		int verbose_level)
+// Points is a vector of vectors containing the orbits (as sets) one-by-one
 {
 	int *coeff;
 	int i;
@@ -637,22 +637,29 @@ void orbits_on_polynomials::report(
 				algebra::ring_theory::longinteger_object go;
 				T->Reps[i].Strong_gens->group_order(go);
 
+				// 1
 				ost << i << " : ";
+
+				// 2
 				Lint_vec_print(ost, T->Reps[i].data, T->Reps[i].sz);
 				ost << " : ";
+
+				// 3
 				ost << go;
 
 				ost << " : ";
 
 				HPD->unrank_coeff_vector(coeff, T->Reps[i].data[0]);
 
-				int nb_pts;
+				//int nb_pts;
 
-				nb_pts = Nb_pts[i];
+				//nb_pts = Nb_pts[i];
 
 				//ost << nb_pts;
 				//ost << " : ";
 
+
+				// 4
 				ost << T->Reps[i].data[0] << "=$";
 				HPD->print_equation_tex(ost, coeff);
 				//int_vec_print(f, coeff, HPD->get_nb_monomials());
@@ -665,21 +672,32 @@ void orbits_on_polynomials::report(
 
 				ost << " : ";
 
-				int u;
-				long int *set;
+				//int u;
+				//long int *set;
 				//groups::strong_generators *Sg;
 
+#if 0
 				set = NEW_lint(nb_pts);
 				for (u = 0; u < nb_pts; u++) {
 					set[u] = Points[i][u];
 				}
+#endif
 
+				// 5
+				string s_points;
+
+				s_points = Lint_vec_stl_stringify(Points[i]);
+
+				ost << "\"" + s_points + "\"";
+
+#if 0
 				for (u = 0; u < nb_pts; u++) {
 					ost << set[u];
 					if (u < nb_pts - 1) {
 						ost << ",";
 					}
 				}
+#endif
 
 #if 0
 				PA->compute_group_of_set(set, nb_pts,
@@ -694,7 +712,7 @@ void orbits_on_polynomials::report(
 
 				ost << "\\\\" << endl;
 
-				FREE_lint(set);
+				//FREE_lint(set);
 			}
 
 			FREE_int(Idx);
@@ -719,6 +737,130 @@ void orbits_on_polynomials::report(
 	}
 
 }
+
+void orbits_on_polynomials::prepare_data(
+		std::string &headings,
+		std::string *&Table,
+		int &nb_rows, int &nb_cols,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+	int f_vv = (verbose_level >= 2);
+
+	if (f_v) {
+		cout << "orbits_on_polynomials::prepare_data" << endl;
+		cout << "orbits_on_polynomials::prepare_data verbose_level=" << verbose_level << endl;
+	}
+	int orbit_idx;
+
+	nb_rows = T->nb_orbits;
+
+	create_heading(headings, nb_cols);
+
+	Table = new string[nb_rows * nb_cols];
+
+
+	for (orbit_idx = 0; orbit_idx < nb_rows; orbit_idx++) {
+
+		if (f_vv) {
+			cout << "orbits_on_polynomials::prepare_data counter = " << orbit_idx
+					<< " / " << nb_rows << endl;
+		}
+
+
+		std::vector<std::string> v;
+
+		create_vector_of_strings(
+				orbit_idx,
+				v,
+				verbose_level - 1);
+
+
+		int j;
+
+		for (j = 0; j < nb_cols; j++) {
+			Table[orbit_idx * nb_cols + j] = v[j];
+		}
+
+	}
+	if (f_v) {
+		cout << "orbits_on_polynomials::prepare_data done" << endl;
+	}
+}
+
+
+
+void orbits_on_polynomials::create_heading(
+		std::string &heading, int &nb_cols)
+{
+	heading = "OrbIdx,Go,EqnCode,EqnVec,EqnAf,NbPts,Pts";
+	nb_cols = 7;
+
+}
+
+void orbits_on_polynomials::create_vector_of_strings(
+		int orbit_idx,
+		std::vector<std::string> &v,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "orbits_on_polynomials::create_vector_of_strings" << endl;
+	}
+
+	int *coeff;
+
+	coeff = NEW_int(HPD->get_nb_monomials());
+
+
+	int nb_cols;
+
+	nb_cols = 7;
+
+	v.resize(nb_cols);
+
+	v[0] = std::to_string(orbit_idx);
+
+	algebra::ring_theory::longinteger_object go;
+	T->Reps[orbit_idx].Strong_gens->group_order(go);
+
+	v[1] = go.stringify();
+
+	v[2] = std::to_string(T->Reps[orbit_idx].data[0]);
+	//v[2] = Lint_vec_stringify(T->Reps[orbit_idx].data, T->Reps[orbit_idx].sz);
+
+	HPD->unrank_coeff_vector(coeff, T->Reps[orbit_idx].data[0]);
+
+	v[3] = "\"" + Int_vec_stringify(coeff, HPD->get_nb_monomials()) + "\"";
+
+
+	string s_eqn_af;
+
+	s_eqn_af = HPD->stringify_equation(coeff);
+
+	v[4] = "\"" + s_eqn_af + "\"";
+
+
+	v[5] = std::to_string(Points[orbit_idx].size());
+
+	string s_points;
+
+	s_points = Lint_vec_stl_stringify(Points[orbit_idx]);
+
+	v[6] = "\"" + s_points + "\"";
+
+
+
+	FREE_int(coeff);
+
+
+	if (f_v) {
+		cout << "orbits_on_polynomials::create_vector_of_strings done" << endl;
+	}
+}
+
+
 
 void orbits_on_polynomials::report_detailed_list(
 		std::ostream &ost,
@@ -846,14 +988,18 @@ void orbits_on_polynomials::export_something(
 
 	if (f_v) {
 		cout << "orbits_on_polynomials::export_something" << endl;
-		cout << "orbits_on_polynomials::export_something this = " << this << endl;
+		//cout << "orbits_on_polynomials::export_something this = " << this << endl;
 	}
 
 	other::data_structures::string_tools ST;
 
 	string fname_base;
 
-	fname_base = "orbits_" + A2->label;
+	fname_base = "orbits_" + A2->label + "_" + what;
+	if (f_v) {
+		cout << "orbits_on_polynomials::export_something what = " << what << endl;
+		cout << "orbits_on_polynomials::export_something fname_base = " << fname_base << endl;
+	}
 
 	if (f_v) {
 		cout << "orbits_on_polynomials::export_something "
@@ -890,7 +1036,7 @@ void orbits_on_polynomials::export_something_worker(
 	if (ST.stringcmp(what, "orbit") == 0) {
 
 		if (f_v) {
-			cout << "orbits_on_polynomials::export_something_worker orbit" << endl;
+			cout << "orbits_on_polynomials::export_something_worker what=orbit" << endl;
 		}
 
 		if (f_has_Sch) {
@@ -952,6 +1098,116 @@ void orbits_on_polynomials::export_something_worker(
 		cout << "orbits_on_polynomials::export_something_worker "
 				"Written file " << fname << " of size "
 				<< Fio.file_size(fname) << endl;
+	}
+	else if (ST.stringcmp(what, "representatives") == 0) {
+
+		if (f_v) {
+			cout << "orbits_on_polynomials::export_something_worker what=representatives" << endl;
+		}
+
+		if (f_has_Sch) {
+
+			if (f_v) {
+				cout << "orbits_on_polynomials::export_something_worker f_has_Sch" << endl;
+			}
+
+			std::string *Table;
+			std::string Headings;
+			int nb_rows, nb_cols;
+
+
+
+			prepare_data(
+					Headings,
+					Table,
+					nb_rows, nb_cols,
+					verbose_level);
+
+			fname = fname_base + ".csv";
+
+			Fio.Csv_file_support->write_table_of_strings(
+					fname,
+					nb_rows, nb_cols, Table,
+					Headings,
+					verbose_level);
+
+			other::data_structures::tally *Ago_dist;
+			long int *Ago;
+
+
+			Ago_dist = T->get_ago_distribution(
+					Ago,
+					verbose_level);
+
+			if (f_v) {
+				cout << "orbits_on_polynomials::export_something_worker Ago_dist = ";
+				Ago_dist->print_bare(true);
+				cout << endl;
+
+				int i, f, l, a;
+
+				cout << "\\left( ";
+				for (i = Ago_dist->nb_types - 1; i >= 0; i--) {
+					f = Ago_dist->type_first[i];
+					l = Ago_dist->type_len[i];
+					a = Ago_dist->data_sorted[f];
+					cout << "\\frac{" << l << "}{" << a << "}";
+					if (i) {
+						cout << " + ";
+					}
+#if 0
+					ost << a;
+					if (l > 1) {
+						ost << "^" << l;
+					}
+					if (i) {
+						ost << ", ";
+					}
+#endif
+				}
+				cout << " \\right)";
+				cout << endl;
+
+
+				cout << "( ";
+				for (i = Ago_dist->nb_types - 1; i >= 0; i--) {
+					f = Ago_dist->type_first[i];
+					l = Ago_dist->type_len[i];
+					a = Ago_dist->data_sorted[f];
+					cout << " " << l << " / " << a << " ";
+					if (i) {
+						cout << " + ";
+					}
+#if 0
+					ost << a;
+					if (l > 1) {
+						ost << "^" << l;
+					}
+					if (i) {
+						ost << ", ";
+					}
+#endif
+				}
+				cout << " )";
+				cout << endl;
+
+
+			}
+
+
+		}
+		else if (f_has_Orb) {
+			if (f_v) {
+				cout << "orbits_on_polynomials::export_something_worker f_has_Orb" << endl;
+			}
+			cout << "orbits_on_polynomials::export_something_worker not implemented for this type of orbit" << endl;
+			exit(1);
+		}
+		else {
+			cout << "orbits_on_polynomials::export_something_worker neither f_has_Sch nor f_has_Orb" << endl;
+			exit(1);
+		}
+
 	}
 	else {
 		cout << "orbits_on_polynomials::export_something_worker "

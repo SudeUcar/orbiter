@@ -535,6 +535,28 @@ void int_vec::print_stl(
 	}
 }
 
+
+std::string int_vec::stringify_stl(
+		std::vector<int> &v)
+{
+	int i, len;
+	string s;
+
+	len = v.size();
+	//s += "( ";
+	for (i = 0; i < len; i++) {
+		s += std::to_string(v[i]);
+		if (i < len - 1) {
+			s += ", ";
+		}
+	}
+	//s += " )";
+	return s;
+}
+
+
+
+
 void int_vec::print(
 		std::ostream &ost, int *v, int len)
 {

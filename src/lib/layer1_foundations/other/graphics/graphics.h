@@ -384,6 +384,8 @@ public:
 
 	int f_rotated; // Rotate the output.
 
+	int f_upside_down; // flip top and bottom
+
 
 	int f_nodes; // Turn on node drawing.
 	int f_nodes_empty; // Do not label the nodes. Default value: off.
@@ -1292,6 +1294,11 @@ public:
 			draw_mod_n_description *Descr,
 			int verbose_level);
 	void draw_desargues(
+			mp_graphics &G,
+			draw_options *O,
+			draw_mod_n_description *Descr,
+			int verbose_level);
+	void draw_vector_decomposition(
 			mp_graphics &G,
 			draw_options *O,
 			draw_mod_n_description *Descr,

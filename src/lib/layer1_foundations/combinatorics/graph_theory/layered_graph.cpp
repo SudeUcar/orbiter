@@ -496,15 +496,30 @@ void layered_graph::draw_edges(
 	rad_x_twice = O->rad >> 3;
 	rad_y_twice = O->rad >> 3;
 
+
+	if (f_v) {
+		if (O->f_select_layers) {
+			cout << "layered_graph::draw_edges f_select_layers is on : ";
+			Int_vec_print(cout, O->layer_select, O->nb_layer_select);
+			cout << endl;
+		}
+		else {
+			cout << "layered_graph::draw_edges f_select_layers is off" << endl;
+		}
+	}
+
+
 	// draw the edges first:
 	for (i = 0; i < nb_layers; i++) {
 
 		if (O->f_select_layers) {
 			int idx;
+			int f_found;
 
-			if (!Sorting.int_vec_search_linear(
+			f_found = Sorting.int_vec_search_linear(
 					O->layer_select,
-					O->nb_layer_select, i, idx)) {
+					O->nb_layer_select, i, idx);
+			if (!f_found) {
 				continue;
 			}
 
@@ -539,7 +554,8 @@ void layered_graph::draw_edges(
 			}
 			coordinates(
 					L[i].Nodes[j].id, O->xin, O->yin,
-					O->f_rotated, x, y);
+					O->f_rotated, O->f_upside_down, x, y);
+
 			//G.circle(x, y, rad);
 
 
@@ -587,7 +603,7 @@ void layered_graph::draw_edges(
 					up_color[nb_up] = L[i].Nodes[j].Edge_color[h];
 					nb_up++;
 					if (f_v) {
-						cout << "added an up link" << endl;
+						cout << "added an up link from layer " << i << " to layer " << l << endl;
 					}
 				}
 				else {
@@ -595,7 +611,7 @@ void layered_graph::draw_edges(
 					down_color[nb_down] = L[i].Nodes[j].Edge_color[h];
 					nb_down++;
 					if (f_v) {
-						cout << "added a down link" << endl;
+						cout << "added a down link from layer " << i << " to layer " << l << endl;
 					}
 				}
 			}
@@ -627,7 +643,8 @@ void layered_graph::draw_edges(
 					find_node_by_id(id, l, n);
 					coordinates(
 							id, O->xin, O->yin,
-							O->f_rotated, x2, y2);
+							O->f_rotated, O->f_upside_down,
+							x2, y2);
 					if (h > 0 && h < nb_up - 1) {
 #if 1
 						Px[0] = x;
@@ -679,10 +696,11 @@ void layered_graph::draw_edges(
 					find_node_by_id(id, l, n);
 					coordinates(
 							id, O->xin, O->yin,
-							O->f_rotated, x2, y2);
+							O->f_rotated, O->f_upside_down,
+							x2, y2);
 					Px[0] = x;
-					Px[1] = x2;
 					Py[0] = y;
+					Px[1] = x2;
 					Py[1] = y2;
 
 					G->sl_color(edge_color);
@@ -731,7 +749,8 @@ void layered_graph::draw_edges(
 
 					find_node_by_id(id, l, n);
 					coordinates(
-							id, O->xin, O->yin, O->f_rotated, x2, y2);
+							id, O->xin, O->yin, O->f_rotated, O->f_upside_down,
+							x2, y2);
 					if (h > 0 && h < nb_down - 1) {
 #if 1
 						Px[0] = x;
@@ -790,7 +809,8 @@ void layered_graph::draw_edges(
 					find_node_by_id(id, l, n);
 					coordinates(
 							id, O->xin, O->yin,
-							O->f_rotated, x2, y2);
+							O->f_rotated, O->f_upside_down,
+							x2, y2);
 					Px[0] = x;
 					Px[1] = x2;
 					Py[0] = y;
@@ -892,11 +912,13 @@ void layered_graph::draw_vertices(
 
 		if (L[i].nb_nodes > threshold) {
 			coordinates(L[i].Nodes[0].id, O->xin, O->yin,
-					O->f_rotated, x, y);
+					O->f_rotated, O->f_upside_down,
+					x, y);
 			Px[0] = x;
 			Py[0] = y;
 			coordinates(L[i].Nodes[L[i].nb_nodes - 1].id,
-					O->xin, O->yin, O->f_rotated, x, y);
+					O->xin, O->yin, O->f_rotated, O->f_upside_down,
+					x, y);
 			Px[1] = x;
 			Py[1] = y;
 			G->polygon2(Px, Py, 0, 1);
@@ -914,7 +936,8 @@ void layered_graph::draw_vertices(
 			}
 			coordinates(
 					L[i].Nodes[j].id, O->xin, O->yin,
-					O->f_rotated, x, y);
+					O->f_rotated, O->f_upside_down,
+					x, y);
 
 
 			string label;
@@ -1017,7 +1040,8 @@ void layered_graph::draw_level_info(
 	if (O->f_show_level_info) {
 		// draw depth labels at the side:
 		coordinates(L[0].Nodes[0].id,
-				O->xin, O->yin, O->f_rotated, x, y);
+				O->xin, O->yin, O->f_rotated, O->f_upside_down,
+				x, y);
 		Px[0] = 1 * O->rad;
 		Py[0] = y + 4 * O->rad;
 		string s;
@@ -1025,18 +1049,21 @@ void layered_graph::draw_level_info(
 		G->aligned_text(Px[0], Py[0], "", s);
 		for (i = 0; i < nb_layers - 1; i++) {
 			coordinates(L[i].Nodes[0].id,
-					O->xin, O->yin, O->f_rotated, x, y);
+					O->xin, O->yin, O->f_rotated, O->f_upside_down,
+					x, y);
 			Px[0] = 2 * O->rad;
 			Py[0] = y;
 			coordinates(L[i + 1].Nodes[0].id,
-					O->xin, O->yin, O->f_rotated, x, y);
+					O->xin, O->yin, O->f_rotated, O->f_upside_down,
+					x, y);
 			Px[1] = 2 * O->rad;
 			Py[1] = y;
 			G->polygon2(Px, Py, 0, 1);
 		}
 		for (i = 0; i < nb_layers; i++) {
 			coordinates(L[i].Nodes[0].id,
-					O->xin, O->yin, O->f_rotated, x, y);
+					O->xin, O->yin, O->f_rotated, O->f_upside_down,
+					x, y);
 			Px[0] = 1 * O->rad;
 			Py[0] = y;
 			Px[1] = 3 * O->rad;
@@ -1046,7 +1073,8 @@ void layered_graph::draw_level_info(
 		for (i = 0; i < nb_layers; i++) {
 
 			coordinates(L[i].Nodes[0].id,
-					O->xin, O->yin, O->f_rotated, x, y);
+					O->xin, O->yin, O->f_rotated, O->f_upside_down,
+					x, y);
 			Px[0] = 0;
 			Py[0] = y;
 			//G.nice_circle(Px[0], Py[0], rad * 4);
@@ -1065,10 +1093,12 @@ void layered_graph::draw_level_info(
 
 void layered_graph::coordinates_direct(
 		double x_in, double y_in,
-		int x_max, int y_max, int f_rotated,
+		int x_max, int y_max,
+		int f_rotated, int f_upside_down,
 		int &x, int &y)
 {
 	double x1, y1;
+	double x2, y2;
 
 	if (f_rotated) {
 		x1 = 1 - y_in;
@@ -1078,13 +1108,23 @@ void layered_graph::coordinates_direct(
 		x1 = x_in;
 		y1 = y_in;
 	}
-	x = (int)(x1 * x_max);
-	y = (int)(y1 * y_max);
+
+	if (f_upside_down) {
+		y2 = 1 - y1;
+		x2 = x1;
+	}
+	else {
+		x2 = x1;
+		y2 = y1;
+	}
+	x = (int)(x2 * x_max);
+	y = (int)(y2 * y_max);
 }
 
 void layered_graph::coordinates(
 		int id,
-		int x_max, int y_max, int f_rotated,
+		int x_max, int y_max,
+		int f_rotated, int f_upside_down,
 		int &x, int &y)
 {
 	int l, n;
@@ -1093,7 +1133,7 @@ void layered_graph::coordinates(
 
 	coordinates_direct(
 			L[l].Nodes[n].x_coordinate,
-			L[l].y_coordinate, x_max, y_max, f_rotated, x, y);
+			L[l].y_coordinate, x_max, y_max, f_rotated, f_upside_down, x, y);
 #if 0
 	x = (int)(L[l].Nodes[n].x_coordinate * x_max);
 	y = (int)(L[l].y_coordinate * y_max);

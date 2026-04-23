@@ -551,6 +551,18 @@ public:
 	void report_detailed_list(
 			std::ostream &ost,
 			int verbose_level);
+	void prepare_data(
+			std::string &headings,
+			std::string *&Table,
+			int &nb_rows, int &nb_cols,
+			int verbose_level);
+	void create_heading(
+			std::string &heading, int &nb_cols);
+	void create_vector_of_strings(
+			int orbit_idx,
+			std::vector<std::string> &v,
+			int verbose_level);
+
 	void export_something(
 			std::string &what, int data1,
 			std::string &fname, int verbose_level);
@@ -614,7 +626,7 @@ class poset_classification_activity_description {
 
 public:
 
-	// TABLES/poset_classification_activity.tex
+	// TABLES/poset_classification_activity_1.tex
 
 	int f_report;
 	layer4_classification::poset_classification::poset_classification_report_options *report_options;
@@ -666,6 +678,12 @@ public:
 	int f_draw_schreier_trees;
 	std::string schreier_tree_prefix;
 			// comes after problem_label_with_path
+
+
+
+
+	// TABLES/poset_classification_activity_2.tex
+
 
 	int f_test_multi_edge_in_decomposition_matrix;
 

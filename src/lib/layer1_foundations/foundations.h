@@ -1111,6 +1111,8 @@ namespace other {
 
 #define Int_vec_stringify(v, len) other::orbiter_kernel_system::Orbiter->Int_vec->stringify(v, len)
 #define Lint_vec_stringify(v, len) other::orbiter_kernel_system::Orbiter->Lint_vec->stringify(v, len)
+#define Int_vec_stl_stringify(v) other::orbiter_kernel_system::Orbiter->Int_vec->stringify_stl(v)
+#define Lint_vec_stl_stringify(v) other::orbiter_kernel_system::Orbiter->Lint_vec->stringify_stl(v)
 
 #define Int_vec_heapsort(v, len) other::orbiter_kernel_system::Orbiter->Int_vec->heapsort(v, len)
 #define Lint_vec_heapsort(v, len) other::orbiter_kernel_system::Orbiter->Lint_vec->heapsort(v, len)

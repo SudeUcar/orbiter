@@ -1635,7 +1635,7 @@ void surfaces_arc_lifting::report_surfaces_in_detail(
 		ost << "The automorphism group of the surface:\\\\" << endl;
 
 		if (D->SOA) {
-			D->SOA->cheat_sheet_basic(ost, verbose_level);
+			D->SOA->SOO->cheat_sheet_basic(ost, verbose_level);
 		}
 
 

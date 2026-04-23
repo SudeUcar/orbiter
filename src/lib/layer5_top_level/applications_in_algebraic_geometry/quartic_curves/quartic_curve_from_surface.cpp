@@ -271,7 +271,7 @@ void quartic_curve_from_surface::create_quartic_curve(
 	}
 
 
-	if (SOA->Orbits_on_points_not_on_lines->Forest->nb_orbits == 0) {
+	if (SOA->SOO->Orbits_on_points_not_on_lines->Forest->nb_orbits == 0) {
 		return;
 	}
 
@@ -669,11 +669,11 @@ void quartic_curve_from_surface::compute_point_A(
 	// which is the rank of the point which represents the chosen point orbit.
 	// The point must not lie on any line.
 
-	fst = SOA->Orbits_on_points_not_on_lines->Forest->orbit_first[pt_orbit];
+	fst = SOA->SOO->Orbits_on_points_not_on_lines->Forest->orbit_first[pt_orbit];
 
-	po_index = SOA->Orbits_on_points_not_on_lines->Forest->orbit_len[pt_orbit];
+	po_index = SOA->SOO->Orbits_on_points_not_on_lines->Forest->orbit_len[pt_orbit];
 
-	i = SOA->Orbits_on_points_not_on_lines->Forest->orbit[fst];
+	i = SOA->SOO->Orbits_on_points_not_on_lines->Forest->orbit[fst];
 
 	pt_A = SOA->SO->SOP->Pts_not_on_lines[i];
 
@@ -708,12 +708,12 @@ void quartic_curve_from_surface::map_surface_to_special_form(
 		cout << "pt_orbit=" << pt_orbit << endl;
 	}
 
-	if (SOA->Orbits_on_points_not_on_lines == NULL) {
+	if (SOA->SOO->Orbits_on_points_not_on_lines == NULL) {
 		cout << "quartic_curve_from_surface::map_surface_to_special_form "
 				"Orbits_on_points_not_on_lines has not been computed" << endl;
 		exit(1);
 	}
-	if (pt_orbit >= SOA->Orbits_on_points_not_on_lines->Forest->nb_orbits) {
+	if (pt_orbit >= SOA->SOO->Orbits_on_points_not_on_lines->Forest->nb_orbits) {
 		cout << "quartic_curve_from_surface::map_surface_to_special_form "
 				"pt_orbit >= Orbits_on_points_not_on_lines->nb_orbits" << endl;
 		exit(1);

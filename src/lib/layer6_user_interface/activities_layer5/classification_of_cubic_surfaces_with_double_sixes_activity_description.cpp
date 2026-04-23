@@ -49,6 +49,16 @@ classification_of_cubic_surfaces_with_double_sixes_activity_description::classif
 
 	f_sweep_Cayley = false;
 
+	f_sweep_Sylvester = false;
+	//std::string sweep_Sylvester_fname;
+	//std::string sweep_Sylvester_col_label;
+	//std::string sweep_Sylvester_options;
+
+	f_Sylvester_pentahedral_form_after_sweep = false;
+	//std::string Sylvester_pentahedral_form_after_sweep_surface_label;
+	//std::string Sylvester_pentahedral_form_after_sweep_fname;
+	//std::string Sylvester_pentahedral_form_after_sweep_col_label;
+
 }
 
 classification_of_cubic_surfaces_with_double_sixes_activity_description::~classification_of_cubic_surfaces_with_double_sixes_activity_description()
@@ -140,6 +150,28 @@ int classification_of_cubic_surfaces_with_double_sixes_activity_description::rea
 				cout << "-sweep_Cayley " << endl;
 			}
 		}
+		else if (ST.stringcmp(argv[i], "-sweep_Sylvester") == 0) {
+			f_sweep_Sylvester = true;
+			sweep_Sylvester_fname.assign(argv[++i]);
+			sweep_Sylvester_col_label.assign(argv[++i]);
+			sweep_Sylvester_options.assign(argv[++i]);
+			if (f_v) {
+				cout << "-sweep_Sylvester " << sweep_Sylvester_fname << " " << sweep_Sylvester_col_label << " " << sweep_Sylvester_options << endl;
+			}
+		}
+		else if (ST.stringcmp(argv[i], "-Sylvester_pentahedral_form_after_sweep") == 0) {
+			f_Sylvester_pentahedral_form_after_sweep = true;
+			Sylvester_pentahedral_form_after_sweep_surface_label.assign(argv[++i]);
+			Sylvester_pentahedral_form_after_sweep_fname.assign(argv[++i]);
+			Sylvester_pentahedral_form_after_sweep_col_label.assign(argv[++i]);
+			if (f_v) {
+				cout << "-Sylvester_pentahedral_form_after_sweep "
+						<< Sylvester_pentahedral_form_after_sweep_surface_label
+						<< " " << Sylvester_pentahedral_form_after_sweep_fname
+						<< " " << Sylvester_pentahedral_form_after_sweep_col_label
+						<< endl;
+			}
+		}
 		else if (ST.stringcmp(argv[i], "-end") == 0) {
 			if (f_v) {
 				cout << "classification_of_cubic_surfaces_with_double_sixes_activity_description::read_arguments -end" << endl;
@@ -197,6 +229,15 @@ void classification_of_cubic_surfaces_with_double_sixes_activity_description::pr
 	}
 	if (f_sweep_Cayley) {
 		cout << "-sweep_Cayley " << endl;
+	}
+	if (f_sweep_Sylvester) {
+		cout << "-sweep_Sylvester " << sweep_Sylvester_fname << " " << sweep_Sylvester_col_label << " " << sweep_Sylvester_options << endl;
+	}
+	if (f_Sylvester_pentahedral_form_after_sweep) {
+		cout << "-Sylvester_pentahedral_form_after_sweep " << Sylvester_pentahedral_form_after_sweep_surface_label
+				<< " " << Sylvester_pentahedral_form_after_sweep_fname
+				<< " " << Sylvester_pentahedral_form_after_sweep_col_label
+				<< endl;
 	}
 }
 

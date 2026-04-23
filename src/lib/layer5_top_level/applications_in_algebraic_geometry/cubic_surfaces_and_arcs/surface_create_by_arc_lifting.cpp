@@ -205,12 +205,12 @@ void surface_create_by_arc_lifting::init(
 				"arc " << arc_label << " yields a surface with "
 			<< AL->Web->E->nb_E << " Eckardt points and a stabilizer "
 				"of order " << go << " with "
-			<< SOA->Orbits_on_single_sixes->Forest->nb_orbits
+			<< SOA->SOO->Orbits_on_single_sixes->Forest->nb_orbits
 			<< " orbits on single sixes" << endl;
 	}
 
 
-	SCA->Arc_identify_nb[SCA->nb_surfaces] = SOA->Orbits_on_single_sixes->Forest->nb_orbits;
+	SCA->Arc_identify_nb[SCA->nb_surfaces] = SOA->SOO->Orbits_on_single_sixes->Forest->nb_orbits;
 
 
 	int orbit_idx;
@@ -220,14 +220,14 @@ void surface_create_by_arc_lifting::init(
 				"performing isomorph rejection" << endl;
 	}
 
-	Clebsch = NEW_OBJECTS(cubic_surfaces_in_general::surface_clebsch_map, SOA->Orbits_on_single_sixes->Forest->nb_orbits);
-	Other_arc_idx = NEW_int(SOA->Orbits_on_single_sixes->Forest->nb_orbits);
+	Clebsch = NEW_OBJECTS(cubic_surfaces_in_general::surface_clebsch_map, SOA->SOO->Orbits_on_single_sixes->Forest->nb_orbits);
+	Other_arc_idx = NEW_int(SOA->SOO->Orbits_on_single_sixes->Forest->nb_orbits);
 
-	for (orbit_idx = 0; orbit_idx < SOA->Orbits_on_single_sixes->Forest->nb_orbits; orbit_idx++) {
+	for (orbit_idx = 0; orbit_idx < SOA->SOO->Orbits_on_single_sixes->Forest->nb_orbits; orbit_idx++) {
 
 		if (f_v) {
 			cout << "surface_create_by_arc_lifting::init "
-					"orbit " << orbit_idx << " / " << SOA->Orbits_on_single_sixes->Forest->nb_orbits << endl;
+					"orbit " << orbit_idx << " / " << SOA->SOO->Orbits_on_single_sixes->Forest->nb_orbits << endl;
 		}
 		Clebsch[orbit_idx].init(SOA, orbit_idx, verbose_level);
 
@@ -260,7 +260,7 @@ void surface_create_by_arc_lifting::init(
 				<< AL->Web->E->nb_E
 				<< " Eckardt points and a stabilizer of order "
 				<< go << " with "
-				<< SOA->Orbits_on_single_sixes->Forest->nb_orbits
+				<< SOA->SOO->Orbits_on_single_sixes->Forest->nb_orbits
 				<< " orbits on single sixes";
 			cout << " orbit " << orbit_idx << " yields an arc which "
 					"is isomorphic to arc " << Other_arc_idx[orbit_idx] << endl;
@@ -314,7 +314,7 @@ void surface_create_by_arc_lifting::report_summary(
 	ost << "arc " << arc_idx << " yields a surface with "
 		<< AL->Web->E->nb_E << " Eckardt points and a "
 				"stabilizer of order " << ago << " with "
-		<< SOA->Orbits_on_single_sixes->Forest->nb_orbits
+		<< SOA->SOO->Orbits_on_single_sixes->Forest->nb_orbits
 		<< " orbits on single sixes\\\\" << endl;
 
 
@@ -368,7 +368,7 @@ void surface_create_by_arc_lifting::report(
 	ost << "arc " << arc_idx << " yields a surface with "
 		<< AL->Web->E->nb_E << " Eckardt points and a "
 				"stabilizer of order " << ago << " with "
-		<< SOA->Orbits_on_single_sixes->Forest->nb_orbits
+		<< SOA->SOO->Orbits_on_single_sixes->Forest->nb_orbits
 		<< " orbits on single sixes\\\\" << endl;
 
 #if 0
@@ -426,14 +426,14 @@ void surface_create_by_arc_lifting::report(
 
 	if (f_v) {
 		cout << "surface_create_by_arc_lifting::report "
-			"before SOA->print_automorphism_group" << endl;
+			"before SOA->SOO->print_automorphism_group" << endl;
 	}
-	SOA->print_automorphism_group(
+	SOA->SOO->print_automorphism_group(
 			ost,
 		verbose_level - 1);
 	if (f_v) {
 		cout << "surface_create_by_arc_lifting::report "
-			"after SOA->print_automorphism_group" << endl;
+			"after SOA->SOO->print_automorphism_group" << endl;
 	}
 
 	string fname_mask;
@@ -446,9 +446,9 @@ void surface_create_by_arc_lifting::report(
 
 	if (f_v) {
 		cout << "surface_create_by_arc_lifting::report "
-			"before SOA->print_orbits_of_automorphism_group" << endl;
+			"before SOA->SOO->print_orbits_of_automorphism_group" << endl;
 	}
-	SOA->print_orbits_of_automorphism_group(
+	SOA->SOO->print_orbits_of_automorphism_group(
 			ost,
 		true /* f_print_orbits */,
 		fname_mask, Opt,
@@ -456,7 +456,7 @@ void surface_create_by_arc_lifting::report(
 		verbose_level - 1);
 	if (f_v) {
 		cout << "surface_create_by_arc_lifting::report "
-			"after SOA->print_orbits_of_automorphism_group" << endl;
+			"after SOA->SOO->print_orbits_of_automorphism_group" << endl;
 	}
 
 
@@ -464,19 +464,19 @@ void surface_create_by_arc_lifting::report(
 	ost << "arc " << arc_label << " yields a surface with "
 		<< AL->Web->E->nb_E << " Eckardt points and a "
 				"stabilizer of order " << ago << " with "
-		<< SOA->Orbits_on_single_sixes->Forest->nb_orbits
+		<< SOA->SOO->Orbits_on_single_sixes->Forest->nb_orbits
 		<< " orbits on single sixes\\\\" << endl;
 
 
 	int orbit_idx;
 
-	for (orbit_idx = 0; orbit_idx < SOA->Orbits_on_single_sixes->Forest->nb_orbits; orbit_idx++) {
+	for (orbit_idx = 0; orbit_idx < SOA->SOO->Orbits_on_single_sixes->Forest->nb_orbits; orbit_idx++) {
 
 		cout << "arc " << arc_label << " yields a surface with "
 			<< AL->Web->E->nb_E
 			<< " Eckardt points and a stabilizer of order "
 			<< ago << " with "
-			<< SOA->Orbits_on_single_sixes->Forest->nb_orbits
+			<< SOA->SOO->Orbits_on_single_sixes->Forest->nb_orbits
 			<< " orbits on single sixes \\\\" << endl;
 		cout << " orbit " << orbit_idx << " yields an arc which is "
 				"isomorphic to arc " << Other_arc_idx[orbit_idx] << "\\\\" << endl;
@@ -484,7 +484,7 @@ void surface_create_by_arc_lifting::report(
 	}
 
 
-	for (orbit_idx = 0; orbit_idx < SOA->Orbits_on_single_sixes->Forest->nb_orbits; orbit_idx++) {
+	for (orbit_idx = 0; orbit_idx < SOA->SOO->Orbits_on_single_sixes->Forest->nb_orbits; orbit_idx++) {
 		Clebsch[orbit_idx].report(ost, verbose_level);
 	}
 

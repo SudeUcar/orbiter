@@ -55,7 +55,7 @@ void action_latex_interface::report(
 		cout << "action_latex_interface::report verbose_level = " << verbose_level << endl;
 	}
 
-	ost << "\\section*{The Action}" << endl;
+	ost << "\\section*{The Group and its Action}" << endl;
 
 
 	if (f_v) {
@@ -171,7 +171,7 @@ void action_latex_interface::report(
 			cout << "action_latex_interface::report Stabilizer_chain is allocated" << endl;
 		}
 		if (A->base_len()) {
-			ost << "action\\_latex\\_interface::report\\\\" << endl;
+			//ost << "action\\_latex\\_interface::report\\\\" << endl;
 
 			report_base(
 					ost,
@@ -240,6 +240,10 @@ void action_latex_interface::report(
 
 		}
 	}
+
+	ost << "\\bigskip" << endl;
+
+
 	if (f_v) {
 		cout << "action_latex_interface::report done" << endl;
 	}

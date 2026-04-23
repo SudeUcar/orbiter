@@ -1316,7 +1316,7 @@ void pc_combinatorics::pairwise_join_and_identify(
 				"lvl=" << lvl << " po=" << po << endl;
 	}
 
-	if (!PC->get_poset()->f_subset_lattice) {
+	if (!PC->get_poset()->f_subspace_lattice) {
 		cout << "pc_combinatorics::pairwise_join_and_identify "
 				"we must be in the subspace setting" << endl;
 		exit(1);

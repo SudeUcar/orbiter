@@ -11,4 +11,5 @@ ROW,C1,C2,C3
 1,"\verb'-recognize' "," surf "," Recognizes the isomorphism type of the given surface object in the Orbiter Catalogue of cubic surfaces. "
 1,"\verb'-create_source_code' ","  "," Create C++ source code for the cubic surfaces of the given order. "
 1,"\verb'-sweep_Cayley' ","  "," Identify the isomorphism type of all surfaces of Cayley type. "
+1,"\verb'-sweep_Sylvester' "," fname col options "," Identify the isomorphism type of all surfaces of Sylvester pentahedral type based on a list of 5-sets of planes, given by Orbiter rank. Options is an extra parameter that must be given (it could be an empty string). "
 END

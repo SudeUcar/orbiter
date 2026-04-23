@@ -817,15 +817,32 @@ void design_object::do_export_blocks(
 	string *Table;
 	string headings;
 	int nb_rows = b;
-	int nb_cols = 2;
+	int nb_cols = 3;
 	int i;
+	int *bitvec;
+
+	bitvec = NEW_int(v);
 
 	Table = new string [nb_rows * nb_cols];
 	for (i = 0; i < nb_rows; i++) {
+
+		Int_vec_zero(bitvec, v);
+
+		int j, a;
+
+		for (j = 0; j < k; j++) {
+			a = Blocks[i * k + j];
+			if (a >= v) {
+				cout << "design_object::do_export_blocks a >= v" << endl;
+				exit(1);
+			}
+			bitvec[a] = 1;
+		}
 		Table[i * nb_cols + 0] = std::to_string(i);
 		Table[i * nb_cols + 1] = "\"" + Int_vec_stringify(Blocks + i * k, k) + "\"";
+		Table[i * nb_cols + 2] = "\"" + Int_vec_stringify(bitvec, v) + "\"";
 	}
-	headings = "row,block";
+	headings = "row,block,bitvector";
 
 
 
@@ -843,7 +860,7 @@ void design_object::do_export_blocks(
 	delete [] Table;
 
 	FREE_int(Blocks);
-
+	FREE_int(bitvec);
 
 	if (f_v) {
 		cout << "design_object::do_export_blocks done" << endl;

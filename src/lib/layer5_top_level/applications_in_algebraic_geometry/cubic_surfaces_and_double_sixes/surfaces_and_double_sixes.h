@@ -386,12 +386,27 @@ public:
 	void recognition(
 			std::string &surface_label,
 			int verbose_level);
-	void identify_surface(int *coeff_of_given_surface,
+	void identify_surface(
+			int *coeff_of_given_surface,
 		int &isomorphic_to, int *Elt_isomorphism,
 		int verbose_level);
 
 	void sweep_Cayley(
+			int f_break_early,
 			int verbose_level);
+	void sweep_Sylvester(
+			long int *Plane5_ranks, int nb_types,
+			std::string &options,
+			int verbose_level);
+	// Plane5_ranks[nb_types * 5]
+	void Sylvester_pentahedral_form_after_sweep(
+			std::string &surface_label,
+			long int *Plane5_ranks, int nb_types,
+			long int *&Pentahedron5_ranks,
+			int *&Pentahedron5_coeffs,
+			int *&linear_combination5,
+			int verbose_level);
+
 	void identify_general_abcd_and_print_table(
 			int verbose_level);
 	void identify_general_abcd(

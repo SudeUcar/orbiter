@@ -759,6 +759,7 @@ void surface_domain::create_lines_for_general_abcd(
 void surface_domain::create_equation_Cayley_klmn(
 		int k, int l, int m, int n,
 		int *coeff, int verbose_level)
+// l,m,n must be nonzero
 {
 	int f_v = (verbose_level >= 1);
 
@@ -787,6 +788,61 @@ void surface_domain::create_equation_Cayley_klmn(
 
 	if (f_v) {
 		cout << "surface_domain::create_equation_Cayley_klmn done" << endl;
+	}
+}
+
+
+void surface_domain::create_equation_Pentahedral_form(
+		int *param25,
+		int *coeff,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "surface_domain::create_equation_Pentahedral_form" << endl;
+	}
+
+	if (PolynomialDomains->nb_monomials != 20) {
+		cout << "surface_domain::create_equation_Pentahedral_form "
+				"PolynomialDomains->nb_monomials != 20" << endl;
+		exit(1);
+	}
+
+	Int_vec_zero(coeff, PolynomialDomains->nb_monomials);
+
+	int plane_coeffs[20]; // 5 x 4 plane coefficients
+	int coeffs[5];
+
+	Int_vec_copy(param25, plane_coeffs, 20);
+	Int_vec_copy(param25 + 20, coeffs, 5);
+
+	int i, h, a;
+	int six, three;
+
+	three = F->add3(1, 1, 1);
+	six = F->add(three, three);
+
+	for (h = 0; h < 5; h++) {
+
+		for (i = 0; i < 20; i++) {
+
+			a = PolynomialDomains->Poly3_4->evaluate_monomial(
+				i /* idx_of_monomial */, plane_coeffs + h * 4);
+			if (i >= 16) {
+				a = F->mult(six, a);
+			}
+			else if (i >= 4) {
+				a = F->mult(three, a);
+			}
+			a = F->mult(coeffs[h], a);
+			coeff[i] = F->add(coeff[i], a);
+		}
+	}
+
+
+	if (f_v) {
+		cout << "surface_domain::create_equation_Pentahedral_form done" << endl;
 	}
 }
 

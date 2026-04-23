@@ -11497,7 +11497,6 @@ poset_of_4subsets:
 	$(OPEN) poset_4_poset.pdf
 
 
-
 poset_of_4subsets_draw:
 	$(ORBITER) -v 3 \
 		-draw_layered_graph \
@@ -11581,11 +11580,24 @@ Symmetric_4_on_pairs_poset:
 		-with Orb -do -orbits_activity \
 			-report "" \
 			-report_options ro \
-		-end 
+		-end \
+		-define PC_Activity1 -poset_classification_activity \
+			-orbit_reps_csv \
+		-end \
+		-with Orb -do -orbits_activity \
+			-poset_classification_activity PC_Activity1 \
+		-end
+		-define PC_Activity2 -poset_classification_activity \
+			-export_orbits_long \
+		-end \
+		-with Orb -do -orbits_activity \
+			-poset_classification_activity PC_Activity2 \
+		-end
 	$(PDFLATEX) Sym4_on2_poset.tex
 	$(OPEN) Sym4_on2_poset.pdf
 
 
+#Sym4_on2_all_orbits_expanded.csv
 
 
 V_3_2_trivial:
@@ -11622,6 +11634,7 @@ V_4_2_trivial:
 		-orbiter_path $(ORBITER_EXE_PATH) \
 		-define Do -draw_options \
 			-radius 200 -embedded \
+			-select_layers "1,2,3,4" \
 		-end \
 		-define Control -poset_classification_control \
 			-problem_label V_4_2_trivial \
@@ -11643,7 +11656,7 @@ V_4_2_trivial:
 	$(PDFLATEX) V_4_2_trivial_poset.tex
 	$(OPEN) V_4_2_trivial_poset.pdf
 
-
+#V_4_2_trivial_poset_detailed_lvl_4.layered_graph
 
 ###############################################################################
 # Section 8.3: Orbits on Subsets
@@ -14357,6 +14370,7 @@ test_9_4:
 	make Family_general_F31_25_5_5_25_recognize
 	make surface_F_abcd_identify_q9
 	make Family_general_F11_iso_test
+	make surface_classify_q7_sweep_Cayley
 
 
 
@@ -14586,6 +14600,46 @@ Family_general_F11_iso_test:
 # 0  4  1  8 
 # 9  2  5  7 
 # 1 10 10  3 
+
+
+surface_classify_q7_sweep_Cayley:
+	$(ORBITER) -v 5 \
+		-orbiter_path $(ORBITER_EXE_PATH) \
+		-define F -finite_field -q 7 -end \
+		-define P -projective_space -n 3 -field F -v 0 -end \
+		-define Control -poset_classification_control -W \
+			-problem_label "surf_q7" \
+		-end \
+		-define Classify -classify_cubic_surfaces \
+			-use_double_sixes \
+			-projective_space P \
+			-poset_classification_control Control \
+		-end \
+		-define Orb -orbits \
+			-on_cubic_surfaces Classify \
+		-end \
+		-define Do -draw_options \
+			-radius 200 -line_width 0.3 -nodes_empty \
+		-end \
+		-define ro \
+			-poset_classification_report_options \
+				-draw_poset -type_ordinary \
+			-draw_options Do \
+		-end \
+		-with Orb -do -orbits_activity \
+			-report "5plus1=off,double_sixes=off,flag_orbits=off,show_group=off,report_options=ro" \
+		-end \
+		-with Orb -do \
+			-orbits_activity \
+			-export_source_code \
+		-end \
+		-with Orb -do \
+			-cubic_surfaces_after_classification_activity \
+			-sweep_Cayley \
+		-end
+	$(PDFLATEX) Surfaces_q7.tex 
+	$(OPEN) Surfaces_q7.pdf
+
 
 
 ###############################################################################
@@ -20331,6 +20385,229 @@ max_arc_16_4_refine:
 max_arc_16_4r_print:
 	$(ORBITER) -v 4 -tdo_print max_arc_q16_r4r.tdo 
 
+
+
+###############################################################################
+# Section 12.8: Plesken Rings
+
+
+SECTION_CREATING_GRAPHS:
+
+
+test_12_8:
+	make subspaces_GOp_6_2
+	make subspaces_GOp_6_2_draw_Asup
+	make subspaces_GOp_6_2_plesken_ring
+	make subspaces_GOp_6_2_plesken_ring_evaluate_join
+	make subspaces_GOp_6_2_make_pair_relations
+
+
+
+
+
+subspaces_GOp_6_2:
+	$(ORBITER) -v 5 \
+		-orbiter_path $(ORBITER_EXE_PATH) \
+		-define Do -draw_options \
+			-radius 200 -line_width 0.3 \
+			-poset_orbits_x_stretch 750 \
+			-embedded \
+			-poset_type_Asup \
+		-end \
+		-define Control -poset_classification_control \
+			-problem_label GOp_6_2 -W -depth 6 \
+		-end \
+		-define G -linear_group -PGL 6 2 -orthogonal 1 -end \
+		-define Orb -orbits \
+			-group G \
+			-group_action G \
+			-generators G \
+			-on_subspaces 6 Control \
+		-end \
+		-define ro \
+			-poset_classification_report_options \
+				-draw_poset -type_ordinary \
+			-draw_options Do \
+		-end \
+		-with Orb -do -orbits_activity \
+			-report "" \
+			-report_options ro \
+		-end \
+		-print_symbols
+	$(PDFLATEX) GOp_6_2_poset.tex
+	$(OPEN) GOp_6_2_poset.pdf
+
+
+
+subspaces_GOp_6_2_draw_Asup:
+	$(ORBITER) -v 5 \
+		-orbiter_path $(ORBITER_EXE_PATH) \
+		-define Do -draw_options \
+			-radius 200 -line_width 0.3 \
+			-poset_orbits_x_stretch 750 \
+			-embedded \
+			-poset_type_Asup \
+		-end \
+		-define Control -poset_classification_control \
+			-problem_label GOp_6_2 -W -depth 6 \
+		-end \
+		-define G -linear_group -PGL 6 2 -orthogonal 1 -end \
+		-define Orb -orbits \
+			-group G \
+			-group_action G \
+			-generators G \
+			-on_subspaces 6 Control \
+		-end \
+		-define PC_Activity -poset_classification_activity \
+			-draw_full_poset Do \
+		-end \
+		-with Orb -do -orbits_activity \
+			-poset_classification_activity PC_Activity \
+		-end \
+		-print_symbols
+	$(ORBITER) -v 3 \
+		-draw_layered_graph \
+			GOp_6_2_poset_full_lvl_6_Asup.layered_graph \
+		-radius 50 -embedded \
+			-line_width 0.2 -x_stretch 1.4 -scale 0.5 \
+		-end
+	$(PDFLATEX) GOp_6_2_poset_full_lvl_6_Asup_draw.tex
+	$(OPEN) GOp_6_2_poset_full_lvl_6_Asup_draw.pdf
+
+
+#cp GOp_6_2_poset_full_lvl_6_Asup_draw.pdf ~/TEX.26/ORBITER_USERS_GUIDE/GRAPHICS/PLESKEN_RING
+
+
+
+
+subspaces_GOp_6_2_plesken_ring:
+	$(ORBITER) -v 5 \
+		-orbiter_path $(ORBITER_EXE_PATH) \
+		-define Do -draw_options \
+			-radius 200 -line_width 0.3 \
+			-poset_orbits_x_stretch 750 \
+			-embedded \
+			-poset_type_Asup \
+		-end \
+		-define Control -poset_classification_control \
+			-problem_label GOp_6_2 -W -depth 6 \
+		-end \
+		-define G -linear_group -PGL 6 2 -orthogonal 1 -end \
+		-define Orb -orbits \
+			-group G \
+			-group_action G \
+			-generators G \
+			-on_subspaces 6 Control \
+		-end \
+		-define PC_Plesken -poset_classification_activity \
+			-plesken_ring \
+		-end \
+		-assign P -from \
+		-with Orb -do -orbits_activity \
+			-poset_classification_activity PC_Plesken \
+		-end \
+		-with P -do -plesken_ring_activity \
+			-report Do \
+		-end \
+		-print_symbols
+	$(PDFLATEX) GOp_6_2_plesken_ring.tex
+	$(OPEN) GOp_6_2_plesken_ring.pdf
+
+
+# there are 19 orbits, so we need 19 variables:
+
+subspaces_GOp_6_2_plesken_ring_evaluate_join:
+	$(ORBITER) -v 5 \
+		-orbiter_path $(ORBITER_EXE_PATH) \
+		-define Do -draw_options \
+			-radius 200 -line_width 0.3 \
+			-poset_orbits_x_stretch 750 \
+			-embedded \
+			-poset_type_Asup \
+		-end \
+		-define Control -poset_classification_control \
+			-problem_label Op_6_2 -W -depth 6 \
+		-end \
+		-define G -linear_group -PGL 6 2 -orthogonal 1 -end \
+		-define Orb -orbits \
+			-group G \
+			-group_action G \
+			-generators G \
+			-on_subspaces 6 Control \
+		-end \
+		-define ro \
+			-poset_classification_report_options \
+				-draw_poset -type_ordinary \
+			-draw_options Do \
+		-end \
+		-with Orb -do -orbits_activity \
+			-report "" \
+			-report_options ro \
+		-end \
+		-define PC_Plesken -poset_classification_activity \
+			-plesken_ring \
+		-end \
+		-assign P -from \
+		-with Orb -do -orbits_activity \
+			-poset_classification_activity PC_Plesken \
+		-end \
+		-with P -do -plesken_ring_activity \
+			-report Do \
+		-end \
+		-define F -finite_field -q 2 -end \
+		-define formula -symbolic_object \
+			-field F \
+			-text "X6^2"\
+		-end \
+		-define R -polynomial_ring \
+			-field F \
+			-number_of_variables 19 \
+			-homogeneous_of_degree 2 \
+			-monomial_ordering_partition \
+			-variables "X0,X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18" \
+			"X_0,X_1,X_2,X_3,X_4,X_5,X_6,X_7,X_8,X_9,X_{10},X_{11},X_{12},X_{13},X_{14},X_{15},X_{16},X_{17},X_{18}" \
+		-end \
+		-with P -do -plesken_ring_activity \
+			-evaluate_join R formula \
+		-end \
+		-print_symbols
+
+
+subspaces_GOp_6_2_make_pair_relations:
+	$(ORBITER) -v 5 \
+		-orbiter_path $(ORBITER_EXE_PATH) \
+		-define Do -draw_options \
+			-radius 200 -line_width 0.3 \
+			-poset_orbits_x_stretch 750 \
+			-embedded \
+			-poset_type_Asup \
+		-end \
+		-define Control -poset_classification_control \
+			-problem_label Op_6_2 -W -depth 6 \
+		-end \
+		-define G -linear_group -PGL 6 2 -orthogonal 1 -end \
+		-define Orb -orbits \
+			-group G \
+			-group_action G \
+			-generators G \
+			-on_subspaces 6 Control \
+		-end \
+		-define ro \
+			-poset_classification_report_options \
+				-draw_poset -type_ordinary \
+			-draw_options Do \
+		-end \
+		-with Orb -do -orbits_activity \
+			-report "" \
+			-report_options ro \
+		-end \
+		-define PC_Activity -poset_classification_activity \
+			-pair_relations_within_orbit 6 \
+		-end \
+		-with Orb -do -orbits_activity \
+			-poset_classification_activity PC_Activity \
+		-end \
+		-print_symbols
 
 
 
@@ -29401,6 +29678,42 @@ stabilizer_of_mmx:
 	$(PDFLATEX) decomp_classification.tex
 	$(OPEN) decomp_classification.pdf
 
+
+draw_desargues:
+	$(ORBITER) -v 2 \
+		-define Do -draw_options \
+			-radius 150 \
+			-line_width 1.0 -embedded \
+		-end \
+		-draw_mod_n \
+			"desargues=on" \
+			-file desargues \
+			-n 51 \
+			-radius 50 \
+			-label_nodes \
+			-draw_options Do \
+		-end
+	pdflatex desargues_draw.tex
+	open desargues_draw.pdf
+
+draw_vector_decomposition:
+	$(ORBITER) -v 2 \
+		-define Do -draw_options \
+			-xin 20000 -yin 20000 \
+			-xout 600000 -yout 600000 \
+			-radius 50 \
+			-line_width 1.0 -embedded \
+		-end \
+		-draw_mod_n \
+			"vector_decomposition=on" \
+			-file vector_decomposition \
+			-n 51 \
+			-radius 50 \
+			-label_nodes \
+			-draw_options Do \
+		-end
+	pdflatex vector_decomposition_draw.tex
+	open vector_decomposition_draw.pdf
 
 
 

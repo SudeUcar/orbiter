@@ -55,6 +55,7 @@ draw_options::draw_options()
 	f_line_width = false;
 	line_width = 1.5;
 	f_rotated = false;
+	f_upside_down = false;
 
 
 	f_nodes = false;
@@ -229,6 +230,12 @@ int draw_options::read_arguments(
 				cout << "-rotated " << endl;
 			}
 		}
+		else if (ST.stringcmp(argv[i], "-upside_down") == 0) {
+			f_upside_down = true;
+			if (f_v) {
+				cout << "-upside_down " << endl;
+			}
+		}
 		else if (ST.stringcmp(argv[i], "-nodes") == 0) {
 			f_nodes = true;
 			if (f_v) {
@@ -376,6 +383,9 @@ void draw_options::print()
 	if (f_rotated) {
 		cout << "rotated" << endl;
 	}
+	if (f_upside_down) {
+		cout << "-upside_down " << endl;
+	}
 	if (f_nodes) {
 		cout << "nodes" << endl;
 	}
@@ -482,6 +492,9 @@ std::string draw_options::stringify()
 	}
 	if (f_rotated) {
 		s += " -rotated ";
+	}
+	if (f_upside_down) {
+		s += " -upside_down ";
 	}
 	if (f_nodes) {
 		s += " -nodes ";

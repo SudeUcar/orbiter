@@ -330,6 +330,25 @@ void lint_vec::print(
 	}
 }
 
+std::string lint_vec::stringify_stl(
+		std::vector<long int> &v)
+{
+	int i, len;
+	string s;
+
+	len = v.size();
+	//s += "( ";
+	for (i = 0; i < len; i++) {
+		s += std::to_string(v[i]);
+		if (i < len - 1) {
+			s += ", ";
+		}
+	}
+	//s += " )";
+	return s;
+}
+
+
 void lint_vec::print(
 		std::ostream &ost, std::vector<long int> &v)
 {
