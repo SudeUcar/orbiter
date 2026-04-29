@@ -547,6 +547,7 @@ void surface_classify_wedge::sweep_Cayley(
 
 void surface_classify_wedge::sweep_Sylvester(
 		long int *Plane5_ranks, int nb_types,
+		long int *plane_ago,
 		std::string &options,
 		int verbose_level)
 // Plane5_ranks[nb_types * 5]
@@ -695,19 +696,23 @@ void surface_classify_wedge::sweep_Sylvester(
 
 
 	string *Table;
+	string *Table2;
 	string *Table_reverse;
 
 	int max_nb_rows1 = nb_types * theta4;
 	int max_nb_rows2 = nb_iso;
-	int nb_cols1 = 7;
-	int nb_cols2 = 7;
+	int nb_cols1 = 8;
+	int nb_cols2 = 14;
+	int nb_cols3 = 8;
 
 	int cnt = 0;
+	int cnt2 = 0;
 	int nb_identified = 0;
 
 
 	Table = new string [max_nb_rows1 * nb_cols1];
-	Table_reverse = new string [max_nb_rows2 * nb_cols2];
+	Table2 = new string [max_nb_rows1 * nb_cols2];
+	Table_reverse = new string [max_nb_rows2 * nb_cols3];
 
 	int Mtx[16];
 	int N;
@@ -772,7 +777,8 @@ void surface_classify_wedge::sweep_Sylvester(
 
 			if ((lc_idx % 1000) == 0) {
 				cout << "surface_classify_wedge::sweep_Sylvester "
-						"cnt=" << cnt << " type " << t << " lc_idx = " << lc_idx << " / " << N << endl;
+						"cnt=" << cnt << " type " << t
+						<< " lc_idx = " << lc_idx << " / " << N << endl;
 			}
 
 
@@ -822,7 +828,8 @@ void surface_classify_wedge::sweep_Sylvester(
 
 				if (f_vv) {
 					cout << "surface_classify_wedge::sweep_Sylvester "
-							"cnt=" << cnt << " type " << t << " lc_idx = " << lc_idx << " / " << N << " has 27 lines" << endl;
+							"cnt=" << cnt << " type " << t
+							<< " lc_idx = " << lc_idx << " / " << N << " has 27 lines" << endl;
 				}
 				identify_surface(
 					SC->SO->Variety_object->eqn,
@@ -859,29 +866,99 @@ void surface_classify_wedge::sweep_Sylvester(
 
 				Table[cnt * nb_cols1 + 0] = std::to_string(cnt);
 				Table[cnt * nb_cols1 + 1] = std::to_string(t);
-				Table[cnt * nb_cols1 + 2] = std::to_string(lc_idx);
-				Table[cnt * nb_cols1 + 3] = "\"" + s_plane_coeffs + "\"";
-				Table[cnt * nb_cols1 + 4] = "\"" + s_lc_coeffs + "\"";
-				Table[cnt * nb_cols1 + 5] = std::to_string(isomorphic_to);
-				Table[cnt * nb_cols1 + 6] = "\"" + s_transform + "\"";
+				Table[cnt * nb_cols1 + 2] = std::to_string(plane_ago[t]);
+				Table[cnt * nb_cols1 + 3] = std::to_string(lc_idx);
+				Table[cnt * nb_cols1 + 4] = "\"" + s_plane_coeffs + "\"";
+				Table[cnt * nb_cols1 + 5] = "\"" + s_lc_coeffs + "\"";
+				Table[cnt * nb_cols1 + 6] = std::to_string(isomorphic_to);
+				Table[cnt * nb_cols1 + 7] = "\"" + s_transform + "\"";
 
 
 
 
-				if (Table_reverse[isomorphic_to * nb_cols2 + 0].length() == 0) {
-					Table_reverse[isomorphic_to * nb_cols2 + 0] = std::to_string(isomorphic_to);
-					Table_reverse[isomorphic_to * nb_cols2 + 1] = std::to_string(cnt);
-					Table_reverse[isomorphic_to * nb_cols2 + 2] = std::to_string(t);
-					Table_reverse[isomorphic_to * nb_cols2 + 3] = std::to_string(lc_idx);
-					Table_reverse[isomorphic_to * nb_cols2 + 4] = "\"" + s_plane_coeffs + "\"";
-					Table_reverse[isomorphic_to * nb_cols2 + 5] = "\"" + s_lc_coeffs + "\"";
-					Table_reverse[isomorphic_to * nb_cols2 + 6] = "\"" + s_transform + "\"";
+				if (Table_reverse[isomorphic_to * nb_cols3 + 0].length() == 0) {
+					Table_reverse[isomorphic_to * nb_cols3 + 0] = std::to_string(isomorphic_to);
+					Table_reverse[isomorphic_to * nb_cols3 + 1] = std::to_string(cnt);
+					Table_reverse[isomorphic_to * nb_cols3 + 2] = std::to_string(t);
+					Table_reverse[isomorphic_to * nb_cols3 + 3] = std::to_string(plane_ago[t]);
+					Table_reverse[isomorphic_to * nb_cols3 + 4] = std::to_string(lc_idx);
+					Table_reverse[isomorphic_to * nb_cols3 + 5] = "\"" + s_plane_coeffs + "\"";
+					Table_reverse[isomorphic_to * nb_cols3 + 6] = "\"" + s_lc_coeffs + "\"";
+					Table_reverse[isomorphic_to * nb_cols3 + 7] = "\"" + s_transform + "\"";
 					nb_identified++;
 				}
 
 				cnt++;
 
 			}
+			else {
+				// less than 27 lines, no isomorphism testing
+
+				if (Int_vec_is_zero(SC->SO->Variety_object->eqn, Surf->PolynomialDomains->Poly3_4->get_nb_monomials())) {
+
+				}
+				else {
+					string s_eqn;
+
+					s_eqn = Int_vec_stringify(SC->SO->Variety_object->eqn, Surf->PolynomialDomains->Poly3_4->get_nb_monomials());
+
+					int nb_points, nb_lines;
+
+					string s_points;
+					string s_lines;
+
+					nb_points = SC->SO->Variety_object->Point_sets->Set_size[0];
+					nb_lines = SC->SO->Variety_object->Line_sets->Set_size[0];
+
+					s_points = Lint_vec_stringify(SC->SO->Variety_object->Point_sets->Sets[0], nb_points);
+					s_lines = Lint_vec_stringify(SC->SO->Variety_object->Line_sets->Sets[0], nb_lines);
+
+					if (f_vv) {
+						cout << "surface_classify_wedge::sweep_Sylvester "
+								"cnt=" << cnt << " type " << t
+								<< " lc_idx = " << lc_idx << " / " << N << " does not have 27 lines, computing singular points" << endl;
+					}
+					SC->SO->Variety_object->compute_singular_points(
+								verbose_level - 2);
+
+
+					string s_singular_pts;
+					int nb_singular_pts = 0;
+
+					if (SC->SO->Variety_object->f_has_singular_points) {
+						nb_singular_pts = SC->SO->Variety_object->Singular_points.size();
+						s_singular_pts = Lint_vec_stl_stringify(SC->SO->Variety_object->Singular_points);
+					}
+
+					if (f_vv) {
+						cout << "surface_classify_wedge::sweep_Sylvester "
+								"cnt=" << cnt << " type " << t
+								<< " lc_idx = " << lc_idx << " / " << N
+								<< " does not have 27 lines, nb_singular_pts = " << nb_singular_pts << endl;
+					}
+
+					Table2[cnt2 * nb_cols2 + 0] = std::to_string(cnt);
+					Table2[cnt2 * nb_cols2 + 1] = std::to_string(t);
+					Table2[cnt2 * nb_cols2 + 2] = std::to_string(plane_ago[t]);
+					Table2[cnt2 * nb_cols2 + 3] = std::to_string(lc_idx);
+					Table2[cnt2 * nb_cols2 + 4] = "\"" + s_plane_coeffs + "\"";
+					Table2[cnt2 * nb_cols2 + 5] = "\"" + s_lc_coeffs + "\"";
+					Table2[cnt2 * nb_cols2 + 6] = "\"" + s_eqn + "\"";
+					Table2[cnt2 * nb_cols2 + 7] = std::to_string(nb_points);
+					Table2[cnt2 * nb_cols2 + 8] = std::to_string(nb_lines);
+					Table2[cnt2 * nb_cols2 + 9] = "\"" + s_points + "\"";
+					Table2[cnt2 * nb_cols2 + 10] = "\"" + s_lines + "\"";
+					Table2[cnt2 * nb_cols2 + 11] = std::to_string(SC->SO->Variety_object->f_has_singular_points);
+					Table2[cnt2 * nb_cols2 + 12] = std::to_string(nb_singular_pts);
+					Table2[cnt2 * nb_cols2 + 13] = "\"" + s_singular_pts + "\"";
+
+
+					cnt2++;
+				}
+
+			}
+
+
 
 			FREE_OBJECT(SC);
 
@@ -892,10 +969,11 @@ void surface_classify_wedge::sweep_Sylvester(
 		}
 	} // next t
 
-	int nb_rows1, nb_rows2;
+	int nb_rows1, nb_rows2, nb_rows3;
 
 	nb_rows1 = cnt;
-	nb_rows2 = max_nb_rows2;
+	nb_rows2 = cnt2;
+	nb_rows3 = max_nb_rows2;
 
 	string fname;
 
@@ -906,7 +984,7 @@ void surface_classify_wedge::sweep_Sylvester(
 	std::string headings1;
 
 
-	headings1 = "Cnt,Type,Idx,Plane20,Lc5,IsoIdx,Transform";
+	headings1 = "Cnt,PlaneIso,PlaneAgo,Idx,Plane20,Lc5,IsoIdx,Transform";
 
 
 	Fio.Csv_file_support->write_table_of_strings(
@@ -917,24 +995,46 @@ void surface_classify_wedge::sweep_Sylvester(
 
 
 
-	fname = "Sylvester_reverse_q" + std::to_string(q) + ".csv";
-
-
 	std::string headings2;
 
 
-	headings2 = "IsoIdx,Cnt,Type,Idx,Plane20,Lc5,Transform";
+	headings2 = "Cnt,PlaneIso,PlaneAgo,Idx,Plane20,Lc5,Eqn20,NbPts,Nb_lines,Pts,Lines,FHasSingPts,NbSingPts,SingPts";
+
+	fname = "Sylvester_q" + std::to_string(q) + "_not27.csv";
+
+
 
 
 	Fio.Csv_file_support->write_table_of_strings(
 			fname,
-			nb_rows2, nb_cols2, Table_reverse,
+			nb_rows2, nb_cols2, Table2,
+			headings2,
+			verbose_level);
+
+
+
+
+
+	fname = "Sylvester_reverse_q" + std::to_string(q) + ".csv";
+
+
+
+	std::string headings3;
+
+
+	headings3 = "IsoIdx,Cnt,PlaneIso,PlaneAgo,Idx,Plane20,Lc5,Transform";
+
+
+	Fio.Csv_file_support->write_table_of_strings(
+			fname,
+			nb_rows3, nb_cols3, Table_reverse,
 			headings2,
 			verbose_level);
 
 
 
 	delete [] Table;
+	delete [] Table2;
 	delete [] Table_reverse;
 
 	FREE_int(Elt_isomorphism);
@@ -943,7 +1043,10 @@ void surface_classify_wedge::sweep_Sylvester(
 	if (f_v) {
 		cout << "surface_classify_wedge::sweep_Sylvester "
 				"nb_identified = " << nb_identified << " nb_iso = " << nb_iso << endl;
+		cout << "surface_classify_wedge::sweep_Sylvester "
+				"cnt2 = " << cnt2 << endl;
 	}
+
 
 
 
@@ -973,7 +1076,8 @@ void surface_classify_wedge::Sylvester_pentahedral_form_after_sweep(
 
 
 	if (!PA->f_has_action_on_planes) {
-		cout << "surface_classify_wedge::Sylvester_pentahedral_form_after_sweep the action on planes is not available" << endl;
+		cout << "surface_classify_wedge::Sylvester_pentahedral_form_after_sweep "
+				"the action on planes is not available" << endl;
 		exit(1);
 	}
 
@@ -1063,8 +1167,8 @@ void surface_classify_wedge::Sylvester_pentahedral_form_after_sweep(
 	int sz;
 
 	t = std::stoi(Table_reverse[isomorphic_to * nb_cols2 + 2]);
-	lc_idx = std::stoi(Table_reverse[isomorphic_to * nb_cols2 + 3]);
-	Int_vec_scan(Table_reverse[isomorphic_to * nb_cols2 + 6], transform_data, sz);
+	lc_idx = std::stoi(Table_reverse[isomorphic_to * nb_cols2 + 4]);
+	Int_vec_scan(Table_reverse[isomorphic_to * nb_cols2 + 7], transform_data, sz);
 
 
 	A->Group_element->make_element(
@@ -1075,6 +1179,9 @@ void surface_classify_wedge::Sylvester_pentahedral_form_after_sweep(
 				" Elt_iso2 = " << endl;
 		A->Group_element->print_quick(cout, Elt_iso2);
 	}
+
+	// Elt_iso3 goes from the 5 planes from the classification
+	// and maps them to the 5 planes in the given surface.
 
 	A->Group_element->element_invert(Elt_iso1, Elt_iso1v, 0 /* verbose_level */);
 	A->Group_element->element_mult(Elt_iso2, Elt_iso1v, Elt_iso3, 0 /* verbose_level */);

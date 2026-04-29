@@ -281,12 +281,15 @@ public:
 	int f_sweep_Sylvester;
 	std::string sweep_Sylvester_fname;
 	std::string sweep_Sylvester_col_label;
+	std::string sweep_Sylvester_col_ago_label;
 	std::string sweep_Sylvester_options;
 
 	int f_Sylvester_pentahedral_form_after_sweep;
 	std::string Sylvester_pentahedral_form_after_sweep_surface_label;
 	std::string Sylvester_pentahedral_form_after_sweep_fname;
 	std::string Sylvester_pentahedral_form_after_sweep_col_label;
+	std::string Sylvester_pentahedral_form_after_sweep_col_ago_label;
+
 
 	classification_of_cubic_surfaces_with_double_sixes_activity_description();
 	~classification_of_cubic_surfaces_with_double_sixes_activity_description();
@@ -322,8 +325,9 @@ public:
 	void perform_activity(
 			int verbose_level);
 	void get_plane5_ranks(
-			std::string &fname, std::string &col_label,
+			std::string &fname, std::string &col_label, std::string &col_ago_label,
 			long int *&Plane5_ranks,
+			long int *&Plane5_ago,
 			int &nb_types,
 			int verbose_level);
 	void report(

@@ -520,8 +520,7 @@ int data_input_stream_description::read_arguments(
 
 			nb_inputs++;
 		}
-		else if (ST.stringcmp(argv[i],
-				"-multi_matrix") == 0) {
+		else if (ST.stringcmp(argv[i], "-multi_matrix") == 0) {
 
 			data_input_stream_description_element E;
 			string a, b;

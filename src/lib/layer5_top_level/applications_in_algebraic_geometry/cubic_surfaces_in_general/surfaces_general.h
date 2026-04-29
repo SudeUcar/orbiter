@@ -787,7 +787,7 @@ public:
 // surface_study.cpp
 // #############################################################################
 
-//! to study properties of cubic surfaces
+//! to study properties of one cubic surface
 
 class surface_study {
 public:

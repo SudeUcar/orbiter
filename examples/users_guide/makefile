@@ -646,10 +646,12 @@ SURFACE_F9_1_EQN_RESTRICTED="4*X0*X1^2+4*X1^2*X2+8*X0*X2^2+3*X1*X2^2+3*X0*X1*X2"
 
 # Chapter 9 Cubic Surfaces
 
-# Section 9.2 Generalities
 
 
 # Section 9.2 Creation
+
+
+HIRSCHFELD_SURFACE_EQN_AF="X0^2*X3+X0*X3^2+X1^2*X2+X1*X2^2"
 
 
 # Dickson 1915:
@@ -13250,6 +13252,7 @@ SECTION_CUBIC_SURFACES_CREATION:
 
 test_9_2:
 	make surface_4_0
+	make Hirschfeld_surface_q4
 	make Family_general_F7
 	make surface_eckardt_13_4_12
 	make Eckardt_13
@@ -13268,6 +13271,39 @@ surface_4_0:
 		-define F -finite_field -q 4 -end \
 		-define P -projective_space -n 3 -field F -end \
 		-define S -cubic_surface -space P -catalogue 0 -end \
+
+
+
+Hirschfeld_surface_q4:
+	$(ORBITER) -v 6 \
+		-define Do -draw_options \
+			-radius 200 -line_width 0.3 \
+		-end \
+		-define F -finite_field -q 4 -compute_related_fields -end \
+		-define P -projective_space -n 3 -field F -v 0 -end \
+		-define R -polynomial_ring \
+			-field F \
+			-number_of_variables 4 \
+			-homogeneous_of_degree 3 \
+			-monomial_ordering_partition \
+			-variables "X0,X1,X2,X3" "X_0,X_1,X_2,X_3" \
+		-end \
+		-define f -symbolic_object \
+			-field F \
+			-managed_variables "X0,X1,X2,X3" \
+			-text $(HIRSCHFELD_SURFACE_EQN_AF) \
+		-end \
+		-define Surf -cubic_surface \
+			-space P \
+			-by_symbolic_object R f \
+		-end \
+		-with Surf -do \
+		-cubic_surface_activity \
+			-report Do \
+		-end
+	pdflatex surface_equation_f_q4_report.tex
+	open surface_equation_f_q4_report.pdf
+
 
 
 Family_general_F7:

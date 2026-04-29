@@ -1221,12 +1221,83 @@ void classification_of_varieties_nauty::generate_source_code(
 
 
 
+
 		if (f_v) {
 			cout << "classification_of_varieties_nauty::generate_source_code "
-					"preparing Bitangents" << endl;
+					"preparing Lines_first and Nb_lines" << endl;
 		}
-		f << "// the 28 bitangents:" << endl;
-		f << "static long int " << fname_base << "_Bitangents[] = { " << endl;
+
+		int *Lines_first;
+		int *Nb_lines;
+		int lines_first;
+		Lines_first = NEW_int(nb_orbits);
+		Nb_lines = NEW_int(nb_orbits);
+
+		lines_first = 0;
+
+		for (orbit_index = 0;
+				orbit_index < nb_orbits;
+				orbit_index++) {
+
+			int idx;
+
+			idx = Orbit_input_idx[orbit_index];
+
+			long int *Lines;
+			int nb_lines;
+
+			nb_lines = Input->Vo[idx]->Variety_object->Line_sets->Set_size[0];
+			Lines = Input->Vo[idx]->Variety_object->Line_sets->Sets[0];
+
+			Nb_lines[orbit_index] = nb_lines;
+			Lines_first[orbit_index] = lines_first;
+
+			lines_first += nb_lines;
+		}
+
+
+		f << "// the lines:" << endl;
+
+		f << "static long int " << fname_base << "_Lines_first[] = { " << endl;
+		f << "\t";
+		for (orbit_index = 0;
+				orbit_index < nb_orbits;
+				orbit_index++) {
+
+			f << Lines_first[orbit_index];
+			if (orbit_index < nb_orbits - 1) {
+				f << ", ";
+			}
+
+		}
+		f << "};" << endl;
+		f << endl;
+
+		f << "static int " << fname_base << "_Nb_lines[] = { " << endl;
+		f << "\t";
+		for (orbit_index = 0;
+				orbit_index < nb_orbits;
+				orbit_index++) {
+
+			f << Nb_lines[orbit_index];
+			if (orbit_index < nb_orbits - 1) {
+				f << ", ";
+			}
+
+		}
+		f << "};" << endl;
+		f << endl;
+
+
+		FREE_int(Lines_first);
+		FREE_int(Nb_lines);
+
+		if (f_v) {
+			cout << "classification_of_varieties_nauty::generate_source_code "
+					"preparing Lines" << endl;
+		}
+		f << "// the lines:" << endl;
+		f << "static int " << fname_base << "_Lines[] = { " << endl;
 
 
 		for (orbit_index = 0;
@@ -1243,20 +1314,25 @@ void classification_of_varieties_nauty::generate_source_code(
 
 			idx = Orbit_input_idx[orbit_index];
 
-			long int *bitangents_orig;
+			long int *Lines;
+			int nb_lines;
 
-			bitangents_orig = Input->Vo[idx]->Variety_object->Line_sets->Sets[0];
+			nb_lines = Input->Vo[idx]->Variety_object->Line_sets->Set_size[0];
+			Lines = Input->Vo[idx]->Variety_object->Line_sets->Sets[0];
+
+#if 0
 			if (Input->Vo[idx]->Variety_object->Line_sets->Set_size[0] != 28) {
 				cout << "classification_of_varieties_nauty::generate_source_code Set_size[0] != 28" << endl;
 				cout << "classification_of_varieties_nauty::generate_source_code Set_size[0] = " << Input->Vo[idx]->Variety_object->Point_sets->Set_size[0] << endl;
 				exit(1);
 			}
+#endif
 
 			int j;
 
 			f << "\t";
-			for (j = 0; j < 28; j++) {
-				f << bitangents_orig[j];
+			for (j = 0; j < nb_lines; j++) {
+				f << Lines[j];
 				f << ", ";
 			}
 			f << endl;

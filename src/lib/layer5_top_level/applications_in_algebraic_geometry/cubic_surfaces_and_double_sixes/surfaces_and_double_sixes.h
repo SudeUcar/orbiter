@@ -396,6 +396,7 @@ public:
 			int verbose_level);
 	void sweep_Sylvester(
 			long int *Plane5_ranks, int nb_types,
+			long int *plane_ago,
 			std::string &options,
 			int verbose_level);
 	// Plane5_ranks[nb_types * 5]

@@ -190,6 +190,7 @@ void classification_of_cubic_surfaces_with_double_sixes_activity::perform_activi
 
 
 		long int *Plane5_ranks;
+		long int *Plane5_ago;
 		int nb_types;
 
 		if (f_v) {
@@ -197,8 +198,11 @@ void classification_of_cubic_surfaces_with_double_sixes_activity::perform_activi
 					"before get_plane5_ranks" << endl;
 		}
 		get_plane5_ranks(
-				Descr->sweep_Sylvester_fname, Descr->sweep_Sylvester_col_label,
+				Descr->sweep_Sylvester_fname,
+				Descr->sweep_Sylvester_col_label,
+				Descr->sweep_Sylvester_col_ago_label,
 				Plane5_ranks,
+				Plane5_ago,
 				nb_types,
 				verbose_level);
 		if (f_v) {
@@ -210,13 +214,16 @@ void classification_of_cubic_surfaces_with_double_sixes_activity::perform_activi
 			cout << "classification_of_cubic_surfaces_with_double_sixes_activity::perform_activity "
 					"before SCW->sweep_Sylvester" << endl;
 		}
-		SCW->sweep_Sylvester(Plane5_ranks, nb_types, Descr->sweep_Sylvester_options, verbose_level);
+		SCW->sweep_Sylvester(Plane5_ranks, nb_types, Plane5_ago,
+				Descr->sweep_Sylvester_options,
+				verbose_level);
 		if (f_v) {
 			cout << "classification_of_cubic_surfaces_with_double_sixes_activity::perform_activity "
 					"after SCW->sweep_Sylvester" << endl;
 		}
 
 		FREE_lint(Plane5_ranks);
+		FREE_lint(Plane5_ago);
 
 	}
 	else if (Descr->f_Sylvester_pentahedral_form_after_sweep) {
@@ -229,6 +236,7 @@ void classification_of_cubic_surfaces_with_double_sixes_activity::perform_activi
 
 
 		long int *Plane5_ranks;
+		long int *Plane5_ago;
 		int nb_types;
 
 		if (f_v) {
@@ -238,7 +246,9 @@ void classification_of_cubic_surfaces_with_double_sixes_activity::perform_activi
 		get_plane5_ranks(
 				Descr->Sylvester_pentahedral_form_after_sweep_fname,
 				Descr->Sylvester_pentahedral_form_after_sweep_col_label,
+				Descr->Sylvester_pentahedral_form_after_sweep_col_ago_label,
 				Plane5_ranks,
+				Plane5_ago,
 				nb_types,
 				verbose_level);
 		if (f_v) {
@@ -276,14 +286,19 @@ void classification_of_cubic_surfaces_with_double_sixes_activity::perform_activi
 			Int_vec_print(cout, linear_combination5, 5);
 			cout << endl;
 		}
+
+		FREE_lint(Plane5_ranks);
+		FREE_lint(Plane5_ago);
+
 	}
 
 }
 
 
 void classification_of_cubic_surfaces_with_double_sixes_activity::get_plane5_ranks(
-		std::string &fname, std::string &col_label,
+		std::string &fname, std::string &col_label, std::string &col_ago_label,
 		long int *&Plane5_ranks,
+		long int *&Plane5_ago,
 		int &nb_types,
 		int verbose_level)
 {
@@ -310,10 +325,19 @@ void classification_of_cubic_surfaces_with_double_sixes_activity::get_plane5_ran
 		exit(1);
 	}
 
+
 	if (SoS->get_constant_size() != 5) {
 		cout << "classification_of_cubic_surfaces_with_double_sixes_activity::get_plane5_ranks the data must have size 5" << endl;
 		exit(1);
 	}
+
+	other::data_structures::set_of_sets *SoS_ago;
+
+	Fio.Csv_file_support->read_column_as_set_of_sets(
+			fname, col_ago_label,
+			SoS_ago,
+			verbose_level);
+
 
 
 
@@ -337,7 +361,15 @@ void classification_of_cubic_surfaces_with_double_sixes_activity::get_plane5_ran
 		Lint_matrix_print(Plane5_ranks, nb_types, 5);
 	}
 
+	Plane5_ago = NEW_lint(SoS->nb_sets);
+
+	for (i = 0; i < nb_types; i++) {
+		Plane5_ago[i] = SoS_ago->Sets[i][0];
+	}
+
+
 	FREE_OBJECT(SoS);
+	FREE_OBJECT(SoS_ago);
 
 	if (f_v) {
 		cout << "classification_of_cubic_surfaces_with_double_sixes_activity::get_plane5_ranks done" << endl;

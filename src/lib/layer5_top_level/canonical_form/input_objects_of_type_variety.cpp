@@ -317,6 +317,10 @@ void input_objects_of_type_variety::read_input_objects_from_list_of_csv_files(
 			nb_carry_through = Classifier->get_description()->carry_through.size();
 			Carry_through = NEW_int(nb_carry_through);
 			for (i = 0; i < nb_carry_through; i++) {
+				if (f_v) {
+					cout << "input_objects_of_type_variety::read_input_objects_from_list_of_csv_files "
+							"searching for column = '" << Classifier->get_description()->carry_through[i] << "'" << endl;
+				}
 				Carry_through[i] = S.find_column(Classifier->get_description()->carry_through[i]);
 			}
 		}
@@ -356,6 +360,10 @@ void input_objects_of_type_variety::read_input_objects_from_list_of_csv_files(
 				if (f_v) {
 					cout << "input_objects_of_type_variety::read_input_objects_from_list_of_csv_files "
 							"before S.find_column " << s << endl;
+				}
+				if (f_v) {
+					cout << "input_objects_of_type_variety::read_input_objects_from_list_of_csv_files "
+							"searching for column = '" << s << "'" << endl;
 				}
 				Carry_through2[nb_carry_through + i] = S.find_column(s);
 			}
