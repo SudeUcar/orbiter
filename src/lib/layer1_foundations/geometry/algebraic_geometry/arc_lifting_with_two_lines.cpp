@@ -80,6 +80,7 @@ void arc_lifting_with_two_lines::create_surface(
 
 	if (f_v) {
 		cout << "arc_lifting_with_two_lines::create_surface" << endl;
+		cout << "arc_lifting_with_two_lines::create_surface verbose_level = " << verbose_level << endl;
 		cout << "line1=" << line1 << " line2=" << line2 << endl;
 		cout << "Arc6: ";
 		Lint_vec_print(cout, Arc6, 6);
@@ -226,7 +227,7 @@ void arc_lifting_with_two_lines::create_surface(
 
 	if (f_vv) {
 		cout << "arc_lifting_with_two_lines::create_surface "
-				"transversal_23=" << transversal_45 << endl;
+				"transversal_45=" << transversal_45 << endl;
 	}
 
 
@@ -240,19 +241,28 @@ void arc_lifting_with_two_lines::create_surface(
 		Int_matrix_print(Arc_coords, 6, 4);
 	}
 
+	if (f_v) {
+		cout << "arc_lifting_with_two_lines::create_surface computing transversal lines" << endl;
+	}
 	for (i = 0; i < 4; i++) {
 		transversal[i] =
 				Surf->P->Solid->transversal_to_two_skew_lines_through_a_point(
 						line1, line2, P[2 + i],
-						0 /* verbose_level */);
+						verbose_level - 2);
 		Surf->unrank_line(Transversals + i * 8, transversal[i]);
+		if (f_vv) {
+			cout << "arc_lifting_with_two_lines::create_surface "
+					"transversal " << i << ":" << endl;
+			Int_matrix_print(Transversals + i * 8, 2, 4);
+			cout << endl;
+		}
 	}
 	if (f_vv) {
 		cout << "arc_lifting_with_two_lines::create_surface "
-				"transversal:" << endl;
+				"The 4 transversals by rank are:" << endl;
 		Lint_vec_print(cout, transversal, 4);
 		cout << endl;
-		cout << "Transversals:" << endl;
+		cout << "The 4 transversals in coordinates are:" << endl;
 		Int_matrix_print(Transversals, 8, 4);
 	}
 
@@ -267,9 +277,23 @@ void arc_lifting_with_two_lines::create_surface(
 	input_Lines[8] = transversal[3];
 
 
+	if (f_vv) {
+		cout << "arc_lifting_with_two_lines::create_surface "
+				"The 9 lines by rank are:" << endl;
+		Lint_vec_print(cout, input_Lines, 9);
+		cout << endl;
+	}
+	if (f_vv) {
+		cout << "arc_lifting_with_two_lines::create_surface "
+				"before Surf->build_cubic_surface_from_lines" << endl;
+	}
 	Surf->build_cubic_surface_from_lines(
 		9, input_Lines,
-		coeff, 0/* verbose_level*/);
+		coeff, verbose_level - 2);
+	if (f_vv) {
+		cout << "arc_lifting_with_two_lines::create_surface "
+				"after Surf->build_cubic_surface_from_lines" << endl;
+	}
 
 	if (f_v) {
 		cout << "arc_lifting_with_two_lines::create_surface "
@@ -510,10 +534,30 @@ void arc_lifting_with_two_lines::create_surface(
 		cout << endl;
 	}
 	Lint_vec_copy(double_six, lines27, 12);
+	if (f_vv) {
+		cout << "arc_lifting_with_two_lines::create_surface "
+				"before Surf->create_the_fifteen_other_lines" << endl;
+	}
 	Surf->create_the_fifteen_other_lines(
 			double_six,
 			lines27 + 12,
-			verbose_level - 10);
+			verbose_level - 3);
+	if (f_vv) {
+		cout << "arc_lifting_with_two_lines::create_surface "
+				"after Surf->create_the_fifteen_other_lines" << endl;
+	}
+	if (f_v) {
+		cout << "arc_lifting_with_two_lines::create_surface "
+				"15 further lines=";
+		Lint_vec_print(cout, lines27 + 12, 15);
+		cout << endl;
+	}
+	if (f_v) {
+		cout << "arc_lifting_with_two_lines::create_surface "
+				"the 27 lines=";
+		Lint_vec_print(cout, lines27, 27);
+		cout << endl;
+	}
 
 	if (f_v) {
 		cout << "arc_lifting_with_two_lines::create_surface "

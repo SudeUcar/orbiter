@@ -97,7 +97,7 @@ void top_level_geometry_global::report_decomposition_by_group(
 	Sch1 = NEW_OBJECT(groups::schreier);
 	actions::action_global AcGl;
 
-	AcGl.all_point_orbits_from_generators(PA->A,
+	AcGl.all_point_orbits_from_strong_generators(PA->A,
 			*Sch1,
 			SG,
 			0 /* verbose_level */);
@@ -106,7 +106,7 @@ void top_level_geometry_global::report_decomposition_by_group(
 	//ost << "Orbits on lines:\\\\" << endl;
 
 	Sch2 = NEW_OBJECT(groups::schreier);
-	AcGl.all_point_orbits_from_generators(PA->A_on_lines,
+	AcGl.all_point_orbits_from_strong_generators(PA->A_on_lines,
 			*Sch2,
 			SG,
 			0 /* verbose_level */);
@@ -159,7 +159,7 @@ void top_level_geometry_global::report_decomposition_by_group(
 		groups::schreier *Sch3;
 		Sch3 = NEW_OBJECT(groups::schreier);
 		actions::action_global AcGl;
-		AcGl.all_point_orbits_from_generators(PA->A_on_planes,
+		AcGl.all_point_orbits_from_strong_generators(PA->A_on_planes,
 				*Sch3,
 				SG,
 				0 /*verbose_level*/);

@@ -410,6 +410,7 @@ long int projective_space_of_dimension_three::transversal_to_two_skew_lines_thro
 // requires n = 3
 {
 	int f_v = (verbose_level >= 1);
+	int f_vv = (verbose_level >= 2);
 	int Basis1[4 * 4];
 	int Basis2[4 * 4];
 	int Basis3[4 * 4];
@@ -425,17 +426,61 @@ long int projective_space_of_dimension_three::transversal_to_two_skew_lines_thro
 	}
 	Projective_space->unrank_line(Basis1, line1);
 	Projective_space->unrank_point(Basis1 + 8, pt);
+
+	if (f_vv) {
+		cout << "projective_space_of_dimension_three::transversal_to_two_skew_lines_through_a_point Basis1=" << endl;
+		Int_matrix_print(Basis1, 3, 4);
+	}
+
 	Projective_space->unrank_line(Basis2, line2);
 	Projective_space->unrank_point(Basis2 + 8, pt);
+
+	if (f_vv) {
+		cout << "projective_space_of_dimension_three::transversal_to_two_skew_lines_through_a_point Basis2=" << endl;
+		Int_matrix_print(Basis2, 3, 4);
+	}
+
+
 	Projective_space->Subspaces->F->Linear_algebra->RREF_and_kernel(
 			4, 3, Basis1, 0 /* verbose_level */);
+
+	if (f_vv) {
+		cout << "projective_space_of_dimension_three::transversal_to_two_skew_lines_through_a_point Kernel1=" << endl;
+		Int_matrix_print(Basis1 + 12, 1, 4);
+	}
+
 	Projective_space->Subspaces->F->Linear_algebra->RREF_and_kernel(
 			4, 3, Basis2, 0 /* verbose_level */);
+
+	if (f_vv) {
+		cout << "projective_space_of_dimension_three::transversal_to_two_skew_lines_through_a_point Kernel2=" << endl;
+		Int_matrix_print(Basis2 + 12, 1, 4);
+	}
+
+
 	Int_vec_copy(Basis1 + 12, Basis3, 4);
 	Int_vec_copy(Basis2 + 12, Basis3 + 4, 4);
+
+	if (f_vv) {
+		cout << "projective_space_of_dimension_three::transversal_to_two_skew_lines_through_a_point Basis3=" << endl;
+		Int_matrix_print(Basis3, 2, 4);
+	}
+
 	Projective_space->Subspaces->F->Linear_algebra->RREF_and_kernel(
 			4, 2, Basis3, 0 /* verbose_level */);
+
+	if (f_vv) {
+		cout << "projective_space_of_dimension_three::transversal_to_two_skew_lines_through_a_point Kernel3=" << endl;
+		Int_matrix_print(Basis3 + 8, 2, 4);
+	}
+
 	a = Projective_space->rank_line(Basis3 + 8);
+
+	if (f_vv) {
+		cout << "projective_space_of_dimension_three::transversal_to_two_skew_lines_through_a_point line rank = " << a << endl;
+	}
+
+
 	if (f_v) {
 		cout << "projective_space_of_dimension_three::transversal_to_two_skew_lines_through_a_point "
 				"done" << endl;

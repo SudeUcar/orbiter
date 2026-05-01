@@ -681,6 +681,8 @@ public:
 			actions::action *A, int verbose_level);
 	void copy(
 			vector_ge *&vector_copy, int verbose_level);
+	void extract_subset(
+			vector_ge *&vector_copy, int *subset, int sz, int verbose_level);
 	void init_by_hdl(
 			actions::action *A,
 			int *gen_hdl, int nb_gen, int verbose_level);

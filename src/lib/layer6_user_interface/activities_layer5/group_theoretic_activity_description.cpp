@@ -343,6 +343,7 @@ group_theoretic_activity_description::group_theoretic_activity_description()
 
 	f_permutation_subgroup = false;
 
+	f_find_small_generating_set = false;
 }
 
 group_theoretic_activity_description::~group_theoretic_activity_description()
@@ -1167,6 +1168,13 @@ int group_theoretic_activity_description::read_arguments(
 			}
 		}
 
+		else if (ST.stringcmp(argv[i], "-find_small_generating_set") == 0) {
+			f_find_small_generating_set = true;
+			if (f_v) {
+				cout << "-find_small_generating_set " << endl;
+			}
+		}
+
 
 
 
@@ -1591,6 +1599,9 @@ void group_theoretic_activity_description::print()
 		cout << "-permutation_subgroup " << endl;
 	}
 
+	if (f_find_small_generating_set) {
+		cout << "-find_small_generating_set " << endl;
+	}
 
 
 }

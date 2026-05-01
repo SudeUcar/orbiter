@@ -357,6 +357,15 @@ public:
 		data_structures_groups::vector_ge *gens,
 		groups::strong_generators *&Strong_gens,
 		int verbose_level);
+	void find_small_generating_set(
+		data_structures_groups::vector_ge *gens,
+		algebra::ring_theory::longinteger_object &target_go,
+		data_structures_groups::vector_ge *&generating_set_small,
+		int verbose_level);
+	void generate_group_without_target_go(
+		data_structures_groups::vector_ge *gens,
+		groups::sims *&S,
+		int verbose_level);
 
 
 	// action_io.cpp:
@@ -608,10 +617,16 @@ public:
 			actions::action *A,
 			int *&orbit_no,
 			int verbose_level);
-	void all_point_orbits_from_generators(
+	void all_point_orbits_from_strong_generators(
 			actions::action *A,
 			groups::schreier &Schreier,
 			groups::strong_generators *SG,
+			int verbose_level);
+	void all_point_orbits_from_generators(
+			actions::action *A,
+			groups::schreier &Schreier,
+			data_structures_groups::vector_ge *gens,
+			algebra::ring_theory::longinteger_object &go,
 			int verbose_level);
 	void all_point_orbits_from_single_generator(
 			actions::action *A,
@@ -747,6 +762,9 @@ public:
 			std::string &element_from,
 			std::string &element_to,
 			int verbose_level);
+
+
+
 
 	// orbiter data files:
 	void read_orbit_rep_and_candidates_from_files_and_process(

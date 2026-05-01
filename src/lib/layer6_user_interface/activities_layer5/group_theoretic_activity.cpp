@@ -2479,6 +2479,57 @@ int group_theoretic_activity::perform_activity_part5(
 
 
 	}
+	else if (Descr->f_find_small_generating_set) {
+		if (f_v) {
+			cout << "group_theoretic_activity::perform_activity "
+					"f_find_small_generating_set"
+					<< endl;
+		}
+
+
+
+		if (AG->Subgroup_gens == NULL) {
+			cout << "group_theoretic_activity::perform_activity "
+					"Subgroup_gens == NULL" << endl;
+			exit(1);
+
+		}
+#if 0
+		if (AG->Subgroup_sims == NULL) {
+			cout << "group_theoretic_activity::perform_activity "
+					"Subgroup_sims == NULL" << endl;
+			exit(1);
+		}
+
+		groups::sims *Sims;
+
+		Sims = AG->Subgroup_sims;
+#endif
+
+
+		layer5_applications::apps_algebra::algebra_global_with_action Algebra_global_with_action;
+
+		if (f_v) {
+			cout << "group_theoretic_activity::perform_activity "
+					"before Algebra_global_with_action.find_permutation_subgroup" << endl;
+		}
+		Algebra_global_with_action.find_small_generating_set(
+				//Sims,
+				AG,
+				AG->Subgroup_gens,
+				verbose_level);
+
+		if (f_v) {
+			cout << "group_theoretic_activity::perform_activity "
+					"after Algebra_global_with_action.find_permutation_subgroup" << endl;
+		}
+
+
+
+
+	}
+
+
 
 	else {
 		ret = false;

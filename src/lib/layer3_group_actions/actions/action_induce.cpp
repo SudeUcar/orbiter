@@ -441,6 +441,189 @@ void action::generators_to_strong_generators(
 
 
 
+void action::find_small_generating_set(
+	data_structures_groups::vector_ge *gens,
+	algebra::ring_theory::longinteger_object &target_go,
+	data_structures_groups::vector_ge *&generating_set_small,
+	int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "action::find_small_generating_set" << endl;
+	}
+	if (f_v) {
+		cout << "action::find_small_generating_set success, "
+				"The original generating set has size " << gens->len << endl;
+	}
+
+	algebra::ring_theory::longinteger_domain D;
+
+	combinatorics::other_combinatorics::combinatorics_domain Combi;
+
+	int sz;
+	long int N, idx;
+	int *subset;
+	int f_success = false;
+
+	subset = NEW_int(gens->len);
+
+	for (sz = 2; sz < gens->len; sz++) {
+
+		if (f_v) {
+			cout << "action::find_small_generating_set success "
+					"trying subset of size " << sz << endl;
+		}
+
+
+		N = Combi.binomial_lint(
+				gens->len, sz);
+
+		if (f_v) {
+			cout << "action::find_small_generating_set success "
+					"the number of subsets of size " << sz << " is equal to " << N << endl;
+		}
+
+		for (idx = 0; idx < N; idx++) {
+
+			data_structures_groups::vector_ge *gens_subset;
+
+			Combi.unrank_k_subset(
+					idx, subset, gens->len, sz);
+
+
+			if (f_v) {
+				cout << "action::find_small_generating_set success "
+						"trying subset " << idx << " / " << N << " : ";
+				Int_vec_print(cout, subset, sz);
+				cout << endl;
+			}
+
+
+			gens->extract_subset(
+					gens_subset, subset, sz, 0 /* verbose_level */);
+
+			groups::sims *S;
+			algebra::ring_theory::longinteger_object go;
+
+			generate_group_without_target_go(gens_subset, S, verbose_level - 2);
+
+
+			S->group_order(go);
+
+			if (D.compare(
+					go, target_go) == 0) {
+
+				if (f_v) {
+					cout << "action::find_small_generating_set success "
+							"success: subset " << idx << " / " << N << " is a small generating set" << endl;
+					cout << "action::find_small_generating_set success "
+							"go = " << go << endl;
+					cout << "action::find_small_generating_set success "
+							"target_go = " << target_go << endl;
+				}
+
+				f_success = true;
+				generating_set_small = gens_subset;
+				FREE_OBJECT(S);
+				break;
+			}
+
+			FREE_OBJECT(gens_subset);
+			FREE_OBJECT(S);
+
+
+		}
+
+		if (f_success) {
+			break;
+		}
+
+
+
+	}
+
+	FREE_int(subset);
+
+	if (f_success) {
+		if (f_v) {
+			cout << "action::find_small_generating_set success "
+					"found a small generating set of size " << generating_set_small->len << endl;
+			cout << "action::find_small_generating_set success "
+					"The original generating set has size " << gens->len << endl;
+		}
+
+	}
+	else {
+		if (f_v) {
+			cout << "action::find_small_generating_set "
+					"failure to find a small generating set, "
+					"copying the original generating set" << endl;
+		}
+
+		gens->copy(
+				generating_set_small, verbose_level - 2);
+
+	}
+
+
+	if (f_v) {
+		cout << "action::find_small_generating_set done" << endl;
+	}
+}
+
+
+void action::generate_group_without_target_go(
+	data_structures_groups::vector_ge *gens,
+	groups::sims *&S,
+	int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "action::generate_group_without_target_go" << endl;
+	}
+
+	//groups::sims *S;
+
+	algebra::ring_theory::longinteger_object target_go_dummy;
+	//algebra::ring_theory::longinteger_object go;
+
+	if (f_v) {
+		cout << "action::generate_group_without_target_go "
+				"before create_sims_from_generators_randomized" << endl;
+	}
+
+	S = create_sims_from_generators_randomized(
+		gens, false /* f_target_go */,
+		target_go_dummy,
+		verbose_level - 2);
+
+	if (f_v) {
+		cout << "action::generate_group_without_target_go "
+				"after create_sims_from_generators_randomized" << endl;
+	}
+
+#if 0
+	S->group_order(go);
+
+	Strong_gens = NEW_OBJECT(groups::strong_generators);
+	if (f_v) {
+		cout << "action::generate_group_without_target_go "
+				"before Strong_gens->init_from_sims" << endl;
+	}
+	Strong_gens->init_from_sims(
+			S, verbose_level - 5);
+
+	FREE_OBJECT(S);
+#endif
+
+	if (f_v) {
+		cout << "action::generate_group_without_target_go done" << endl;
+	}
+}
+
+
 
 }}}
 

@@ -1346,6 +1346,9 @@ public:
 	// ToDo undocumented
 	int f_permutation_subgroup;
 
+	// ToDo undocumented
+	int f_find_small_generating_set;
+
 
 	group_theoretic_activity_description();
 	~group_theoretic_activity_description();

@@ -11086,6 +11086,7 @@ test_8_1:
 	make orbits_on_conics_q13
 	make orbits_cubic_curves_q2
 	make orbits_cubic_curves_q2_with_draw_tree
+	make poly_orbits_d3_n2_q2_compute
 	make poly_orbits_d3_n3_q2.csv
 	make poly_orbits_d3_n3_q2_get_ranks
 	make T4_orbits
@@ -11311,6 +11312,38 @@ orbits_cubic_curves_q2_with_draw_tree:
 		-end
 	$(PDFLATEX) PGL_3_2_orbit_6_tree.tex
 	$(OPEN) PGL_3_2_orbit_6_tree.pdf
+
+
+
+
+poly_orbits_d3_n2_q2_compute:
+	$(ORBITER) -v 4 \
+		-define Do -draw_options \
+			-yout 500000 -radius 15 -nodes_empty \
+			-line_width 0.5 -y_stretch 0.25 -embedded \
+		-end \
+		-define F -finite_field -q 2 -end \
+		-define G -linear_group -PGL 3 F -end \
+		-define R -polynomial_ring \
+			-field F \
+			-number_of_variables 3 \
+			-homogeneous_of_degree 3 \
+			-monomial_ordering_partition \
+			-variables "X,Y,Z" "X,Y,Z" \
+		-end \
+		-define Orb -orbits -group G \
+			-print_interval 1000000 \
+			-on_polynomials R \
+		-end \
+		-with Orb -do -orbits_activity \
+			-report Do \
+		-end \
+		-with Orb -do -orbits_activity \
+			-export_something representatives -1 \
+		-end
+		-print_symbols
+	$(PDFLATEX) poly_orbits_d3_n2_q2.tex
+	$(OPEN) poly_orbits_d3_n2_q2.pdf
 
 
 
@@ -13260,6 +13293,7 @@ test_9_2:
 	make surface_F_abcd_Eckardt_q31_by_equation
 	make Eckardt_13_by_arc_lifting
 	make surface_F_abcd_Eckardt_q31_by_symbolic_object
+	make Hirschfeld_surface_by_arc_lifting_with_two_lines
 	make Dickson6_q2
 	make Dickson1_group
 	make Dickson2_group
@@ -13402,6 +13436,25 @@ surface_F_abcd_Eckardt_q31_by_symbolic_object:
 			R \
 			F_abcd_sub \
 		-end
+
+
+
+Hirschfeld_surface_by_arc_lifting_with_two_lines:
+	$(ORBITER) -v 3 \
+		-define F -finite_field -q 4 -end \
+		-define P -projective_space -n 3 -field F -v 0 -end \
+		-define Surf -cubic_surface -space P -arc_lifting_with_two_lines "0,1,2,12,18,21" "0,0"  -end \
+		-define Do -draw_options \
+			-radius 200 -line_width 0.3 \
+		-end \
+		-with Surf -do \
+		-cubic_surface_activity \
+			-report Do \
+		-end \
+		-print_symbols
+	pdflatex surface_arc_lifting_with_two_lines_q4_lines_0_0_arc_0_1_2_12_18_21_report.tex
+	open surface_arc_lifting_with_two_lines_q4_lines_0_0_arc_0_1_2_12_18_21_report.pdf
+
 
 
 
@@ -29751,5 +29804,19 @@ draw_vector_decomposition:
 	pdflatex vector_decomposition_draw.tex
 	open vector_decomposition_draw.pdf
 
+
+
+PGGL_4_4_small_generating_set:
+	$(ORBITER) -v 4 \
+		-define Do -draw_options \
+			-yout 500000 -radius 15 -nodes_empty \
+			-line_width 0.5 -y_stretch 0.25 -embedded \
+		-end \
+		-define F -finite_field -q 4 -end \
+		-define G -linear_group -PGGL 4 F -end \
+		-with G -do \
+		-group_theoretic_activity \
+			-find_small_generating_set \
+		-end
 
 

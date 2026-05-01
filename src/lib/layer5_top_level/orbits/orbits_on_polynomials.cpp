@@ -119,14 +119,60 @@ void orbits_on_polynomials::init(
 	//A2->all_point_orbits(*Sch, verbose_level);
 
 
+	f_has_Sch = true;
+
+	data_structures_groups::vector_ge *generating_set_small;
+	algebra::ring_theory::longinteger_object target_go;
+
+
+	A->Strong_gens->group_order(target_go);
+
+	if (f_v) {
+		cout << "orbits_on_polynomials::init "
+				"before A->find_small_generating_set" << endl;
+	}
+	A->find_small_generating_set(
+			A->Strong_gens->gens,
+			target_go,
+			generating_set_small,
+			verbose_level);
+	if (f_v) {
+		cout << "orbits_on_polynomials::init "
+				"after A->find_small_generating_set" << endl;
+	}
+
+
+	actions::action_global Action_global;
+
 	if (f_v) {
 		cout << "orbits_on_polynomials::init "
 				"before A->Strong_gens->compute_all_point_orbits_schreier" << endl;
 	}
 
-	f_has_Sch = true;
+	Sch = NEW_OBJECT(groups::schreier);
 
 
+	Action_global.all_point_orbits_from_generators(
+			A,
+			*Sch,
+			generating_set_small, // not: A->Strong_gens->gens,
+			target_go,
+			verbose_level - 2);
+
+#if 0
+	Action_global.all_point_orbits_from_strong_generators(
+			A,
+			*Sch,
+			A->Strong_gens,
+			verbose_level - 2);
+#endif
+
+
+#if 0
+	if (f_v) {
+		cout << "orbits_on_polynomials::init "
+				"before A->Strong_gens->compute_all_point_orbits_schreier" << endl;
+	}
 	Sch = A->Strong_gens->compute_all_point_orbits_schreier(
 			A2, print_interval, verbose_level - 2);
 
@@ -134,6 +180,7 @@ void orbits_on_polynomials::init(
 		cout << "orbits_on_polynomials::init "
 				"after A->Strong_gens->compute_all_point_orbits_schreier" << endl;
 	}
+#endif
 
 
 

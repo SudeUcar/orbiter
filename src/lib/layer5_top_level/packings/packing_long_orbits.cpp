@@ -838,16 +838,16 @@ void packing_long_orbits::read_and_process_solutions(
 	}
 	if (f_v) {
 		cout << "packing_long_orbits::read_and_process_solutions "
-				"before Ar_On_Packings->all_point_orbits_from_generators" << endl;
+				"before Ar_On_Packings->all_point_orbits_from_strong_generators" << endl;
 	}
-	AcGl.all_point_orbits_from_generators(
+	AcGl.all_point_orbits_from_strong_generators(
 			Ar_On_Packings,
 			*Orbits,
 			fixpoint_clique_stabilizer_gens,
 			verbose_level + 3);
 	if (f_v) {
 		cout << "packing_long_orbits::read_and_process_solutions "
-				"after Ar_On_Packings->all_point_orbits_from_generators" << endl;
+				"after Ar_On_Packings->all_point_orbits_from_strong_generators" << endl;
 	}
 
 	int *iso_type;

@@ -3027,7 +3027,7 @@ void homogeneous_polynomial_domain::make_system(
 		evaluate_point_on_all_monomials(
 				Pt_coords + i * nb_variables,
 				System + i * nb_monomials,
-				verbose_level - 2);
+				0 /*verbose_level - 2*/);
 
 #if 0
 		for (j = 0; j < nb_monomials; j++) {

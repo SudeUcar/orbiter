@@ -3220,5 +3220,60 @@ void algebra_global_with_action::compute_subgroup_lattice_wrapper(
 
 }
 
+
+void algebra_global_with_action::find_small_generating_set(
+		groups::any_group *Any_group,
+		groups::strong_generators *Subgroup_gens,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "algebra_global_with_action::find_small_generating_set" << endl;
+	}
+
+
+	algebra::ring_theory::longinteger_object target_go;
+
+	Subgroup_gens->group_order(target_go);
+
+	if (f_v) {
+		cout << "algebra_global_with_action::find_small_generating_set go = " << target_go << endl;
+		cout << "algebra_global_with_action::find_small_generating_set number of generators = " << Subgroup_gens->gens->len << endl;
+	}
+
+	data_structures_groups::vector_ge *generating_set_small;
+
+	if (f_v) {
+		cout << "algebra_global_with_action::find_small_generating_set "
+				"before action::find_small_generating_set" << endl;
+	}
+
+	Subgroup_gens->A->find_small_generating_set(
+			Subgroup_gens->gens,
+			target_go,
+			generating_set_small,
+			verbose_level - 2);
+	if (f_v) {
+		cout << "algebra_global_with_action::find_small_generating_set "
+				"after action::find_small_generating_set" << endl;
+	}
+	if (f_v) {
+		cout << "algebra_global_with_action::find_small_generating_set go = " << target_go << endl;
+		cout << "algebra_global_with_action::find_small_generating_set number of generators = " << Subgroup_gens->gens->len << endl;
+		cout << "algebra_global_with_action::find_small_generating_set reduced number of generators = " << generating_set_small->len << endl;
+	}
+
+
+
+	if (f_v) {
+		cout << "algebra_global_with_action::find_small_generating_set done" << endl;
+	}
+}
+
+
+
+
+
 }}}
 

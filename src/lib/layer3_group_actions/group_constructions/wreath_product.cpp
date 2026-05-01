@@ -3321,7 +3321,7 @@ void wreath_product::orbits_restricted_compute(
 
 		actions::action_global AcGl;
 
-		AcGl.all_point_orbits_from_generators(
+		AcGl.all_point_orbits_from_strong_generators(
 				A_on_orbit,
 				*Sch_orbit,
 				gens,

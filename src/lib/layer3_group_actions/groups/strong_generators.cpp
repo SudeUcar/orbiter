@@ -2835,6 +2835,7 @@ schreier *strong_generators::compute_all_point_orbits_schreier(
 				"generators:" << endl;
 		//print_generators_tex();
 	}
+
 	Sch = NEW_OBJECT(schreier);
 
 	Sch->init(A_given, verbose_level - 2);

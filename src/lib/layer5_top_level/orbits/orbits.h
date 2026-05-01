@@ -506,7 +506,6 @@ public:
 
 	algebra::ring_theory::homogeneous_polynomial_domain *HPD;
 
-	//geometry::projective_space *P;
 
 	actions::action *A2; // induced_action_on_homogeneous_polynomials
 

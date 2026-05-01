@@ -129,12 +129,12 @@ void arc_partition::init(
 
 	if (f_v) {
 		cout << "arc_partition::init "
-				"before A_on_rest->all_point_orbits_from_generators" << endl;
+				"before A_on_rest->all_point_orbits_from_strong_generators" << endl;
 	}
 
 	actions::action_global AcGl;
 
-	AcGl.all_point_orbits_from_generators(
+	AcGl.all_point_orbits_from_strong_generators(
 			A_on_partition,
 			*Orbits_on_partition,
 			The_pair->Strong_gens,

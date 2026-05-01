@@ -99,6 +99,45 @@ void vector_ge::copy(
 	}
 }
 
+void vector_ge::extract_subset(
+		vector_ge *&vector_copy, int *subset, int sz, int verbose_level)
+{
+	int i;
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "vector_ge::extract_subset" << endl;
+	}
+	if (A == NULL) {
+		cout << "vector_ge::extract_subset A == NULL" << endl;
+		exit(1);
+	}
+
+	vector_copy = NEW_OBJECT(vector_ge);
+	if (f_v) {
+		cout << "vector_ge::extract_subset before vector_copy->null" << endl;
+	}
+	vector_copy->null();
+	if (f_v) {
+		cout << "vector_ge::extract_subset before vector_copy->init" << endl;
+	}
+	vector_copy->init(A, verbose_level);
+	if (f_v) {
+		cout << "vector_ge::extract_subset before vector_copy->allocate" << endl;
+	}
+	vector_copy->allocate(sz, verbose_level);
+	if (f_v) {
+		cout << "vector_ge::extract_subset before loop" << endl;
+	}
+	for (i = 0; i < sz; i++) {
+		A->Group_element->element_move(ith(subset[i]), vector_copy->ith(i), 0);
+	}
+	if (f_v) {
+		cout << "vector_ge::extract_subset done" << endl;
+	}
+}
+
+
 void vector_ge::init_by_hdl(
 		actions::action *A,
 		int *gen_hdl, int nb_gen, int verbose_level)

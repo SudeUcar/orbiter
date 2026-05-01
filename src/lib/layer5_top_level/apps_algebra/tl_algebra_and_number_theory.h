@@ -271,6 +271,11 @@ public:
 			groups::any_group *AG,
 			groups::sims *Sims,
 			int verbose_level);
+	void find_small_generating_set(
+			//groups::sims *Sims,
+			groups::any_group *Any_group,
+			groups::strong_generators *Subgroup_gens,
+			int verbose_level);
 
 
 };

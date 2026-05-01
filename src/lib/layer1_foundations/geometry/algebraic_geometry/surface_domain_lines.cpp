@@ -80,6 +80,7 @@ void surface_domain::build_cubic_surface_from_lines(
 	int *coeff, int verbose_level)
 {
 	int f_v = (verbose_level >= 1);
+	int f_vv = (verbose_level >= 2);
 	int r;
 	int *System;
 	int nb_rows;
@@ -92,10 +93,15 @@ void surface_domain::build_cubic_surface_from_lines(
 		cout << "surface_domain::build_cubic_surface_from_lines "
 				"before create_system" << endl;
 	}
-	create_system(len, S, System, nb_rows, verbose_level);
+	create_system(len, S, System, nb_rows, verbose_level - 2);
 	if (f_v) {
 		cout << "surface_domain::build_cubic_surface_from_lines "
 				"after create_system" << endl;
+	}
+	if (f_vv) {
+		cout << "surface_domain::build_cubic_surface_from_lines "
+				"system of size " << nb_rows << " x " << PolynomialDomains->nb_monomials << endl;
+		Int_matrix_print(System, nb_rows, PolynomialDomains->nb_monomials);
 	}
 
 
@@ -114,15 +120,15 @@ void surface_domain::build_cubic_surface_from_lines(
 				"after F->Gauss_simple" << endl;
 	}
 
-	if (false) {
-		cout << "surface_domain::create_system "
-				"The system in RREF:" << endl;
-		Int_matrix_print(
-				System, nb_rows, PolynomialDomains->nb_monomials);
-	}
 	if (f_v) {
 		cout << "surface_domain::create_system "
 				"The system has rank " << r << endl;
+	}
+	if (f_vv) {
+		cout << "surface_domain::create_system "
+				"The system in RREF:" << endl;
+		Int_matrix_print(
+				System, r, PolynomialDomains->nb_monomials);
 	}
 
 
@@ -147,6 +153,12 @@ void surface_domain::build_cubic_surface_from_lines(
 	if (f_v) {
 		cout << "surface_domain::build_cubic_surface_from_lines "
 				"after F->matrix_get_kernel" << endl;
+	}
+	if (f_v) {
+		cout << "surface_domain::build_cubic_surface_from_lines "
+				"coeff = ";
+		Int_vec_print(cout, coeff, PolynomialDomains->nb_monomials);
+		cout << endl;
 	}
 
 	FREE_int(System);
@@ -327,7 +339,7 @@ void surface_domain::create_system(
 	PolynomialDomains->Poly3_4->make_system(
 			Pt_coords, nb_rows,
 			System, nb_cols,
-			verbose_level);
+			verbose_level - 2);
 	if (f_v) {
 		cout << "surface_domain::create_system "
 				"after PolynomialDomains->Poly3_4->make_system" << endl;
