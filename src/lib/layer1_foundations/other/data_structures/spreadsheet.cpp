@@ -1003,6 +1003,19 @@ int spreadsheet::find_by_column_relaxed(
 	cout << "spreadsheet::find_by_column_relaxed column '" << join_by << "' not found" << endl;
 	cout << "The first row of the table is:" << endl;
 	print_table_row_detailed(0, cout);
+
+	for (j = 0; j < nb_cols; j++) {
+		t = Table[0 * nb_cols + j];
+		if (t >= 0) {
+			c = strncmp(tokens[t], join_by, strlen(join_by));
+			cout << "comparing '" << tokens[t] << "' with '"
+					<< join_by << "' with number of characters=" << strlen(join_by) << " yields " << c << endl;
+			int h;
+			for (h = 0; h < strlen(join_by); h++) {
+				cout << h << " : " << (int)(tokens[t][h]) << " : " << tokens[t][h] << " : " << join_by[h] << endl;
+			}
+		}
+	}
 	exit(1);
 }
 

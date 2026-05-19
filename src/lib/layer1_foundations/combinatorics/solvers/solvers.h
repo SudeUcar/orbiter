@@ -228,6 +228,8 @@ public:
 			int a);
 	void set_x_max_constant(
 			int a);
+	void set_x_max_constant_with_restriction(
+			int a, int q);
 	int &Aij(
 			int i, int j);
 	int &Gij(

@@ -1224,6 +1224,12 @@ long int syntax_tree::evaluate(
 	return a;
 }
 
+int syntax_tree::degree(
+		int verbose_level)
+{
+	return Root->degree(verbose_level);
+}
+
 
 
 }}}}

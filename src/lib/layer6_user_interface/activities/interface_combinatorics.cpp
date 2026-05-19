@@ -968,7 +968,8 @@ void interface_combinatorics::worker(
 
 		combinatorics::other_combinatorics::combinatorics_domain Combi;
 
-		Combi.do_read_poset_file(read_poset_file_fname,
+		Combi.do_read_poset_file(
+				read_poset_file_fname,
 				f_grouping, grouping_x_stretch,
 				verbose_level);
 	}
@@ -1008,7 +1009,6 @@ void interface_combinatorics::worker(
 	}
 	else if (f_tdo_refinement) {
 
-		//combinatorics::other_combinatorics::combinatorics_domain Combi;
 		combinatorics::tactical_decompositions::tactical_decomposition_domain Tactical_decomposition_domain;
 
 		Tactical_decomposition_domain.do_tdo_refinement(
@@ -1016,7 +1016,6 @@ void interface_combinatorics::worker(
 	}
 	else if (f_tdo_print) {
 
-		//combinatorics::other_combinatorics::combinatorics_domain Combi;
 		combinatorics::tactical_decompositions::tactical_decomposition_domain Tactical_decomposition_domain;
 
 		Tactical_decomposition_domain.do_tdo_print(
@@ -1024,7 +1023,6 @@ void interface_combinatorics::worker(
 	}
 	else if (f_convert_stack_to_tdo) {
 
-		//combinatorics::other_combinatorics::combinatorics_domain Combi;
 		combinatorics::tactical_decompositions::tactical_decomposition_domain Tactical_decomposition_domain;
 
 		Tactical_decomposition_domain.convert_stack_to_tdo(
@@ -1032,7 +1030,6 @@ void interface_combinatorics::worker(
 	}
 	else if (f_maximal_arc_parameters) {
 
-		//combinatorics::other_combinatorics::combinatorics_domain Combi;
 		combinatorics::tactical_decompositions::tactical_decomposition_domain Tactical_decomposition_domain;
 
 		Tactical_decomposition_domain.do_parameters_maximal_arc(
@@ -1041,7 +1038,6 @@ void interface_combinatorics::worker(
 	}
 	else if (f_arc_parameters) {
 
-		//combinatorics::other_combinatorics::combinatorics_domain Combi;
 		combinatorics::tactical_decompositions::tactical_decomposition_domain Tactical_decomposition_domain;
 
 		Tactical_decomposition_domain.do_parameters_arc(
@@ -1194,8 +1190,10 @@ void interface_combinatorics::worker(
 		other::data_structures::algorithms Algo;
 
 
-		Algo.union_of_sets(union_set_of_sets_fname,
-				union_input_fname, union_output_fname, verbose_level);
+		Algo.union_of_sets(
+				union_set_of_sets_fname,
+				union_input_fname, union_output_fname,
+				verbose_level);
 	}
 
 	else if (f_dot_product_of_columns) {
@@ -1207,7 +1205,9 @@ void interface_combinatorics::worker(
 
 
 
-		Algo.dot_product_of_columns(dot_product_of_columns_fname, verbose_level);
+		Algo.dot_product_of_columns(
+				dot_product_of_columns_fname,
+				verbose_level);
 	}
 
 	else if (f_dot_product_of_rows) {
@@ -1219,7 +1219,9 @@ void interface_combinatorics::worker(
 
 
 
-		Algo.dot_product_of_rows(dot_product_of_rows_fname, verbose_level);
+		Algo.dot_product_of_rows(
+				dot_product_of_rows_fname,
+				verbose_level);
 	}
 
 
@@ -1247,7 +1249,9 @@ void interface_combinatorics::worker(
 
 
 
-		Algo.matrix_rowspan_over_R(rowspan_over_R_label, verbose_level);
+		Algo.matrix_rowspan_over_R(
+				rowspan_over_R_label,
+				verbose_level);
 	}
 
 	else if (f_read_widor) {
@@ -1304,48 +1308,36 @@ void interface_combinatorics::worker(
 		}
 
 
-		if (f_v) {
-			cout << "interface_combinatorics::worker "
-					"fname=" << test_if_distance_regular_graph_fname << endl;
-		}
-		combinatorics::graph_theory::layered_graph *LG;
-		other::orbiter_kernel_system::file_io Fio;
-
-		LG = NEW_OBJECT(combinatorics::graph_theory::layered_graph);
-		if (Fio.file_size(test_if_distance_regular_graph_fname) <= 0) {
-			cout << "interface_combinatorics::worker "
-					"file " << test_if_distance_regular_graph_fname << " does not exist" << endl;
-			exit(1);
-		}
-		LG->read_file(test_if_distance_regular_graph_fname, verbose_level - 1);
-
-		if (f_v) {
-			cout << "interface_combinatorics::worker "
-					"Layered graph read from file" << endl;
-		}
-
-		LG->print_nb_nodes_per_level();
-
+		combinatorics::other_combinatorics::combinatorics_domain Combi;
 
 		int f_drg;
-
+		int *ABC_by_layer;
+		int nb_layers;
 
 		if (f_v) {
 			cout << "interface_combinatorics::worker "
-					"before LG->test_if_distance_regular" << endl;
+					"before Combi.load_layered_graph_and_test_if_distance_regular" << endl;
 		}
-		f_drg = LG->test_if_distance_regular(
-				verbose_level);
+		f_drg = Combi.load_layered_graph_and_test_if_distance_regular(
+				test_if_distance_regular_graph_fname,
+				ABC_by_layer, nb_layers,
+				verbose_level - 1);
 		if (f_v) {
 			cout << "interface_combinatorics::worker "
-					"after LG->test_if_distance_regular" << endl;
+					"after Combi.load_layered_graph_and_test_if_distance_regular" << endl;
 		}
+
+
 
 		if (f_drg) {
-			cout << "The graph is distance regular" << endl;
+			cout << "interface_combinatorics::worker The graph is distance regular" << endl;
+			cout << "interface_combinatorics::worker ABC_by_layer:" << endl;
+			Int_matrix_print(ABC_by_layer, nb_layers, 3);
+
+			FREE_int(ABC_by_layer);
 		}
 		else {
-			cout << "The graph is *not* distance regular" << endl;
+			cout << "interface_combinatorics::worker The graph is *not* distance regular" << endl;
 		}
 		//cout << "f_drg = " << f_drg << endl;
 
@@ -1429,7 +1421,6 @@ void interface_combinatorics::do_conjugacy_classes_Sym_n(
 	int cnt;
 	algebra::ring_theory::longinteger_object class_size, S, F, A;
 	algebra::ring_theory::longinteger_domain D;
-	combinatorics::other_combinatorics::combinatorics_domain C;
 	combinatorics::other_combinatorics::combinatorics_domain Combi;
 
 	cnt = Combi.count_partitions(n);
@@ -1443,13 +1434,14 @@ void interface_combinatorics::do_conjugacy_classes_Sym_n(
 	S.create(0);
 
 	cout << "The conjugacy classes in Sym_" << n << " are:" << endl;
+
 	for (i = 0; i < cnt; i++) {
 
 		cout << i << " : ";
 		Int_vec_print(cout, Parts + i * n, n);
 		cout << " : ";
 
-		C.size_of_conjugacy_class_in_sym_n(class_size, n, Parts + i * n);
+		Combi.size_of_conjugacy_class_in_sym_n(class_size, n, Parts + i * n);
 		cout << class_size << " : ";
 		cout << endl;
 
@@ -1458,10 +1450,12 @@ void interface_combinatorics::do_conjugacy_classes_Sym_n(
 
 	D.factorial(F, n);
 	D.integral_division_exact(F, S, A);
+
 	if (!A.is_one()) {
 		cout << "the class sizes do not add up" << endl;
 		exit(1);
 	}
+
 	cout << "The sum of the class sizes is n!" << endl;
 
 	if (f_v) {

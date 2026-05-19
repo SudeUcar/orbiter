@@ -36,6 +36,10 @@ design_create_description::design_create_description()
 	f_sporadic = false;
 	//std::string sporadic_name;
 
+	f_from_blocks = false;
+	from_blocks_v = 0;
+	//std::string from_blocks_label;
+
 	f_from_incidence_matrix = false;
 	//std::string from_incidence_matrix_label;
 
@@ -140,6 +144,14 @@ int design_create_description::read_arguments(
 			sporadic_name.assign(argv[++i]);
 			if (f_v) {
 				cout << "-sporadic " << sporadic_name << endl;
+			}
+		}
+		else if (ST.stringcmp(argv[i], "-from_blocks") == 0) {
+			f_from_blocks = true;
+			from_blocks_v = ST.strtoi(argv[++i]);
+			from_blocks_label.assign(argv[++i]);
+			if (f_v) {
+				cout << "-from_blocks " << from_blocks_v << " " << from_blocks_label << endl;
 			}
 		}
 		else if (ST.stringcmp(argv[i], "-from_incidence_matrix") == 0) {
@@ -304,6 +316,9 @@ void design_create_description::print()
 	}
 	if (f_sporadic) {
 		cout << "-sporadic " << sporadic_name << endl;
+	}
+	if (f_from_blocks) {
+		cout << "-from_blocks " << from_blocks_v << " " << from_blocks_label << endl;
 	}
 	if (f_from_incidence_matrix) {
 		cout << "-from_incidence_matrix " << from_incidence_matrix_label << endl;

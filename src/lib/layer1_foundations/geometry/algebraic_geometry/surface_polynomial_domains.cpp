@@ -147,39 +147,42 @@ void surface_polynomial_domains::init(
 
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"before Poly1->init" << endl;
+				"before Poly1->init_without_description" << endl;
 	}
-	Poly1->init(Surf->F,
+	Poly1->init_without_description(
+			Surf->F,
 			3 /* nb_vars */, 1 /* degree */,
 			t_PART,
 			verbose_level);
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"after Poly1->init" << endl;
+				"after Poly1->init_without_description" << endl;
 	}
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"before Poly2->init" << endl;
+				"before Poly2->init_without_description" << endl;
 	}
-	Poly2->init(Surf->F,
+	Poly2->init_without_description(
+			Surf->F,
 			3 /* nb_vars */, 2 /* degree */,
 			t_PART,
 			verbose_level);
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"after Poly2->init" << endl;
+				"after Poly2->init_without_description" << endl;
 	}
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"before Poly3->init" << endl;
+				"before Poly3->init_without_description" << endl;
 	}
-	Poly3->init(Surf->F,
+	Poly3->init_without_description(
+			Surf->F,
 			3 /* nb_vars */, 3 /* degree */,
 			t_PART,
 			verbose_level);
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"after Poly3->init" << endl;
+				"after Poly3->init_without_description" << endl;
 	}
 
 	Poly1_x123 = NEW_OBJECT(algebra::ring_theory::homogeneous_polynomial_domain);
@@ -188,51 +191,55 @@ void surface_polynomial_domains::init(
 	Poly4_x123 = NEW_OBJECT(algebra::ring_theory::homogeneous_polynomial_domain);
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"before Poly1_x123->init" << endl;
+				"before Poly1_x123->init_without_description" << endl;
 	}
-	Poly1_x123->init(Surf->F,
+	Poly1_x123->init_without_description(
+			Surf->F,
 			3 /* nb_vars */, 1 /* degree */,
 			t_PART,
 			verbose_level);
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"after Poly1_x123->init" << endl;
+				"after Poly1_x123->init_without_description" << endl;
 	}
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"before Poly2_x123->init" << endl;
+				"before Poly2_x123->init_without_description" << endl;
 	}
-	Poly2_x123->init(Surf->F,
+	Poly2_x123->init_without_description(
+			Surf->F,
 			3 /* nb_vars */, 2 /* degree */,
 			t_PART,
 			verbose_level);
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"after Poly2_x123->init" << endl;
+				"after Poly2_x123->init_without_description" << endl;
 	}
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"before Poly3_x123->init" << endl;
+				"before Poly3_x123->init_without_description" << endl;
 	}
-	Poly3_x123->init(Surf->F,
+	Poly3_x123->init_without_description(
+			Surf->F,
 			3 /* nb_vars */, 3 /* degree */,
 			t_PART,
 			verbose_level);
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"after Poly3_x123->init" << endl;
+				"after Poly3_x123->init_without_description" << endl;
 	}
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"before Poly4_x123->init" << endl;
+				"before Poly4_x123->init_without_description" << endl;
 	}
-	Poly4_x123->init(Surf->F,
+	Poly4_x123->init_without_description(
+			Surf->F,
 			3 /* nb_vars */, 4 /* degree */,
 			t_PART,
 			verbose_level);
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"after Poly4_x123->init" << endl;
+				"after Poly4_x123->init_without_description" << endl;
 	}
 
 
@@ -250,39 +257,42 @@ void surface_polynomial_domains::init(
 	Poly3_4 = NEW_OBJECT(algebra::ring_theory::homogeneous_polynomial_domain);
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"before Poly1_4->init" << endl;
+				"before Poly1_4->init_without_description" << endl;
 	}
-	Poly1_4->init(Surf->F,
+	Poly1_4->init_without_description(
+			Surf->F,
 			4 /* nb_vars */, 1 /* degree */,
 			t_PART,
 			verbose_level);
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"after Poly1_4->init" << endl;
+				"after Poly1_4->init_without_description" << endl;
 	}
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"before Poly2_4->init" << endl;
+				"before Poly2_4->init_without_description" << endl;
 	}
-	Poly2_4->init(Surf->F,
+	Poly2_4->init_without_description(
+			Surf->F,
 			4 /* nb_vars */, 2 /* degree */,
 			t_PART,
 			verbose_level);
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"after Poly2_4->init" << endl;
+				"after Poly2_4->init_without_description" << endl;
 	}
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"before Poly3_4->init" << endl;
+				"before Poly3_4->init_without_description" << endl;
 	}
-	Poly3_4->init(Surf->F,
+	Poly3_4->init_without_description(
+			Surf->F,
 			4 /* nb_vars */, 3 /* degree */,
 			t_PART,
 			verbose_level);
 	if (f_v) {
 		cout << "surface_polynomial_domains::init_polynomial_domains "
-				"after Poly3_4->init" << endl;
+				"after Poly3_4->init_without_description" << endl;
 	}
 
 	if (f_v) {
@@ -346,19 +356,23 @@ void surface_polynomial_domains::init_large_polynomial_domains(
 	Poly6_27 = NEW_OBJECT(algebra::ring_theory::homogeneous_polynomial_domain);
 	Poly3_24 = NEW_OBJECT(algebra::ring_theory::homogeneous_polynomial_domain);
 
-	Poly2_27->init(Surf->F,
+	Poly2_27->init_without_description(
+			Surf->F,
 			27 /* nb_vars */, 2 /* degree */,
 			t_PART,
 			verbose_level);
-	Poly4_27->init(Surf->F,
+	Poly4_27->init_without_description(
+			Surf->F,
 			27 /* nb_vars */, 4 /* degree */,
 			t_PART,
 			verbose_level);
-	Poly6_27->init(Surf->F,
+	Poly6_27->init_without_description(
+			Surf->F,
 			27 /* nb_vars */, 6 /* degree */,
 			t_PART,
 			verbose_level);
-	Poly3_24->init(Surf->F,
+	Poly3_24->init_without_description(
+			Surf->F,
 			24 /* nb_vars */, 3 /* degree */,
 			t_PART,
 			verbose_level);

@@ -8,4 +8,5 @@ ROW,C1,C2,C3
 1,"\verb'-eigenvalue_report' ","   ","Compute the eigenvalues of the graph (regular and Laplace) and produce a latex report. "
 1,"\verb'-draw' "," options  ","Draw the graph. Uses a draw options object as in Table~\ref{tab:draw:options} for drawing. "
 1,"\verb'-create_distance_poset' "," v  ","Create the distance poset with respect to the vertex $v$. "
+1,"\verb'-test_if_distance_regular' "," v  ","Test if distance regular with respect to the vertex $v$. This is meaningful only if the graph is vertex transitive. "
 END

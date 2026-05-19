@@ -15,13 +15,13 @@ namespace cubic_surfaces_and_arcs {
 
 
 // #############################################################################
-// arc_lifting.cpp
+// arc_lifting_trihedral_pair.cpp
 // #############################################################################
 
 //! creates a cubic surface from a 6-arc in a plane using trihedral pairs
 
 
-class arc_lifting {
+class arc_lifting_trihedral_pair {
 
 public:
 
@@ -46,8 +46,8 @@ public:
 
 	trihedral_pair_with_action *Trihedral_pair;
 
-	arc_lifting();
-	~arc_lifting();
+	arc_lifting_trihedral_pair();
+	~arc_lifting_trihedral_pair();
 	void create_surface_and_group(
 			applications_in_algebraic_geometry::cubic_surfaces_in_general::surface_with_action *Surf_A,
 			long int *Arc6,
@@ -351,7 +351,7 @@ public:
 	long int *Arc6;
 
 
-	arc_lifting *AL;
+	arc_lifting_trihedral_pair *AL;
 
 	cubic_surfaces_in_general::surface_object_with_group *SOA;
 
@@ -370,7 +370,8 @@ public:
 	~surface_create_by_arc_lifting();
 	void init(
 			int arc_idx,
-			surface_classify_using_arc *SCA, int verbose_level);
+			surface_classify_using_arc *SCA,
+			int verbose_level);
 	void report_summary(
 			std::ostream &ost, int verbose_level);
 	void report(
@@ -742,7 +743,7 @@ class trihedral_pair_with_action {
 
 public:
 
-	arc_lifting *AL;
+	arc_lifting_trihedral_pair *AL;
 
 	int The_six_plane_equations[6 * 4]; // [6 * 4]
 	int *The_surface_equations; // [(q + 1) * 20]
@@ -790,7 +791,7 @@ public:
 	trihedral_pair_with_action();
 	~trihedral_pair_with_action();
 	void init(
-			arc_lifting *AL, int verbose_level);
+			arc_lifting_trihedral_pair *AL, int verbose_level);
 	void loop_over_trihedral_pairs(
 			data_structures_groups::vector_ge *cosets,
 			data_structures_groups::vector_ge *&coset_reps,

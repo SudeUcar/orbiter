@@ -528,7 +528,7 @@ void gen_geo::generate_all(
 		}
 #endif
 
-		if (f_v) {
+		if (false) {
 			cout << "gen_geo::generate_all before Geometric_backtrack_search->Next" << endl;
 		}
 
@@ -540,8 +540,8 @@ void gen_geo::generate_all(
 			break;
 		}
 
-		if (f_v) {
-			cout << "gen_geo::generate_all before Geometric_backtrack_search->Next" << endl;
+		if (false) {
+			cout << "gen_geo::generate_all after Geometric_backtrack_search->Next" << endl;
 		}
 
 	}

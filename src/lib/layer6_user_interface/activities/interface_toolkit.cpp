@@ -91,6 +91,12 @@ interface_toolkit::interface_toolkit()
 	//std::string csv_file_sort_rows_and_remove_duplicates_fname;
 
 
+
+	// interface_toolkit_2.csv:
+
+
+
+
 	f_csv_file_join = false;
 	//csv_file_join_fname
 	//csv_file_join_identifier
@@ -134,6 +140,12 @@ interface_toolkit::interface_toolkit()
 
 	f_draw_matrix = false;
 	Draw_bitmap_control = NULL;
+
+
+	f_destring = false;
+	//std::string destring_fname_in;
+	//std::string destring_col;
+	//std::string destring_fname_out;
 
 
 	f_reformat = false;
@@ -182,6 +194,10 @@ interface_toolkit::interface_toolkit()
 	//std::string loop_over_variable;
 	//std::string loop_over_domain;
 	loop_over_argv = NULL;
+
+
+	// interface_toolkit_3.csv:
+
 
 	f_plot_function = false;
 	//std::string plot_function_fname;
@@ -353,6 +369,9 @@ void interface_toolkit::print_help(
 	else if (ST.stringcmp(argv[i], "-csv_file_sort_rows_and_remove_duplicates") == 0) {
 		cout << "-csv_file_sort_rows_and_remove_duplicates <string : input file>" << endl;
 	}
+
+	// interface_toolkit_2.csv:
+
 	else if (ST.stringcmp(argv[i], "-csv_file_join") == 0) {
 		cout << "-cvs_file_join <int : number of files> <string : input file1> <string : column label1> ..." << endl;
 	}
@@ -383,6 +402,9 @@ void interface_toolkit::print_help(
 	else if (ST.stringcmp(argv[i], "-draw_matrix") == 0) {
 		cout << "-draw_matrix options -end" << endl;
 	}
+	else if (ST.stringcmp(argv[i], "-destring") == 0) {
+		cout << "-destring fname_in col fname_out -end" << endl;
+	}
 	else if (ST.stringcmp(argv[i], "-reformat") == 0) {
 		cout << "-reformat <string : fname_in> <string : fname_out> <int : new_width>" << endl;
 	}
@@ -411,6 +433,9 @@ void interface_toolkit::print_help(
 	else if (ST.stringcmp(argv[i], "-loop_over") == 0) {
 		cout << "-loop_over <string : index_variable> <string : domain>  <loop body> -loop_end <string : index_variable>" << endl;
 	}
+
+	// interface_toolkit_3.csv:
+
 	else if (ST.stringcmp(argv[i], "-plot_function") == 0) {
 		cout << "-plot_function <string : fname_csv>" << endl;
 	}
@@ -545,6 +570,9 @@ int interface_toolkit::recognize_keyword(
 	else if (ST.stringcmp(argv[i], "-csv_file_sort_rows_and_remove_duplicates") == 0) {
 		return true;
 	}
+
+	// interface_toolkit_2.csv:
+
 	else if (ST.stringcmp(argv[i], "-csv_file_join") == 0) {
 		return true;
 	}
@@ -575,6 +603,9 @@ int interface_toolkit::recognize_keyword(
 	else if (ST.stringcmp(argv[i], "-draw_matrix") == 0) {
 		return true;
 	}
+	else if (ST.stringcmp(argv[i], "-destring") == 0) {
+		return true;
+	}
 	else if (ST.stringcmp(argv[i], "-reformat") == 0) {
 		return true;
 	}
@@ -603,6 +634,9 @@ int interface_toolkit::recognize_keyword(
 	else if (ST.stringcmp(argv[i], "-loop_over") == 0) {
 		return true;
 	}
+
+	// interface_toolkit_3.csv:
+
 	else if (ST.stringcmp(argv[i], "-plot_function") == 0) {
 		return true;
 	}
@@ -885,6 +919,9 @@ void interface_toolkit::read_arguments(
 				<< endl;
 		}
 	}
+
+	// interface_toolkit_2.csv:
+
 	else if (ST.stringcmp(argv[i], "-csv_file_join") == 0) {
 		string s;
 		int nb, j;
@@ -1070,6 +1107,17 @@ void interface_toolkit::read_arguments(
 			Draw_bitmap_control->print();
 		}
 	}
+	else if (ST.stringcmp(argv[i], "-destring") == 0) {
+		f_destring = true;
+		destring_fname_in.assign(argv[++i]);
+		destring_col.assign(argv[++i]);
+		destring_fname_out.assign(argv[++i]);
+		if (f_v) {
+			cout << "-destring " << destring_fname_in
+				<< " " << destring_col
+				<< " " << destring_fname_out << endl;
+		}
+	}
 	else if (ST.stringcmp(argv[i], "-reformat") == 0) {
 		f_reformat = true;
 		reformat_fname_in.assign(argv[++i]);
@@ -1219,6 +1267,9 @@ void interface_toolkit::read_arguments(
 			cout << endl;
 		}
 	}
+
+	// interface_toolkit_3.csv:
+
 	else if (ST.stringcmp(argv[i], "-plot_function") == 0) {
 		f_plot_function = true;
 		plot_function_fname.assign(argv[++i]);
@@ -1618,6 +1669,9 @@ void interface_toolkit::print()
 				<< csv_file_sort_rows_and_remove_duplicates_fname
 				<< endl;
 	}
+
+	// interface_toolkit_2.csv:
+
 	if (f_csv_file_join) {
 		cout << "-csv_file_join " << endl;
 		for (j = 0; j < csv_file_join_fname.size(); j++) {
@@ -1689,6 +1743,11 @@ void interface_toolkit::print()
 		cout << "-draw_matrix " << endl;
 		Draw_bitmap_control->print();
 	}
+	if (f_destring) {
+			cout << "-destring " << destring_fname_in
+				<< " " << destring_col
+				<< " " << destring_fname_out << endl;
+	}
 	if (f_reformat) {
 		cout << "-reformat " << reformat_fname_in
 				<< " " << reformat_fname_out
@@ -1739,6 +1798,9 @@ void interface_toolkit::print()
 		cout << endl;
 
 	}
+
+	// interface_toolkit_3.csv:
+
 	if (f_plot_function) {
 		cout << "-plot_function " << plot_function_fname << endl;
 	}
@@ -1879,6 +1941,39 @@ void interface_toolkit::worker(
 	if (f_v) {
 		cout << "interface_toolkit::worker" << endl;
 	}
+
+
+	if (worker1(verbose_level)) {
+
+	}
+	else if (worker2(verbose_level)) {
+
+	}
+	else if (worker3(verbose_level)) {
+
+	}
+
+
+
+	if (f_v) {
+		cout << "interface_toolkit::worker done" << endl;
+	}
+}
+
+
+int interface_toolkit::worker1(
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "interface_toolkit::worker1" << endl;
+	}
+
+	int ret = true;
+
+
+	// interface_toolkit_1.csv:
 
 	if (f_create_files_direct) {
 
@@ -2118,8 +2213,31 @@ void interface_toolkit::worker(
 				csv_file_sort_rows_and_remove_duplicates_fname, verbose_level);
 
 	}
+	else {
+		ret = false;
+	}
 
-	else if (f_csv_file_join) {
+	if (f_v) {
+		cout << "interface_toolkit::worker1 done" << endl;
+	}
+
+	return ret;
+}
+
+int interface_toolkit::worker2(
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "interface_toolkit::worker2" << endl;
+	}
+
+	int ret = true;
+
+	// interface_toolkit_2.csv:
+
+	if (f_csv_file_join) {
 
 		if (f_v) {
 			cout << "interface_toolkit::worker "
@@ -2264,6 +2382,30 @@ void interface_toolkit::worker(
 
 		FREE_int(Draw_bitmap_control->M);
 	}
+	else if (f_destring) {
+		if (f_v) {
+			cout << "-destring " << destring_fname_in
+				<< " " << destring_col
+				<< " " << destring_fname_out << endl;
+		}
+
+		other::orbiter_kernel_system::file_io Fio;
+		int *M;
+		int m, n;
+
+		Fio.Csv_file_support->read_column_as_table_of_int(
+				destring_fname_in, destring_col,
+			M, m, n, verbose_level);
+
+		if (m != 1) {
+			cout << "-destring m != 1" << endl;
+			exit(1);
+		}
+		Fio.Csv_file_support->int_matrix_write_csv(
+				destring_fname_out, M, 1, n);
+
+	}
+
 	else if (f_reformat) {
 
 		if (f_v) {
@@ -2550,8 +2692,32 @@ void interface_toolkit::worker(
 		delete [] argv2;
 		} // next h
 	}
+	else {
+		ret = false;
+	}
 
-	else if (f_plot_function) {
+	if (f_v) {
+		cout << "interface_toolkit::worker2 done" << endl;
+	}
+
+	return ret;
+
+}
+
+int interface_toolkit::worker3(
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "interface_toolkit::worker3" << endl;
+	}
+
+	int ret = true;
+
+	// interface_toolkit_3.csv:
+
+	if (f_plot_function) {
 
 		if (f_v) {
 			cout << "interface_toolkit::worker f_plot_function" << endl;
@@ -2626,7 +2792,8 @@ void interface_toolkit::worker(
 		int i;
 		std::string tail;
 
-		Fio.extract_from_makefile(extract_from_file_fname,
+		Fio.extract_from_makefile(
+				extract_from_file_fname,
 				extract_from_file_label,
 				false /*  f_tail */, tail,
 				text,
@@ -3443,11 +3610,17 @@ void interface_toolkit::worker(
 
 
 	}
+	else {
+		ret = false;
+	}
 
 	if (f_v) {
-		cout << "interface_toolkit::worker done" << endl;
+		cout << "interface_toolkit::worker3 done" << endl;
 	}
+
+	return ret;
 }
+
 
 
 }}}

@@ -458,6 +458,17 @@ void symbolic_object_builder::process_arguments(
 					label,
 					verbose_level - 1);
 	}
+	else if (Descr->f_collect_by_degree) {
+		if (f_v) {
+			cout << "symbolic_object_builder::process_arguments -collect_by_degree"
+					<< " " << Descr->collect_by_degree_source
+					<< endl;
+		}
+		do_collect_by_degree(
+					Descr,
+					label,
+					verbose_level - 1);
+	}
 
 	else if (Descr->f_collect_by) {
 		if (f_v) {
@@ -1459,6 +1470,11 @@ void symbolic_object_builder::do_collect(
 
 	}
 	else {
+
+		// we are in an addition node:
+
+
+
 		for (i = 0; i < O_source->Formula_vector->V[0].tree->Root->nb_nodes; i++) {
 
 			j = O_source->Formula_vector->V[0].tree->Root->Nodes[i]->exponent_of_variable(
@@ -1512,6 +1528,165 @@ void symbolic_object_builder::do_collect(
 		cout << "symbolic_object_builder::do_collect done" << endl;
 	}
 }
+
+
+
+
+void symbolic_object_builder::do_collect_by_degree(
+		symbolic_object_builder_description *Descr,
+		std::string &label,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "symbolic_object_builder::do_collect_by_degree" << endl;
+	}
+
+	symbolic_object_builder *O_source;
+
+	O_source = Get_symbol(Descr->collect_by_degree_source);
+
+	if (O_source->Formula_vector->len != 1) {
+		cout << "symbolic_object_builder::do_collect_by_degree "
+				"input must be a singleton" << endl;
+		exit(1);
+	}
+
+
+
+	int degree;
+
+
+	degree = O_source->Formula_vector->V[0].get_degree(
+			0 /*verbose_level*/);
+
+	if (f_v) {
+		cout << "symbolic_object_builder::do_collect_by_degree "
+				"degree = " << degree << endl;
+	}
+
+	int len = degree + 1;
+
+	Formula_vector = NEW_OBJECT(expression_parser::formula_vector);
+
+
+	Formula_vector->init_and_allocate(
+				label, label,
+				true,
+				Descr->managed_variables,
+				len, 0 /*verbose_level*/);
+
+	int i, d;
+
+	for (i = 0; i < len; i++) {
+		if (f_v) {
+			cout << "symbolic_object_builder::do_collect_by_degree "
+					"init_empty_plus_node " << i << endl;
+		}
+		Formula_vector->V[i].init_empty_plus_node(
+				label, label /*label_tex*/,
+				Descr->f_managed_variables,
+				Descr->managed_variables,
+				Fq, 0 /*verbose_level*/);
+	}
+
+
+	if (O_source->Formula_vector->V[0].tree->Root->type != operation_type_add) {
+		cout << "symbolic_object_builder::do_collect "
+				"root is not an addition node" << endl;
+		//exit(1);
+
+		d = O_source->Formula_vector->V[0].tree->Root->degree(
+				0 /*verbose_level*/);
+
+		expression_parser::syntax_tree_node *Output_node;
+
+		Output_node = NEW_OBJECT(expression_parser::syntax_tree_node);
+
+		O_source->Formula_vector->V[0].tree->Root->copy_to(
+				Formula_vector->V[d].tree,
+				Output_node,
+				0 /*verbose_level*/);
+
+#if 0
+		int j1;
+
+		// destroy the appearances of the variable in the term:
+
+		j1 = Output_node->exponent_of_variable_destructive(variable);
+
+		if (j1 != j) {
+			cout << "symbolic_object_builder::do_collect_by_degree j1 != j" << endl;
+			exit(1);
+		}
+#endif
+
+		Formula_vector->V[d].tree->Root->append_node(Output_node, 0 /* verbose_level */);
+
+	}
+	else {
+
+		// we are in an addition node:
+
+		int d;
+
+		for (i = 0; i < O_source->Formula_vector->V[0].tree->Root->nb_nodes; i++) {
+
+			d = O_source->Formula_vector->V[0].tree->Root->Nodes[i]->degree(
+					0 /*verbose_level*/);
+
+			if (f_v) {
+				cout << "symbolic_object_builder::do_collect_by_degree "
+						"node " << i << " / " << O_source->Formula_vector->V[0].tree->Root->nb_nodes
+						<< " has degree " << d << endl;
+			}
+
+
+			expression_parser::syntax_tree_node *Output_node;
+
+			Output_node = NEW_OBJECT(expression_parser::syntax_tree_node);
+
+			O_source->Formula_vector->V[0].tree->Root->Nodes[i]->copy_to(
+					Formula_vector->V[d].tree,
+					Output_node,
+					0 /*verbose_level*/);
+
+
+#if 0
+			int j1;
+
+			// destroy the appearances of the variable in the term:
+
+			j1 = Output_node->exponent_of_variable_destructive(variable);
+
+			if (j1 != j) {
+				cout << "symbolic_object_builder::do_collect_by_degree j1 != j" << endl;
+				exit(1);
+			}
+#endif
+
+			Formula_vector->V[d].tree->Root->append_node(Output_node, 0 /* verbose_level */);
+
+		}
+	}
+
+	if (f_v) {
+		for (i = 0; i < len; i++) {
+			cout << "symbolic_object_builder::do_collect_by_degree "
+					"node " << i << " / " << len
+					<< " has " << Formula_vector->V[i].tree->Root->nb_nodes << " terms"
+					<< endl;
+
+		}
+	}
+
+	if (f_v) {
+		cout << "symbolic_object_builder::do_collect_by_degree done" << endl;
+	}
+}
+
+
 
 
 

@@ -381,8 +381,6 @@ void algorithms::print_binary(
 	}
 }
 
-
-
 void algorithms::print_uint32_binary(
 		std::ostream &ost, uint32_t val)
 {
@@ -2100,6 +2098,25 @@ int algorithms::schreier_vector_determine_depth_recursion(
 	ancestor[pos] = ancestor[pt_loc];
 	return d;
 }
+
+int algorithms::Hamming_weight(
+		long int a)
+{
+	int w;
+
+	w = 0;
+	while (a) {
+		if (a % 2) {
+			w++;
+		}
+		a >>= 1;
+	}
+	return w;
+}
+
+
+
+
 
 
 

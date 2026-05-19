@@ -214,7 +214,8 @@ void classification_of_cubic_surfaces_with_double_sixes_activity::perform_activi
 			cout << "classification_of_cubic_surfaces_with_double_sixes_activity::perform_activity "
 					"before SCW->sweep_Sylvester" << endl;
 		}
-		SCW->sweep_Sylvester(Plane5_ranks, nb_types, Plane5_ago,
+		SCW->sweep_Sylvester(
+				Plane5_ranks, nb_types, Plane5_ago,
 				Descr->sweep_Sylvester_options,
 				verbose_level);
 		if (f_v) {
@@ -281,6 +282,14 @@ void classification_of_cubic_surfaces_with_double_sixes_activity::perform_activi
 			cout << "classification_of_cubic_surfaces_with_double_sixes_activity::perform_activity "
 					"plane coeffs: " << endl;
 			Int_matrix_print(Pentahedron5_coeffs, 5, 4);
+
+			int i;
+
+			for (i = 0; i < 5; i++) {
+				cout << i << " : " << Pentahedron5_ranks[i] << " : ";
+				Int_vec_print(cout, Pentahedron5_coeffs + i * 4, 4);
+				cout << endl;
+			}
 			cout << "classification_of_cubic_surfaces_with_double_sixes_activity::perform_activity "
 					"linear combination: " << endl;
 			Int_vec_print(cout, linear_combination5, 5);

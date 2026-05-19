@@ -101,19 +101,21 @@ public:
 class homogeneous_polynomial_domain {
 
 private:
+
+	polynomial_ring_description *Descr;
+
+
 	algebra::field_theory::finite_field *F;
 	int nb_monomials;
 		// = Combi.int_n_choose_k(
 		// nb_variables + degree - 1, nb_variables - 1);
 	int *Monomials; // [nb_monomials * nb_variables]
+		// a matrix of the exponent vectors of all monomials
+		// The i-th row is the exponent vector of the i-th monomial
 
 
 	std::vector<std::string> symbols; // nb_variables
 	std::vector<std::string> symbols_latex; // nb_variables
-
-	std::vector<std::string> monomial_symbols;
-	std::vector<std::string> monomial_symbols_latex;
-	std::vector<std::string> monomial_symbols_easy;
 
 	int *Variables; // [nb_monomials * degree]
 		// Variables contains the monomials written out
@@ -134,7 +136,7 @@ private:
 		// when doing a linear substitution
 	int *v; // [nb_variables]
 
-	// Affine_to_monomial could get too big,
+	// Affine_to_monomial could get very large,
 	// so it may or may not be allocated
 	int *Affine_to_monomial; // [nb_affine]
 		// for each vector in the affine space,
@@ -162,7 +164,7 @@ public:
 	void init(
 			polynomial_ring_description *Descr,
 			int verbose_level);
-	void init(
+	void init_without_description(
 			algebra::field_theory::finite_field *F,
 			int nb_vars, int degree,
 			monomial_ordering_type Monomial_ordering_type,
@@ -210,12 +212,23 @@ public:
 			int from, int len,
 			std::string &symbol_mask, std::string &symbol_mask_latex,
 			int verbose_level);
+	long int nb_monomials_expected(
+			int degree, int nb_variables,
+			int verbose_level);
 	void make_monomials(
 			monomial_ordering_type Monomial_ordering_type,
 			int f_has_variables,
 			std::vector<std::string> *variables_txt,
 			std::vector<std::string> *variables_tex,
 			int verbose_level);
+	void setup_affine(
+			int verbose_level);
+	std::string monomial_string(
+			int idx);
+	std::string monomial_string_latex(
+			int idx);
+	std::string monomial_string_easy(
+			int idx);
 	void rearrange_monomials_by_partition_type(
 			int verbose_level);
 	int index_of_monomial(
@@ -227,6 +240,8 @@ public:
 	void print_symbols(
 			std::ostream &ost);
 	std::string stringify_monomial(
+			int i);
+	std::string stringify_monomial_latex(
 			int i);
 	void print_monomial(
 			std::ostream &ost, int i);
@@ -1212,6 +1227,37 @@ public:
 			other::data_structures::int_matrix *A,
 			other::data_structures::int_matrix *B,
 			other::data_structures::int_matrix *&C,
+			int verbose_level);
+	void create_system_from_lines(
+			geometry::projective_geometry::projective_space *P,
+			algebra::ring_theory::homogeneous_polynomial_domain *Poly_ring,
+			int len, long int *S,
+			int *&System, int &nb_rows,
+			int verbose_level);
+	void create_system_from_points(
+			geometry::projective_geometry::projective_space *P,
+			algebra::ring_theory::homogeneous_polynomial_domain *Poly_ring,
+			int nb_pts, long int *Pts,
+			int *&System, int &nb_rows,
+			int verbose_level);
+	int rank_of_system(
+			geometry::projective_geometry::projective_space *P,
+			algebra::ring_theory::homogeneous_polynomial_domain *Poly_ring,
+			int len, long int *S,
+			int verbose_level);
+	int system_based_on_points_solve(
+			geometry::projective_geometry::projective_space *P,
+			algebra::ring_theory::homogeneous_polynomial_domain *Poly_ring,
+			int len, long int *Pts,
+			int &kernel_m, int &kernel_n, int *&kernel,
+			int verbose_level);
+	void get_a_primitive_polynomial(
+			algebra::field_theory::finite_field *F,
+			int degree,
+			int verbose_level);
+	void get_primitive_polynomial_in_range(
+			algebra::field_theory::finite_field *F,
+			int degree_min, int degree_max,
 			int verbose_level);
 
 };

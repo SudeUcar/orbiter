@@ -5,6 +5,7 @@ ROW,C1,C2,C3
 1,"\verb'-matrix_entry' "," $s$ $i$ $j$ "," Select the $(i,j)$-entry of the matrix $s$. "
 1,"\verb'-vector_entry' "," $s$ $i$  "," Select the $j$-th entry of the vector $s$. Using row-major ordering, a matrix is considered a vector also. "
 1,"\verb'-collect' "," $s$ $t$ "," Collect by coefficients of $t$ in the expression $s$. "
+1,"\verb'-collect_by_degree' "," $s$ "," Collect the expression $s$ by degree. The result is a vector of the homogeneous components of $s$. "
 1,"\verb'-collect_by' "," $s$ $R$ "," Collect the expression $s$ by monomials of the ring $R.$ The ring R must be univariate. For multivariate rings, use \verb'-collect_by_ring'. "
 1,"\verb'-collect_by_ring' "," $s$ $R$ "," Collect the expression $s$ by monomials of the ring $R.$ "
 1,"\verb'-encode_CRC' "," $l$ $d$ $c$ "," Encode tha data $d$ by blocks of length $l$ using the check polynomial $c$. "

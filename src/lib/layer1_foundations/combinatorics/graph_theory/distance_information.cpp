@@ -154,5 +154,67 @@ void distance_information::init_layered_graph(
 	}
 }
 
+
+void distance_information::compute_ABC(
+		layer1_foundations::combinatorics::graph_theory::layered_graph *Layered_graph,
+		int *&ABC, int verbose_level)
+// ABC[nb_nodes_total * 3]
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "distance_information::compute_ABC" << endl;
+	}
+
+	//int *ABC;
+	int l, n, a, b, h, location, l2, n2, cnt;
+
+	ABC = NEW_int(nb_nodes_total * 3);
+	Int_vec_zero(ABC, nb_nodes_total * 3);
+
+	cnt = 0;
+
+	for (l = 0; l < nb_layers; l++) {
+
+		for (n = 0; n < Layered_graph->L[l].nb_nodes; n++, cnt++) {
+
+			a = Layered_graph->L[l].Nodes[n].id;
+
+			for (h = 0; h < Layered_graph->L[l].Nodes[n].nb_neighbors; h++) {
+
+				b = Layered_graph->L[l].Nodes[n].neighbor_list[h];
+
+				location = perm_inv[b];
+				l2 = depth[location];
+				n2 = location - Fst[l2];
+				if (l2 == l + 1) {
+					ABC[cnt * 3 + 1]++; // b
+				}
+				else if (l2 == l) {
+					ABC[cnt * 3 + 0]++; // a
+				}
+				else if (l2 == l - 1) {
+					ABC[cnt * 3 + 2]++; // c
+				}
+				else {
+					cout << "layered_graph::compute_ABC not distance regular" << endl;
+					exit(1);
+				}
+			}
+		}
+
+	}
+	if (f_v) {
+		cout << "layered_graph::compute_ABC "
+				"ABC based on all vertices:" << endl;
+		Int_matrix_print(ABC, nb_nodes_total, 3);
+	}
+
+	if (f_v) {
+		cout << "distance_information::compute_ABC done" << endl;
+	}
+}
+
+
 }}}}
 

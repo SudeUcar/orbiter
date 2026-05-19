@@ -66,6 +66,7 @@ void surface_domain::unrank_lines(
 	}
 }
 
+
 long int surface_domain::rank_line(
 		int *v)
 {
@@ -74,6 +75,32 @@ long int surface_domain::rank_line(
 	rk = Gr->rank_lint_here(v, 0 /* verbose_level */);
 	return rk;
 }
+
+
+#if 0
+void surface_domain::unrank_plane(
+		int *Basis12, long int plane_rk)
+{
+
+	Gr3->unrank_lint_here(
+			Basis12,
+			plane_rk,
+			0/* verbose_level*/);
+}
+
+long int surface_domain::rank_plane(
+		int *Basis12)
+{
+	long int plane_rk;
+
+	plane_rk = Gr3->rank_lint_here(
+			Basis12,
+			0/* verbose_level*/);
+	return plane_rk;
+}
+#endif
+
+
 
 void surface_domain::build_cubic_surface_from_lines(
 	int len, long int *S,
@@ -91,12 +118,14 @@ void surface_domain::build_cubic_surface_from_lines(
 
 	if (f_v) {
 		cout << "surface_domain::build_cubic_surface_from_lines "
-				"before create_system" << endl;
+				"before create_system_from_lines" << endl;
 	}
-	create_system(len, S, System, nb_rows, verbose_level - 2);
+	create_system_from_lines(
+			len, S, System, nb_rows,
+			verbose_level - 2);
 	if (f_v) {
 		cout << "surface_domain::build_cubic_surface_from_lines "
-				"after create_system" << endl;
+				"after create_system_from_lines" << endl;
 	}
 	if (f_vv) {
 		cout << "surface_domain::build_cubic_surface_from_lines "
@@ -182,7 +211,9 @@ int surface_domain::rank_of_system(
 	if (f_v) {
 		cout << "surface_domain::rank_of_system" << endl;
 	}
-	create_system(len, S, System, nb_rows, verbose_level);
+	create_system_from_lines(
+			len, S, System, nb_rows,
+			verbose_level);
 
 
 	int base_cols[20];
@@ -202,7 +233,7 @@ int surface_domain::rank_of_system(
 	return r;
 }
 
-void surface_domain::create_system(
+void surface_domain::create_system_from_lines(
 		int len, long int *S,
 		int *&System, int &nb_rows,
 		int verbose_level)
@@ -211,16 +242,36 @@ void surface_domain::create_system(
 	int f_v = (verbose_level >= 1);
 
 	if (f_v) {
-		cout << "surface_domain::create_system" << endl;
+		cout << "surface_domain::create_system_from_lines" << endl;
 	}
+
+	algebra::ring_theory::ring_theory_global Ring;
+
 	if (f_v) {
-		cout << "surface_domain::create_system len = " << len << endl;
+		cout << "surface_domain::create_system_from_lines "
+				"before Ring.create_system_from_lines" << endl;
+	}
+	Ring.create_system_from_lines(
+			P,
+			PolynomialDomains->Poly3_4,
+			len, S,
+			System, nb_rows,
+			verbose_level);
+	if (f_v) {
+		cout << "surface_domain::create_system_from_lines "
+				"after Ring.create_system_from_lines" << endl;
+	}
+
+
+#if 0
+	if (f_v) {
+		cout << "surface_domain::create_system_from_lines len = " << len << endl;
 	}
 
 	vector<long int> Pts;
 
 	if (f_v) {
-		cout << "surface_domain::create_system "
+		cout << "surface_domain::create_system_from_lines "
 				"before P->Subspaces->points_covered_by_lines" << endl;
 	}
 	P->Subspaces->points_covered_by_lines(
@@ -228,65 +279,13 @@ void surface_domain::create_system(
 			Pts,
 			verbose_level - 2);
 	if (f_v) {
-		cout << "surface_domain::create_system "
+		cout << "surface_domain::create_system_from_lines "
 				"after P->Subspaces->points_covered_by_lines" << endl;
 	}
 
-#if 0
-	long int *pts_on_line;
-	long int a;
-	int i, j;
-
-
-	// Pts is the set of points on the lines in S[]
-
-	pts_on_line = NEW_lint(P->Subspaces->k);
-	//nb_pts = 0;
-	for (i = 0; i < len; i++) {
-		a = S[i];
-
-		if (P->Subspaces->Implementation->has_lines()) {
-			for (j = 0; j < P->Subspaces->k; j++) {
-				Pts.push_back(P->Subspaces->Implementation->lines(a, j));
-				//pt_list[nb_pts++] = P->Lines[a * P->k + j];
-			}
-		}
-		else {
-			if (f_v) {
-				cout << "surface_domain::create_system "
-						"before P->create_points_on_line" << endl;
-			}
-			P->Subspaces->create_points_on_line(a,
-					pts_on_line, //pt_list + nb_pts,
-					0 /* verbose_level */);
-			if (f_v) {
-				cout << "surface_domain::create_system "
-						"after P->create_points_on_line" << endl;
-			}
-			//nb_pts += P->k;
-			for (j = 0; j < P->Subspaces->k; j++) {
-				Pts.push_back(pts_on_line[j]);
-			}
-		}
-	}
-	FREE_lint(pts_on_line);
-#endif
-
-#if 0
-	if (nb_pts > max_pts) {
-		cout << "surface_domain::create_system "
-				"nb_pts > max_pts" << endl;
-		exit(1);
-		}
-	if (false) {
-		cout << "surface_domain::create_system list of "
-				"covered points by lines:" << endl;
-		lint_matrix_print(pt_list, len, P->k);
-		}
-#endif
 
 	if (f_v) {
-		cout << "surface_domain::create_system list of "
+		cout << "surface_domain::create_system_from_lines list of "
 				"covered points by lines has been created" << endl;
 	}
 
@@ -295,9 +294,9 @@ void surface_domain::create_system(
 	nb_rows = Pts.size();
 
 	if (f_v) {
-		cout << "surface_domain::create_system "
+		cout << "surface_domain::create_system_from_lines "
 				"nb_rows = " << nb_rows << endl;
-		cout << "surface_domain::create_system "
+		cout << "surface_domain::create_system_from_lines "
 				"n = " << n << endl;
 	}
 	Pt_coords = NEW_int(nb_rows * n);
@@ -308,32 +307,21 @@ void surface_domain::create_system(
 	}
 
 	if (f_v && false) {
-		cout << "surface_domain::create_system list of "
+		cout << "surface_domain::create_system_from_lines list of "
 				"covered points in coordinates:" << endl;
 		Int_matrix_print(Pt_coords, nb_rows, n);
 	}
 
 	if (f_v) {
-		cout << "surface_domain::create_system "
+		cout << "surface_domain::create_system_from_lines "
 				"nb_rows = " << nb_rows << endl;
 	}
 
-#if 0
-	System = NEW_int(nb_rows * PolynomialDomains->nb_monomials);
-
-	for (i = 0; i < nb_rows; i++) {
-		for (j = 0; j < PolynomialDomains->nb_monomials; j++) {
-			System[i * PolynomialDomains->nb_monomials + j] =
-					PolynomialDomains->Poly3_4->evaluate_monomial(
-							j, Pt_coords + i * n);
-		}
-	}
-#endif
 
 	int nb_cols;
 
 	if (f_v) {
-		cout << "surface_domain::create_system "
+		cout << "surface_domain::create_system_from_lines "
 				"before PolynomialDomains->Poly3_4->make_system" << endl;
 	}
 	PolynomialDomains->Poly3_4->make_system(
@@ -341,7 +329,7 @@ void surface_domain::create_system(
 			System, nb_cols,
 			verbose_level - 2);
 	if (f_v) {
-		cout << "surface_domain::create_system "
+		cout << "surface_domain::create_system_from_lines "
 				"after PolynomialDomains->Poly3_4->make_system" << endl;
 	}
 
@@ -350,17 +338,18 @@ void surface_domain::create_system(
 
 
 	if (f_v) {
-		cout << "surface_domain::create_system "
+		cout << "surface_domain::create_system_from_lines "
 				"The system has been created" << endl;
 	}
 	if (f_v && false) {
-		cout << "surface_domain::create_system "
+		cout << "surface_domain::create_system_from_lines "
 				"The system:" << endl;
 		Int_matrix_print(System, nb_rows, PolynomialDomains->nb_monomials);
 	}
+#endif
 
 	if (f_v) {
-		cout << "surface_domain::create_system done" << endl;
+		cout << "surface_domain::create_system_from_lines done" << endl;
 	}
 }
 

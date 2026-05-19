@@ -1105,7 +1105,8 @@ void algebra_global::apply_Walsh_Hadamard_transform(
 void algebra_global::algebraic_normal_form(
 		field_theory::finite_field *F,
 		int n,
-		int *func, int len, int verbose_level)
+		int *func, int len,
+		int verbose_level)
 {
 	int f_v = (verbose_level >= 1);
 
@@ -1137,6 +1138,57 @@ void algebra_global::algebraic_normal_form(
 		cout << "algebra_global::algebraic_normal_form "
 				"len should be " << PF->Q << endl;
 		exit(1);
+	}
+
+	if (f_v) {
+		cout << "algebra_global::algebraic_normal_form "
+				"func:" << endl;
+		Int_vec_print_fully(cout, func, len);
+		cout << endl;
+	}
+
+
+
+
+	if (f_v) {
+
+		cout << "algebra_global::algebraic_normal_form "
+				"content analysis of the function:" << endl;
+		Int_vec_content_analysis(func, len, 0 /* verbose_level*/);
+
+#if 0
+		other::data_structures::tally T;
+
+		T.init(func,
+				len, false /* f_second */,
+				0 /* verbose_level*/);
+
+		cout << "algebra_global::algebraic_normal_form "
+				"place values of the given function:" << endl;
+		T.print(true /* f_backwards*/);
+
+		other::data_structures::set_of_sets *SoS;
+
+		int *types;
+		int nb_types;
+
+		SoS = T.get_set_partition_and_types(
+				types, nb_types, verbose_level);
+
+		SoS->sort_all(
+				0 /*verbose_level*/);
+		int i;
+
+		for (i = 0; i < nb_types; i++) {
+			cout << i << " : " << types[i] << " : " << SoS->Set_size[i] << " : ";
+			Lint_vec_print(cout, SoS->Sets[i], SoS->Set_size[i]);
+			cout << endl;
+		}
+
+		FREE_OBJECT(SoS);
+		FREE_int(types);
+#endif
+
 	}
 
 #if 0
@@ -1207,7 +1259,6 @@ void algebra_global::algebraic_normal_form(
 #endif
 
 	FREE_OBJECT(PF);
-	// there was a memory error in PF !!! ToDo
 
 	if (f_v) {
 		cout << "algebra_global::algebraic_normal_form done" << endl;
@@ -2454,6 +2505,139 @@ void algebra_global::scan_equation_in_pairs_in_characteristic_p(
 	if (f_v) {
 		cout << "algebra_global::scan_equation_in_pairs_in_characteristic_p done" << endl;
 	}
+}
+
+
+std::string algebra_global::compute_polynomial_representation_boolean_text(
+		int *func, int n, int verbose_level)
+// input: func[Q] where Q = 2^n
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "algebra_global::compute_polynomial_representation_boolean_text" << endl;
+	}
+
+	int q = 2;
+	int Q;
+
+	if (q != 2) {
+		cout << "algebra_global::compute_polynomial_representation_boolean_text q must be equal to 2" << endl;
+		exit(1);
+	}
+
+	Q = 1 << n;
+
+	int f_vv = (verbose_level >= 2);
+	string S;
+	int s;
+
+	if (f_v) {
+		cout << "func=" << endl;
+		for (s = 0; s < Q; s++) {
+			//cout << s << " : " << func[s] << endl;
+			cout << func[s];
+		}
+		cout << endl;
+
+		cout << "algebra_global::compute_polynomial_representation_boolean_text content analysis:" << endl;
+		Int_vec_content_analysis(func, Q, verbose_level);
+	}
+
+
+	geometry::other_geometry::geometry_global Gg;
+
+	int i, f_first;
+	int *vec;
+
+	f_first = true;
+	vec = NEW_int(n);
+
+	if (f_v) {
+		cout << "algebra_global::compute_polynomial_representation_boolean_text "
+				"looping over all values, Q=" << Q << endl;
+	}
+	for (s = 0; s < Q; s++) {
+
+
+		if (f_vv) {
+			cout << "algebra_global::compute_polynomial_representation_boolean_text "
+					"s=" << s << " / " << Q << endl;
+		}
+
+		if (func[s] == 0) {
+			continue;
+		}
+
+		Gg.AG_element_unrank(2, vec, 1, n, s);
+
+		if (f_vv) {
+			cout << "the function value at s=" << s << " is " << func[s] << endl;
+			cout << "vec=" << endl;
+			Int_vec_print(cout, vec, n);
+			cout << endl;
+		}
+
+
+		// create the polynomial
+		// \prod_{i=0}^{n-1} (1-(x_i-vec[i]*x_n)^{q-1})
+		// \prod_{i=0}^{n-1} (x_n^{(q-1)}-(x_i-vec[i]*x_n)^{q-1})
+		// which is one exactly if x_i = vec[i] for all i=0..n-1 and x_n = 1.
+		// and zero otherwise.
+		// So this polynomial agrees with the q-ary function
+		// on the affine space x_n = 1.
+
+		string Term;
+
+
+		for (i = 0; i < n; i++) {
+
+
+			if (f_vv) {
+				cout << "s=" << s << " i=" << i << endl;
+			}
+
+
+
+			string str;
+
+
+			if (vec[i]) {
+				str = "X" + std::to_string(i);
+			}
+			else {
+				str = "(1 + X" + std::to_string(i) + ")";
+			}
+
+			if (i == 0) {
+				Term = str;
+			}
+			else {
+				Term += "*" + str;
+			}
+
+		} // next i
+
+
+		if (f_first) {
+			S += Term;
+			f_first = false;
+		}
+		else {
+			S += " + " + Term;
+		}
+
+
+
+	} // next s
+
+	FREE_int(vec);
+
+
+	if (f_v) {
+		cout << "algebra_global::compute_polynomial_representation_boolean_text done" << endl;
+	}
+	return S;
 }
 
 

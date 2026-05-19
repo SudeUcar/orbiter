@@ -231,7 +231,8 @@ public:
 	void algebraic_normal_form(
 			field_theory::finite_field *F,
 			int n,
-			int *func, int len, int verbose_level);
+			int *func, int len,
+			int verbose_level);
 	void algebraic_normal_form_of_boolean_function(
 			field_theory::finite_field *F,
 			std::string &fname_csv_in, int n, int verbose_level);
@@ -291,6 +292,9 @@ public:
 			int *eqn, int eqn_sz, int characteristic_p,
 			std::string &coefficients_text,
 			int verbose_level);
+	std::string compute_polynomial_representation_boolean_text(
+			int *func, int n, int verbose_level);
+	// input: func[Q] where Q = 2^n
 
 };
 

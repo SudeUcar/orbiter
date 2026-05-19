@@ -382,15 +382,16 @@ void eckardt_point_info::print_bisecants(
 
 	if (f_v) {
 		cout << "eckardt_point_info::print_bisecants "
-				"before Poly1->init" << endl;
+				"before Poly1->init_without_description" << endl;
 	}
-	Poly1->init(P2->Subspaces->F,
+	Poly1->init_without_description(
+			P2->Subspaces->F,
 			3 /* nb_vars */, 1 /* degree */,
 			t_PART,
 			verbose_level);
 	if (f_v) {
 		cout << "eckardt_point_info::print_bisecants "
-				"after Poly1->init" << endl;
+				"after Poly1->init_without_description" << endl;
 	}
 
 
@@ -480,15 +481,16 @@ void eckardt_point_info::print_conics(
 
 	if (f_v) {
 		cout << "eckardt_point_info::print_conics "
-				"before Poly2->init" << endl;
+				"before Poly2->init_without_description" << endl;
 	}
-	Poly2->init(P2->Subspaces->F,
+	Poly2->init_without_description(
+			P2->Subspaces->F,
 			3 /* nb_vars */, 2 /* degree */,
 			t_PART,
 			verbose_level);
 	if (f_v) {
 		cout << "eckardt_point_info::print_conics "
-				"after Poly2->init" << endl;
+				"after Poly2->init_without_description" << endl;
 	}
 
 

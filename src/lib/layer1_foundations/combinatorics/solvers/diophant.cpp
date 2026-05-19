@@ -499,6 +499,24 @@ void diophant::set_x_max_constant(
 	}
 }
 
+void diophant::set_x_max_constant_with_restriction(
+		int a, int q)
+{
+	int j;
+	int b;
+
+	if (a >= q) {
+		b = q - 1;
+	}
+	else {
+		b = a;
+	}
+	for (j = 0; j < n - 1; j++) {
+		x_max[j] = b;
+	}
+	x_max[n - 1] = a;
+}
+
 int &diophant::Aij(
 		int i, int j)
 {

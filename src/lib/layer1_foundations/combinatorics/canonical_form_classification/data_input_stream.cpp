@@ -899,7 +899,11 @@ void data_input_stream::read_objects(
 			cout << endl;
 		}
 
-		if (Descr->Input[input_idx].input_type == t_data_input_stream_set_of_points) {
+
+		enum data_input_stream_type input_type = Descr->Input[input_idx].input_type;
+
+
+		if (input_type == t_data_input_stream_set_of_points) {
 
 			if (f_v) {
 				cout << "data_input_stream::read_objects "
@@ -921,7 +925,7 @@ void data_input_stream::read_objects(
 			Objects.push_back(Any_combo);
 
 		}
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_file_of_point_set) {
+		else if (input_type == t_data_input_stream_file_of_point_set) {
 
 			other::orbiter_kernel_system::file_io Fio;
 			long int *the_set;
@@ -939,7 +943,7 @@ void data_input_stream::read_objects(
 			Objects.push_back(Any_combo);
 
 		}
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_set_of_lines) {
+		else if (input_type == t_data_input_stream_set_of_lines) {
 
 			any_combinatorial_object *Any_combo;
 
@@ -952,7 +956,7 @@ void data_input_stream::read_objects(
 			Objects.push_back(Any_combo);
 
 		}
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_set_of_points_and_lines) {
+		else if (input_type == t_data_input_stream_set_of_points_and_lines) {
 
 			any_combinatorial_object *Any_combo;
 
@@ -967,7 +971,7 @@ void data_input_stream::read_objects(
 			Objects.push_back(Any_combo);
 
 		}
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_set_of_packing) {
+		else if (input_type == t_data_input_stream_set_of_packing) {
 
 			any_combinatorial_object *Any_combo;
 			int q;
@@ -985,7 +989,7 @@ void data_input_stream::read_objects(
 			Objects.push_back(Any_combo);
 
 		}
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_incidence_geometry) {
+		else if (input_type == t_data_input_stream_incidence_geometry) {
 
 			any_combinatorial_object *Any_combo;
 
@@ -1002,7 +1006,7 @@ void data_input_stream::read_objects(
 			Objects.push_back(Any_combo);
 
 		}
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_incidence_geometry_by_row_ranks) {
+		else if (input_type == t_data_input_stream_incidence_geometry_by_row_ranks) {
 
 			any_combinatorial_object *Any_combo;
 
@@ -1019,7 +1023,7 @@ void data_input_stream::read_objects(
 			Objects.push_back(Any_combo);
 
 		}
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_file_of_incidence_geometries) {
+		else if (input_type == t_data_input_stream_file_of_incidence_geometries) {
 			if (f_v) {
 				cout << "input incidence geometries from file "
 						<< Descr->Input[input_idx].input_string << ":" << endl;
@@ -1068,7 +1072,7 @@ void data_input_stream::read_objects(
 		}
 
 
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_file_of_incidence_geometries_csv) {
+		else if (input_type == t_data_input_stream_file_of_incidence_geometries_csv) {
 			if (f_v) {
 				cout << "input incidence geometries from file "
 						<< Descr->Input[input_idx].input_string << ":" << Descr->Input[input_idx].input_string2 << endl;
@@ -1132,7 +1136,7 @@ void data_input_stream::read_objects(
 		}
 
 
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_file_of_incidence_geometries_by_row_ranks) {
+		else if (input_type == t_data_input_stream_file_of_incidence_geometries_by_row_ranks) {
 			if (f_v) {
 				cout << "input incidence geometries from file "
 						<< Descr->Input[input_idx].input_string << " by row ranks:" << endl;
@@ -1179,7 +1183,7 @@ void data_input_stream::read_objects(
 
 			}
 		}
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_file_of_designs) {
+		else if (input_type == t_data_input_stream_file_of_designs) {
 
 			if (f_v) {
 				cout << "data_input_stream::read_objects "
@@ -1263,7 +1267,7 @@ void data_input_stream::read_objects(
 			FREE_OBJECT(SoS);
 		}
 
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_file_of_packings_through_spread_table) {
+		else if (input_type == t_data_input_stream_file_of_packings_through_spread_table) {
 
 			int q;
 
@@ -1386,7 +1390,7 @@ void data_input_stream::read_objects(
 
 		}
 
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_file_of_designs_through_block_orbits) {
+		else if (input_type == t_data_input_stream_file_of_designs_through_block_orbits) {
 
 			string fname_solutions; // the solution file
 			string fname_block_orbits; // the orbits as sets of sets
@@ -1475,7 +1479,7 @@ void data_input_stream::read_objects(
 
 		}
 
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_file_of_designs_through_blocks) {
+		else if (input_type == t_data_input_stream_file_of_designs_through_blocks) {
 
 			string fname_blocks;
 			string col_label;
@@ -1559,7 +1563,7 @@ void data_input_stream::read_objects(
 
 
 
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_file_of_packings) {
+		else if (input_type == t_data_input_stream_file_of_packings) {
 
 			other::data_structures::set_of_sets *SoS;
 
@@ -1613,7 +1617,7 @@ void data_input_stream::read_objects(
 		}
 
 
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_file_of_lines) {
+		else if (input_type == t_data_input_stream_file_of_lines) {
 
 			other::data_structures::set_of_sets *SoS;
 
@@ -1658,7 +1662,7 @@ void data_input_stream::read_objects(
 		}
 
 
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_file_of_points) {
+		else if (input_type == t_data_input_stream_file_of_points) {
 
 			other::data_structures::set_of_sets *SoS;
 
@@ -1702,7 +1706,7 @@ void data_input_stream::read_objects(
 			FREE_OBJECT(SoS);
 
 		}
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_file_of_points_csv) {
+		else if (input_type == t_data_input_stream_file_of_points_csv) {
 			if (f_v) {
 				cout << "data_input_stream::read_objects "
 						"Reading the file " << Descr->Input[input_idx].input_string << endl;
@@ -1739,7 +1743,7 @@ void data_input_stream::read_objects(
 			FREE_OBJECT(SoS);
 		}
 
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_from_parallel_search) {
+		else if (input_type == t_data_input_stream_from_parallel_search) {
 
 			if (f_v) {
 				cout << "input from parallel search" << endl;
@@ -1850,7 +1854,7 @@ void data_input_stream::read_objects(
 		}
 
 
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_orbiter_file) {
+		else if (input_type == t_data_input_stream_orbiter_file) {
 			if (f_v) {
 				cout << "input from orbiter file" << endl;
 			}
@@ -1901,7 +1905,7 @@ void data_input_stream::read_objects(
 			FREE_OBJECT(SoS);
 		}
 
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_csv_file) {
+		else if (input_type == t_data_input_stream_csv_file) {
 			if (f_v) {
 				cout << "input from csv file" << endl;
 			}
@@ -1956,7 +1960,7 @@ void data_input_stream::read_objects(
 		}
 
 
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_graph_by_adjacency_matrix) {
+		else if (input_type == t_data_input_stream_graph_by_adjacency_matrix) {
 
 			if (f_v) {
 				cout << "data_input_stream::read_objects "
@@ -1977,7 +1981,7 @@ void data_input_stream::read_objects(
 			Objects.push_back(Any_combo);
 
 		}
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_graph_by_adjacency_matrix_from_file) {
+		else if (input_type == t_data_input_stream_graph_by_adjacency_matrix_from_file) {
 			if (f_v) {
 				cout << "data_input_stream::read_objects "
 						"t_data_input_stream_graph_by_adjacency_matrix_from_file "
@@ -2037,7 +2041,7 @@ void data_input_stream::read_objects(
 			}
 
 		}
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_graph_object) {
+		else if (input_type == t_data_input_stream_graph_object) {
 			if (f_v) {
 				cout << "data_input_stream::read_objects "
 						<< Descr->Input[input_idx].input_string << ":" << endl;
@@ -2071,7 +2075,7 @@ void data_input_stream::read_objects(
 
 		}
 
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_design_object) {
+		else if (input_type == t_data_input_stream_design_object) {
 			if (f_v) {
 				cout << "data_input_stream::read_objects "
 						<< Descr->Input[input_idx].input_string << ":" << endl;
@@ -2107,7 +2111,7 @@ void data_input_stream::read_objects(
 
 		}
 
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_multi_matrix) {
+		else if (input_type == t_data_input_stream_multi_matrix) {
 			if (f_v) {
 				cout << "input multi matrix "
 						<< Descr->Input[input_idx].input_string
@@ -2127,7 +2131,7 @@ void data_input_stream::read_objects(
 			Objects.push_back(Any_combo);
 
 		}
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_geometric_object) {
+		else if (input_type == t_data_input_stream_geometric_object) {
 			if (f_v) {
 				cout << "input geometric object " << endl;
 			}
@@ -2149,7 +2153,7 @@ void data_input_stream::read_objects(
 			Objects.push_back(Any_combo);
 
 		}
-		else if (Descr->Input[input_idx].input_type == t_data_input_stream_Kaempfer_file) {
+		else if (input_type == t_data_input_stream_Kaempfer_file) {
 			if (f_v) {
 				cout << "input Kaempfer file = " << Descr->Input[input_idx].input_string << endl;
 			}
@@ -2346,7 +2350,7 @@ void data_input_stream::read_objects(
 
 		else {
 			cout << "data_input_stream::read_objects "
-					"unknown input type " << Descr->Input[input_idx].input_type << endl;
+					"unknown input type " << input_type << endl;
 			exit(1);
 		}
 	}
@@ -2362,6 +2366,86 @@ void data_input_stream::read_objects(
 	}
 
 }
+
+
+void data_input_stream::filter_objects(
+		long int *Index_of_objects, int nb_objects,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+	int input_idx;
+
+
+	if (f_v) {
+		cout << "data_input_stream::filter_objects" << endl;
+	}
+
+	if (Descr->nb_inputs != 1) {
+		cout << "data_input_stream::filter_objects Descr->nb_inputs != 1" << endl;
+		exit(1);
+	}
+
+	for (input_idx = 0; input_idx < Descr->nb_inputs; input_idx++) {
+		if (f_v) {
+			cout << "data_input_stream::read_objects "
+					"input " << input_idx << " / " << Descr->nb_inputs
+					<< " is: ";
+			Descr->Input[input_idx].print();
+			cout << endl;
+		}
+
+		int v, b, nb_flags;
+
+		v = Descr->Input[input_idx].input_data1;
+		b = Descr->Input[input_idx].input_data2;
+		nb_flags = Descr->Input[input_idx].input_data3;
+
+
+		enum data_input_stream_type input_type = Descr->Input[input_idx].input_type;
+
+		if (input_type == t_data_input_stream_file_of_incidence_geometries) {
+
+			std::string fname_in;
+
+			fname_in = Descr->Input[input_idx].input_string;
+
+			int v, b, nb_flags;
+
+
+			if (f_v) {
+				cout << "input incidence geometries from file "
+						<< fname_in << ":" << endl;
+			}
+			other::orbiter_kernel_system::file_io Fio;
+			int m, n, nb_flags1;
+
+			string fname_out;
+			other::data_structures::string_tools String;
+
+			fname_out = String.without_extension(
+					fname_in) + "_filtered.inc";
+
+
+			Fio.filter_incidence_file(
+					fname_in,
+					fname_out,
+					Index_of_objects, nb_objects,
+					verbose_level);
+
+
+		}
+
+
+
+		else {
+			cout << "data_input_stream::filter_objects "
+					"input type " << input_type << " is not available for filtering" << endl;
+			exit(1);
+		}
+	}
+
+}
+
 
 }}}}
 

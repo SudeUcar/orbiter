@@ -53,6 +53,9 @@ arc_lifting_with_two_lines::arc_lifting_with_two_lines()
 arc_lifting_with_two_lines::~arc_lifting_with_two_lines()
 {
 	Record_death();
+	if (Arc6) {
+		FREE_lint(Arc6);
+	}
 	if (Arc_coords) {
 		FREE_int(Arc_coords);
 	}
@@ -60,7 +63,7 @@ arc_lifting_with_two_lines::~arc_lifting_with_two_lines()
 
 void arc_lifting_with_two_lines::create_surface(
 		surface_domain *Surf,
-	long int *Arc6, long int line1, long int line2,
+	long int *Arc6, long int input_line1, long int input_line2,
 	int verbose_level)
 // line1 = b1
 // line2 = b2
@@ -88,10 +91,12 @@ void arc_lifting_with_two_lines::create_surface(
 	}
 
 	arc_size = 6;
-	arc_lifting_with_two_lines::Arc6 = Arc6;
+	arc_lifting_with_two_lines::Arc6 = NEW_lint(6);
+	Lint_vec_copy(Arc6, arc_lifting_with_two_lines::Arc6, 6);
+
 	arc_lifting_with_two_lines::Surf = Surf;
-	arc_lifting_with_two_lines::line1 = line1;
-	arc_lifting_with_two_lines::line2 = line2;
+	arc_lifting_with_two_lines::line1 = input_line1;
+	arc_lifting_with_two_lines::line2 = input_line2;
 
 	F = Surf->F;
 	q = F->q;
@@ -117,7 +122,7 @@ void arc_lifting_with_two_lines::create_surface(
 	if (f_vv) {
 		cout << "arc_lifting_with_two_lines::create_surface "
 				"plane_rk=" << plane_rk << endl;
-		}
+	}
 
 	if (line1 == 0 && line2 == 0) {
 		if (f_v) {
@@ -564,6 +569,378 @@ void arc_lifting_with_two_lines::create_surface(
 				"done" << endl;
 	}
 }
+
+
+void arc_lifting_with_two_lines::report(
+		std::ostream &ost,
+		int verbose_level)
+// line1 = b1
+// line2 = b2
+// and Arc6 is the six-arc arising as image of
+// the half double-six a1, a2, a3, a4, a5, a6
+// The arc must be given as points in PG(3,q), not in PG(2,q).
+// The partition is missing.
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "arc_lifting_with_two_lines::report" << endl;
+	}
+
+	ost << endl;
+	ost << "\\clearpage" << endl;
+	ost << endl;
+
+	ost << endl;
+	ost << "\\subsection*{Arc Lifting with 2 Lines}" << endl;
+	ost << endl;
+
+	int i, j;
+	long int Pi;
+	int v[4];
+
+	for (i = 0; i < 6; i++) {
+
+		ost << "$";
+
+		Pi = Arc6[i];
+
+		Surf->unrank_point(v, Pi);
+
+		ost << i << " : ";
+		ost << "P_{" << i << "}=";
+
+
+
+		ost << "P_{" << Pi << "}=";
+		ost << "\\bP(";
+		//int_vec_print_fully(ost, v, 4);
+		for (j = 0; j < 4; j++) {
+			Surf->F->Io->print_element(ost, v[j]);
+			if (j < 4 - 1) {
+				ost << ", ";
+			}
+		}
+		ost << ")";
+		ost << " = \\bP(";
+		for (j = 0; j < 4; j++) {
+			ost << v[j];
+			if (j < 4 - 1) {
+				ost << ", ";
+			}
+		}
+		ost << ")";
+
+
+
+		ost << "$\\\\" << endl;
+
+	}
+
+#if 0
+	long int *Arc6;
+	int arc_size; // = 6
+
+	long int line1, line2;
+
+	long int plane_rk;
+
+	int *Arc_coords; // [6 * 4]
+
+	long int P[6];
+
+	long int transversal_01;
+	long int transversal_23;
+	long int transversal_45;
+
+	long int transversal[4];
+
+	long int input_Lines[9];
+
+	int coeff[20];
+	long int lines27[27];
+#endif
+
+
+
+	ost << "The rearranged arc is:\\\\" << endl;
+
+	for (i = 0; i < 6; i++) {
+
+		ost << "$";
+
+		Pi = P[i];
+
+		Surf->unrank_point(v, Pi);
+
+		ost << i << " : ";
+		ost << "P_{" << i << "}=";
+
+
+
+		ost << "P_{" << Pi << "}=";
+		ost << "\\bP(";
+		//int_vec_print_fully(ost, v, 4);
+		for (j = 0; j < 4; j++) {
+			Surf->F->Io->print_element(ost, v[j]);
+			if (j < 4 - 1) {
+				ost << ", ";
+			}
+		}
+		ost << ")";
+		ost << " = \\bP(";
+		for (j = 0; j < 4; j++) {
+			ost << v[j];
+			if (j < 4 - 1) {
+				ost << ", ";
+			}
+		}
+		ost << ")";
+
+
+
+		ost << "$\\\\" << endl;
+
+	}
+
+
+	int Basis[8];
+	int Basis_plane[12];
+
+
+	ost << "Line 1 has Orbiter rank $" << line1 << "$ \\\\" << endl;
+
+	Surf->unrank_line(Basis, line1);
+	latex_matrix(Basis, 2, 4, ost);
+
+
+
+	ost << "Line 2 has Orbiter rank $" << line2 << "$ \\\\" << endl;
+
+	Surf->unrank_line(Basis, line2);
+	latex_matrix(Basis, 2, 4, ost);
+
+	ost << "The plane has Orbiter rank $" << plane_rk << "$ \\\\" << endl;
+	Surf->unrank_plane(Basis_plane, plane_rk);
+	latex_matrix(Basis_plane, 3, 4, ost);
+
+
+
+	ost << "transversal 01 has Orbiter rank $" << transversal_01 << "$ \\\\" << endl;
+
+	Surf->unrank_line(Basis, transversal_01);
+	latex_matrix(Basis, 2, 4, ost);
+
+
+	ost << "transversal 23 has Orbiter rank $" << transversal_23 << "$ \\\\" << endl;
+
+	Surf->unrank_line(Basis, transversal_23);
+	latex_matrix(Basis, 2, 4, ost);
+
+	ost << "transversal 45 has Orbiter rank $" << transversal_45 << "$ \\\\" << endl;
+
+	Surf->unrank_line(Basis, transversal_45);
+	latex_matrix(Basis, 2, 4, ost);
+
+
+	for (i = 0; i < 4; i++) {
+
+		ost << "transversal " << i << " has Orbiter rank $" << transversal[i] << "$ \\\\" << endl;
+
+		Surf->unrank_line(Basis, transversal[i]);
+		latex_matrix(Basis, 2, 4, ost);
+
+	}
+
+	ost << "The 9 lines in the starter configuration are: \\\\" << endl;
+
+
+	for (i = 0; i < 9; i++) {
+
+		ost << "line " << i << " has Orbiter rank $" << input_Lines[i] << "$ \\\\" << endl;
+
+		Surf->unrank_line(Basis, input_Lines[i]);
+		latex_matrix(Basis, 2, 4, ost);
+
+	}
+
+
+	int n;
+
+	n = Surf->P->Subspaces->n + 1;
+
+	if (f_v) {
+		cout << "arc_lifting_with_two_lines::report n = " << n << endl;
+	}
+
+	vector<long int> Pts;
+
+	if (f_v) {
+		cout << "arc_lifting_with_two_lines::report "
+				"before Surf->P->Subspaces->points_covered_by_lines" << endl;
+	}
+	Surf->P->Subspaces->points_covered_by_lines(
+			input_Lines, 9 /*len*/,
+			Pts,
+			verbose_level - 2);
+	if (f_v) {
+		cout << "arc_lifting_with_two_lines::report "
+				"after Surf->P->Subspaces->points_covered_by_lines" << endl;
+	}
+
+
+	if (f_v) {
+		cout << "arc_lifting_with_two_lines::report list of "
+				"covered points by lines has been created" << endl;
+	}
+
+	int *Pt_coords;
+
+	int nb_pts;
+	nb_pts = Pts.size();
+
+	if (f_v) {
+		cout << "arc_lifting_with_two_lines::report "
+				"nb_pts = " << nb_pts << endl;
+		cout << "arc_lifting_with_two_lines::report "
+				"n = " << n << endl;
+	}
+	Pt_coords = NEW_int(nb_pts * n);
+	//int i;
+
+	for (i = 0; i < nb_pts; i++) {
+		Surf->P->unrank_point(Pt_coords + i * n, Pts[i]);
+		//unrank_point(Pt_coords + i * n, Pts[i]);
+	}
+
+
+	ost << "The number of points on the nine lines is " << nb_pts << "\\\\" << endl;
+	for (i = 0; i < nb_pts; i++) {
+		ost << i << " : " << Pts[i] << " : ";
+		Int_vec_print(ost, Pt_coords + i * n, n);
+		ost << "\\\\" << endl;
+	}
+
+
+
+	ost << "The number of monomials in the polynomial ring is "
+			<< Surf->PolynomialDomains->Poly3_4->get_nb_monomials() << "\\\\" << endl;
+	ost << "The ordering of monomials is like so:\\\\" << endl;
+	for (i = 0; i < Surf->PolynomialDomains->Poly3_4->get_nb_monomials(); i++) {
+
+		std::string s;
+		s = Surf->PolynomialDomains->Poly3_4->stringify_monomial_latex(i);
+
+		ost << i << " : $" << s << "$\\\\" << endl;
+	}
+
+
+
+	int *System;
+	int *System2;
+	int nb_rows, nb_cols;
+
+
+	if (f_v) {
+		cout << "arc_lifting_with_two_lines::report "
+				"before create_system_from_lines" << endl;
+	}
+	Surf->create_system_from_lines(
+			9 /*len*/, input_Lines, System, nb_rows,
+			verbose_level - 2);
+	if (f_v) {
+		cout << "arc_lifting_with_two_lines::report "
+				"after create_system_from_lines" << endl;
+	}
+
+
+	nb_cols = Surf->PolynomialDomains->Poly3_4->get_nb_monomials();
+
+	ost << "The system forcing the cubic surface to pass through all 9 lines is: \\\\" << endl;
+
+	latex_matrix(System, nb_rows, nb_cols, ost);
+
+
+	System2 = NEW_int(nb_rows * nb_cols);
+
+	Int_vec_copy(System, System2, nb_rows * nb_cols);
+
+	int base_cols[20];
+	int r;
+
+	r = F->Linear_algebra->Gauss_simple(
+			System2,
+			nb_rows, nb_cols,
+		base_cols, 0 /* verbose_level */);
+
+	ost << "The rank of the system is " << r << "\\\\" << endl;
+	ost << "The rref is: \\\\" << endl;
+
+	latex_matrix(System2, r, nb_cols, ost);
+
+	ost << "The base columns are";
+	Int_vec_print(ost, base_cols, r);
+	ost << " \\\\" << endl;
+
+
+	int kernel_m, kernel_n;
+	int *kernel;
+
+	kernel = NEW_int(nb_cols * nb_cols);
+
+	if (f_v) {
+		cout << "arc_lifting_with_two_lines::report "
+				"before F->matrix_get_kernel" << endl;
+	}
+	F->Linear_algebra->matrix_get_kernel(
+			System2,
+			r, nb_cols, base_cols, r,
+		kernel_m, kernel_n, kernel,
+		0 /* verbose_level */);
+	if (f_v) {
+		cout << "arc_lifting_with_two_lines::report "
+				"after F->matrix_get_kernel" << endl;
+	}
+	if (f_v) {
+		cout << "arc_lifting_with_two_lines::report "
+				"Nullspace = ";
+		Int_vec_print(cout, kernel, nb_cols);
+		cout << endl;
+	}
+
+
+	ost << "The nullspace is generated by\\\\" << endl;
+	latex_matrix(kernel, kernel_m, kernel_n, ost);
+
+	FREE_int(Pt_coords);
+	FREE_int(System);
+	FREE_int(System2);
+	FREE_int(kernel);
+
+	if (f_v) {
+		cout << "arc_lifting_with_two_lines::report done" << endl;
+	}
+}
+
+void arc_lifting_with_two_lines::latex_matrix(
+		int *M, int m, int n,
+		std::ostream &ost)
+{
+	other::l1_interfaces::latex_interface Li;
+
+	ost << "$=";
+	ost << "\\left[" << endl;
+	Li.int_matrix_print_tex(
+			ost,
+			M, m, n);
+	ost << "\\right]" << endl;
+	ost << "$\\\\" << endl;
+
+}
+
+
+
+
 
 }}}}
 

@@ -672,6 +672,11 @@ public:
 			std::vector<std::vector<int> > &Geos,
 			int &m, int &n, int &nb_flags,
 			std::string &inc_file_name, int verbose_level);
+	void filter_incidence_file(
+			std::string &inc_file_name,
+			std::string &fname_out,
+			long int *Index_of_objects, int nb_objects,
+			int verbose_level);
 	void read_incidence_by_row_ranks_file(
 			std::vector<std::vector<int> > &Geos,
 			int &m, int &n, int &r,

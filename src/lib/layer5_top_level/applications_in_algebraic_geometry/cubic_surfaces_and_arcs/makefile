@@ -6,7 +6,7 @@ LIB =
 LFLAGS = -lm
 
 MODULES = \
-	arc_lifting.o \
+	arc_lifting_trihedral_pair.o \
 	arc_orbits_on_pairs.o \
 	arc_partition.o \
 	classify_trihedral_pairs.o \

@@ -595,10 +595,103 @@ void symbolic_object_activity::evaluate_affine(
 	}
 
 
+	cout << "nb_variables=" << nb_variables << endl;
+	cout << "q=" << q << endl;
+	cout << "N=" << N << endl;
+
 	cout << "symbolic_object_activity::evaluate_affine Values_out:" << endl;
 	Int_vec_print(cout, Values_out, N);
 	cout << endl;
-	cout << "N=" << N << endl;
+
+	if (true) {
+
+		cout << "symbolic_object_activity::evaluate_affine "
+				"content analysis of Values_out:" << endl;
+		Int_vec_content_analysis(Values_out, N, 0 /* verbose_level*/);
+
+
+		other::data_structures::set_of_sets *SoS;
+		other::data_structures::algorithms Algorithms;
+
+		int *types;
+		int nb_types;
+
+		int *elements;
+		int *weight;
+		int l, t, w;
+		long int a;
+
+		Int_vec_content(Values_out, N, SoS, types, nb_types, 0 /* verbose_level*/);
+
+		cout << "Analysis of the fibers:" << endl;
+
+		for (t = 0; t < nb_types; t++) {
+
+			l = SoS->Set_size[t];
+
+			cout << "type " << t << " value " << types[t] << " number of elements " << l << endl;
+
+
+			weight = NEW_int(l);
+			elements = NEW_int(l);
+
+			for (i = 0; i < l; i++) {
+				a = SoS->Sets[t][i];
+
+				w = Algorithms.Hamming_weight(a);
+
+				weight[i] = w;
+			}
+
+			//Int_vec_content_analysis(weight, l, 0 /* verbose_level*/);
+
+			{
+				other::data_structures::tally Tw;
+
+				Tw.init(weight,
+						l, false /* f_second */,
+						0 /* verbose_level*/);
+
+				cout << "int_vec::content_analysis "
+						"place values of the given function:" << endl;
+				Tw.print(true /* f_backwards*/);
+
+				other::data_structures::set_of_sets *SoS2;
+
+				int *types2;
+				int nb_types2;
+
+
+				SoS2 = Tw.get_set_partition_and_types(
+						types2, nb_types2, verbose_level);
+
+				SoS2->sort_all(
+						0 /*verbose_level*/);
+				int i;
+
+				for (i = 0; i < nb_types2; i++) {
+					cout << i << " : " << types2[i] << " : " << SoS2->Set_size[i] << " : ";
+
+					int j;
+
+					for (j = 0; j < SoS2->Set_size[i]; j++) {
+						a = SoS->Sets[t][SoS2->Sets[i][j]];
+						elements[j] = a;
+					}
+					Int_vec_print(cout, elements, SoS2->Set_size[i]);
+					cout << endl;
+				}
+
+				FREE_OBJECT(SoS2);
+				FREE_int(types2);
+			}
+
+			FREE_int(weight);
+			FREE_int(elements);
+
+		}
+
+	}
 
 	int sz;
 

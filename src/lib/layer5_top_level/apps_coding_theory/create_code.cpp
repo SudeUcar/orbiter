@@ -575,10 +575,6 @@ void create_code::init(
 			exit(1);
 		}
 
-		//int f_long_code;
-		//int long_code_n;
-		//std::vector<std::string> long_code_generators;
-
 
 		int i;
 		int nb_rows, nb_cols;
@@ -586,6 +582,12 @@ void create_code::init(
 
 		nb_rows = description->long_code_generators.size();
 		nb_cols = description->long_code_n;
+
+		if (f_v) {
+			cout << "create_code::init nb_rows=" << nb_rows << " nb_cols=" << nb_cols << endl;
+		}
+
+
 		genma = NEW_int(nb_rows * nb_cols);
 		Int_vec_zero(genma, nb_rows * nb_cols);
 
@@ -611,6 +613,12 @@ void create_code::init(
 			}
 
 			for (h = 0; h < sz; h++) {
+				if (v[h] >= nb_cols) {
+					cout << "create_code::init long_code v[h] >= nb_cols" << endl;
+					cout << "create_code::init v[h] = " << v[h] << endl;
+					cout << "create_code::init nb_cols = " << nb_cols << endl;
+					exit(1);
+				}
 				genma[i * nb_cols + v[h]] = 1;
 			}
 
@@ -1124,6 +1132,7 @@ void create_code::create_checkma_from_genma(
 
 void create_code::export_codewords(
 		std::string &fname, int verbose_level)
+// use export_codewords_long below
 {
 	int f_v = (verbose_level >= 1);
 
@@ -1470,6 +1479,9 @@ void create_code::export_codewords_long(
 
 	algebra::number_theory::number_theory_domain NT;
 	combinatorics::coding_theory::coding_theory_domain Code;
+	geometry::other_geometry::geometry_global Gg;
+
+	int *messages;
 	int *codewords;
 	long int N;
 
@@ -1480,6 +1492,7 @@ void create_code::export_codewords_long(
 	Code.codewords_table(
 			F, n, k,
 			genma, // [k * n]
+			messages, // [q^k * k] where N = q^k
 			codewords, // [q^k * n] where N = q^k
 			N,
 			verbose_level);
@@ -1489,24 +1502,61 @@ void create_code::export_codewords_long(
 	}
 
 
+	string *Table;
+	int nb_rows, nb_cols;
+
+	nb_rows = N;
+	nb_cols = 4;
+
+	Table = new string [nb_rows * nb_cols];
+
+	int i;
+	long int rk;
+
+	for (i = 0; i < nb_rows; i++) {
+		Table[i * nb_cols + 0] = std::to_string(i);
+		Table[i * nb_cols + 1] = "\"" + Int_vec_stringify(messages + i * k, k) + "\"";
+		Table[i * nb_cols + 2] = "\"" + Int_vec_stringify(codewords + i * n, n) + "\"";
+
+
+		rk = Gg.AG_element_rank(F->q, codewords + i * n, 1, n);
+		Table[i * nb_cols + 3] = std::to_string(rk);
+
+
+	}
 
 	if (f_v) {
-		cout << "export_codewords_long : ";
+		cout << "export_codewords_long : " << endl;
 		Int_matrix_print(codewords, N, n);
 		cout << endl;
 	}
 
+	std::string headings;
+
+	headings = "Idx,Message,Codeword,CodewordRank";
+
 	other::orbiter_kernel_system::file_io Fio;
 
+
+	Fio.Csv_file_support->write_table_of_strings(
+			fname,
+			nb_rows, nb_cols, Table,
+			headings,
+			verbose_level);
+
+#if 0
 	Fio.Csv_file_support->int_matrix_write_csv(
 			fname, codewords, N, n);
+#endif
 
 	if (f_v) {
 		cout << "written file " << fname << " of size "
 				<< Fio.file_size(fname) << endl;
 	}
 
+	FREE_int(messages);
 	FREE_int(codewords);
+	delete [] Table;
 
 	if (f_v) {
 		cout << "create_code::export_codewords_long done" << endl;

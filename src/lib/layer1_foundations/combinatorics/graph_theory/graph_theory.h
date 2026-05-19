@@ -641,9 +641,24 @@ public:
 			int given_vertex,
 			int *&Distance,
 			int verbose_level);
-	layer1_foundations::combinatorics::graph_theory::layered_graph *create_distance_poset(
+	void create_distance_poset(
 			int given_vertex,
+			layer1_foundations::combinatorics::graph_theory::distance_information *&Distance_information,
+			layer1_foundations::combinatorics::graph_theory::layered_graph *&Layered_graph,
 			int verbose_level);
+	void test_if_distance_regular_assuming_vertex_transitive(
+			int vertex,
+			int &f_drg,
+			int *&ABC_by_layer, int &nb_layers,
+			int verbose_level);
+	void test_if_almost_distance_regular_assuming_vertex_transitive(
+			int vertex,
+			int &f_almost_drg,
+			int *&ABC_by_layer, int &nb_layers,
+			int *&NABC_last_layer, int &nb_types,
+			other::data_structures::tally_vector_data *&T,
+			int verbose_level);
+
 
 };
 
@@ -680,6 +695,10 @@ public:
 	void init_layered_graph(
 			layer1_foundations::combinatorics::graph_theory::layered_graph *Layered_graph,
 			int verbose_level);
+	void compute_ABC(
+			layer1_foundations::combinatorics::graph_theory::layered_graph *Layered_graph,
+			int *&ABC, int verbose_level);
+	// ABC[nb_nodes_total * 3]
 
 };
 
@@ -1241,7 +1260,18 @@ public:
 			int f_grouping, double x_stretch,
 			int verbose_level);
 	int test_if_distance_regular(
+			int *&ABC_by_layer,
 			int verbose_level);
+	// we are assuming that the graph is vertex transitive
+	int test_if_almost_distance_regular(
+			int *&ABC_by_layer, int &nb_layers,
+			int *&ABC_last_layer, int &nb_types,
+			other::data_structures::tally_vector_data *&T,
+			int verbose_level);
+	// we are assuming that the graph is vertex transitive
+	// ABC_by_layer[(nb_layers - 1) * 3]
+	// NABC_last_layer[nb_types * 4]
+	// T[nb_layers]
 
 };
 

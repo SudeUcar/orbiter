@@ -454,7 +454,9 @@ void coding_theoretic_activity::perform_activity(
 			cout << "coding_theoretic_activity::perform_activity "
 					"before Code->export_codewords_long" << endl;
 		}
-		Code->export_codewords_long(Descr->export_codewords_long_fname, verbose_level);
+		Code->export_codewords_long(
+				Descr->export_codewords_long_fname,
+				verbose_level);
 		if (f_v) {
 			cout << "coding_theoretic_activity::perform_activity "
 					"after Code->export_codewords_long" << endl;

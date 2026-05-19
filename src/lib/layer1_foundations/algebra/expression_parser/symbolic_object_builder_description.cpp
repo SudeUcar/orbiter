@@ -118,6 +118,9 @@ symbolic_object_builder_description::symbolic_object_builder_description()
 	//std::string collect_source;
 	//std::string collect_by;
 
+	f_collect_by_degree = false;
+	//std::string collect_by_degree_source;
+
 	f_collect_by = false;
 	//std::string collect_by_source;
 	//std::string collect_by_ring;
@@ -396,7 +399,15 @@ int symbolic_object_builder_description::read_arguments(
 						<< endl;
 			}
 		}
-
+		else if (ST.stringcmp(argv[i], "-collect_by_degree") == 0) {
+			f_collect_by_degree = true;
+			collect_by_degree_source.assign(argv[++i]);
+			if (f_v) {
+				cout << "-collect_by_degree "
+						<< " " << collect_by_degree_source
+						<< endl;
+			}
+		}
 		else if (ST.stringcmp(argv[i], "-collect_by") == 0) {
 			f_collect_by = true;
 			collect_by_source.assign(argv[++i]);
@@ -466,8 +477,6 @@ int symbolic_object_builder_description::read_arguments(
 			}
 		}
 
-
-
 		else if (ST.stringcmp(argv[i], "-do_not_simplify") == 0) {
 			f_do_not_simplify = true;
 			if (f_v) {
@@ -475,6 +484,7 @@ int symbolic_object_builder_description::read_arguments(
 						<< endl;
 			}
 		}
+
 		else if (ST.stringcmp(argv[i], "-write_trees_during_expand") == 0) {
 			f_write_trees_during_expand = true;
 			if (f_v) {
@@ -482,7 +492,6 @@ int symbolic_object_builder_description::read_arguments(
 						<< endl;
 			}
 		}
-
 
 		else if (ST.stringcmp(argv[i], "-end") == 0) {
 			if (f_v) {
@@ -622,6 +631,11 @@ void symbolic_object_builder_description::print()
 		cout << "-collect "
 				<< " " << collect_source
 				<< " " << collect_by
+				<< endl;
+	}
+	if (f_collect_by_degree) {
+		cout << "-collect_by_degree "
+				<< " " << collect_by_degree_source
 				<< endl;
 	}
 

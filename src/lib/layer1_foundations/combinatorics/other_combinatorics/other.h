@@ -268,6 +268,11 @@ public:
 			int verbose_level);
 	void conjugacy_classes_Sym_n_file(
 			int n, int verbose_level);
+	int load_layered_graph_and_test_if_distance_regular(
+			std::string &fname,
+			int *&ABC_by_layer, int &nb_layers,
+			int verbose_level);
+
 
 
 };

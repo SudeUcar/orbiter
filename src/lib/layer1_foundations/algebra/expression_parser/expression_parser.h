@@ -272,6 +272,8 @@ public:
 			int verbose_level);
 	int is_homogeneous(
 			int &degree, int verbose_level);
+	int get_degree(
+			int verbose_level);
 	void get_subtrees(
 			ring_theory::homogeneous_polynomial_domain *Poly,
 			syntax_tree_node **&Subtrees, int &nb_monomials,
@@ -358,6 +360,8 @@ public:
 class symbolic_object_builder_description {
 public:
 
+	// symbolic_object_1.csv
+
 	int f_label_txt;
 	std::string label_txt;
 
@@ -424,9 +428,13 @@ public:
 	std::string symbolic_nullspace_source;
 
 	int f_stack_matrices_vertically;
-	int f_stack_matrices_horizontally;
-	int f_stack_matrices_z_shape;
+	int f_stack_matrices_horizontally; // undocumented
+	int f_stack_matrices_z_shape; // undocumented
 	std::string stack_matrices_label;
+
+
+	// symbolic_object_2.csv
+
 
 	int f_multiply_2x2_from_the_left;
 	std::string multiply_2x2_from_the_left_source;
@@ -446,6 +454,9 @@ public:
 	int f_collect;
 	std::string collect_source;
 	std::string collect_by;
+
+	int f_collect_by_degree;
+	std::string collect_by_degree_source;
 
 	int f_collect_by;
 	std::string collect_by_source;
@@ -575,6 +586,10 @@ public:
 			symbolic_object_builder_description *Descr,
 			std::string &label,
 			int verbose_level);
+	void do_collect_by_degree(
+			symbolic_object_builder_description *Descr,
+			std::string &label,
+			int verbose_level);
 	void do_collect_by(
 			symbolic_object_builder_description *Descr,
 			std::string &label,
@@ -637,6 +652,7 @@ public:
 			std::map<std::string, std::string> &symbol_table,
 			algebra::field_theory::finite_field *F,
 			int verbose_level);
+	int degree();
 
 };
 
@@ -770,6 +786,10 @@ public:
 			int verbose_level);
 	int exponent_of_variable(
 			std::string &variable, int verbose_level);
+	// must be a terminal node or a multiplication node
+	int degree(
+			int verbose_level);
+	// must be a terminal node or a multiplication node
 	int exponent_of_variable_destructive(
 			std::string &variable);
 	int get_exponent();
@@ -1038,6 +1058,9 @@ public:
 	long int evaluate(
 			std::map<std::string, std::string> &symbol_table,
 			int verbose_level);
+	int degree(
+			int verbose_level);
+
 
 };
 

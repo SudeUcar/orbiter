@@ -257,15 +257,6 @@ void design_object::make_Mathon_elliptic_semiplane_1987(
 
 	f_has_incma = true;
 
-#if 0
-	int *block; // [k]
-
-	int v;
-	int b;
-	int nb_inc;
-	int f_has_incma;
-	int *incma; // [v * b]
-#endif
 
 	prefix = "Mathon1987";
 	label_txt = "Mathon1987";
@@ -275,6 +266,64 @@ void design_object::make_Mathon_elliptic_semiplane_1987(
 		cout << "design_object::make_Mathon_elliptic_semiplane_1987 done" << endl;
 	}
 }
+
+
+
+
+void design_object::make_design_from_blocks(
+		int v, std::string &label, int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "design_object::make_design_from_blocks" << endl;
+	}
+
+
+	combinatorics::design_theory::design_theory_global Design_theory_global;
+
+
+	int *Blocks;
+	int m, n;
+
+	Get_matrix(label, Blocks, m, n);
+
+	design_object::v = v;
+	b = m;
+	k = n;
+
+	if (f_v) {
+		cout << "design_object::make_design_from_blocks "
+				"before Design_theory_global.make_design_from_incidence_matrix" << endl;
+	}
+	Design_theory_global.make_design_from_blocks(
+			Blocks, v, b, k,
+			incma,
+			verbose_level - 1);
+	if (f_v) {
+		cout << "design_object::make_design_from_blocks "
+				"after Design_theory_global.make_design_from_incidence_matrix" << endl;
+	}
+
+
+
+	block = NEW_int(k);
+	nb_inc = k * b;
+
+	f_has_set = false;
+
+	f_has_incma = true;
+
+	prefix = label;
+	label_txt = label;
+	label_tex = label;
+
+	if (f_v) {
+		cout << "design_object::make_design_from_blocks done" << endl;
+	}
+}
+
+
 
 void design_object::make_design_from_incidence_matrix(
 		std::string &label, int verbose_level)
@@ -478,7 +527,8 @@ void design_object::do_export_incidence_matrix_as_flags_csv(
 	}
 
 	Fio.Csv_file_support->lint_matrix_write_csv_tabulated(
-			fname, col_heading, Flags, 1, nb_flags, verbose_level -2);
+			fname, col_heading, Flags, 1, nb_flags,
+			verbose_level - 2);
 
 
 	FREE_lint(Flags);
@@ -670,6 +720,8 @@ void design_object::do_intersection_matrix(
 		exit(1);
 	}
 
+	// multiply the incidence matrix by its own transpose:
+
 	int *AAt;
 	int i, j, h, cnt;
 
@@ -684,14 +736,15 @@ void design_object::do_intersection_matrix(
 			}
 			AAt[i * v + j] = cnt;
 		}
-
 	}
 
 	algebra::basic_algebra::algebra_global Algebra;
 	int coeff_I, coeff_J;
 
 	if (Algebra.is_lc_of_I_and_J(
-			AAt, v, coeff_I, coeff_J, 0 /* verbose_level*/)) {
+			AAt, v,
+			coeff_I, coeff_J,
+			0 /* verbose_level*/)) {
 		cout << "Is a linear combination of I and J with coefficients "
 				"coeff(I)=" << coeff_I << " and coeff(J-I)=" << coeff_J << endl;
 	}

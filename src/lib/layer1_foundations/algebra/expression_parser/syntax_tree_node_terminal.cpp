@@ -211,6 +211,26 @@ int syntax_tree_node_terminal::evaluate(
 	return a;
 }
 
+int syntax_tree_node_terminal::degree()
+{
+	int d;
+
+	if (f_int) {
+		d = 0;
+	}
+	else if (f_double) {
+		d = 0;
+	}
+	else if (f_text) {
+		d = 1;
+	}
+	else {
+		cout << "syntax_tree_node_terminal::degree unknown type" << endl;
+		exit(1);
+	}
+	return d;
+
+}
 
 
 }}}}

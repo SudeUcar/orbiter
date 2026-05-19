@@ -2636,6 +2636,145 @@ void file_io::read_incidence_file(
 }
 
 
+
+void file_io::filter_incidence_file(
+		std::string &inc_file_name,
+		std::string &fname_out,
+		long int *Index_of_objects, int nb_objects,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+	int f_vv = (verbose_level >= 2);
+	int a, h, cnt;
+	char *buf;
+	char *p_buf;
+	int *X = NULL;
+	data_structures::string_tools ST;
+
+
+	if (f_v) {
+		cout << "file_io::filter_incidence_file " << inc_file_name << endl;
+	}
+
+	file_io Fio;
+	int sz;
+
+	sz = Fio.file_size(inc_file_name);
+
+	if (f_v) {
+		cout << "file_io::filter_incidence_file "
+				"file size = " << sz << endl;
+	}
+
+	buf = NEW_char(sz);
+
+	int filter_cnt;
+
+	filter_cnt = 0;
+
+	{
+		ifstream f(inc_file_name);
+
+		ofstream of(fname_out);
+
+		int m, n, nb_flags;
+
+		if (f.eof()) {
+			exit(1);
+		}
+		f.getline(buf, sz, '\n'); // ToDo
+		if (strlen(buf) == 0) {
+			exit(1);
+		}
+		sscanf(buf, "%d %d %d", &m, &n, &nb_flags);
+		if (f_vv) {
+			cout << "m=" << m;
+			cout << " n=" << n;
+			cout << " nb_flags=" << nb_flags << endl;
+		}
+
+		of << m << " " << n << " " << nb_flags << endl;
+
+
+		X = NEW_int(nb_flags);
+		cnt = 0;
+		while (true) {
+			if (f.eof()) {
+				break;
+			}
+			f.getline(buf, sz, '\n'); // ToDo
+			if (strlen(buf) == 0) {
+				continue;
+			}
+
+			// check for comment line:
+			if (buf[0] == '#') {
+				continue;
+			}
+
+			p_buf = buf;
+
+			ST.s_scan_int(&p_buf, &a);
+			if (f_vv) {
+				//cout << cnt << " : " << a << " ";
+			}
+			if (a == -1) {
+				cout << "file_io::filter_incidence_file: "
+						"found a complete file with "
+					<< cnt << " solutions" << endl;
+				break;
+			}
+			X[0] = a;
+
+			//cout << "reading " << nb_inc << " incidences" << endl;
+			for (h = 1; h < nb_flags; h++) {
+				ST.s_scan_int(&p_buf, &a);
+				if (a < 0 || a >= m * n) {
+					cout << "attention, read " << a
+						<< " h=" << h << endl;
+					exit(1);
+				}
+				X[h] = a;
+				//M[a] = 1;
+			}
+			//f >> a; // skip aut group order
+
+#if 0
+			vector<int> v;
+
+			for (h = 0; h < nb_flags; h++) {
+				v.push_back(X[h]);
+			}
+			Geos.push_back(v);
+#endif
+
+			if (filter_cnt < nb_objects && cnt == Index_of_objects[filter_cnt]) {
+				for (h = 0; h < nb_flags; h++) {
+					of << X[h];
+					if (h < nb_flags - 1) {
+						of << " ";
+					}
+				}
+				of << endl;
+
+				filter_cnt++;
+
+			}
+			cnt++;
+		}
+		of << -1 << " " << filter_cnt << endl;
+
+	}
+	FREE_int(X);
+	FREE_char(buf);
+	if (f_v) {
+		cout << "file_io::filter_incidence_file done" << endl;
+	}
+
+}
+
+
+
 void file_io::read_incidence_by_row_ranks_file(
 		std::vector<std::vector<int> > &Geos,
 		int &m, int &n, int &r,

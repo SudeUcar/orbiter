@@ -113,6 +113,9 @@ activity_description::activity_description()
 	f_variety_activity = false;
 	Variety_activity_description = NULL;
 
+	f_vector_activity = false;
+	Vector_activity_description = NULL;
+
 	f_vector_ge_activity = false;
 	Vector_ge_activity_description = NULL;
 
@@ -784,6 +787,28 @@ void activity_description::read_arguments(
 			}
 		}
 	}
+	else if (ST.stringcmp(argv[i], "-vector_activity") == 0) {
+		f_vector_activity = true;
+		Vector_activity_description =
+				NEW_OBJECT(layer6_user_interface::activities_layer5::vector_activity_description);
+		if (f_v) {
+			cout << "reading -vector_activity" << endl;
+		}
+		i += Vector_activity_description->read_arguments(argc - (i + 1),
+			argv + i + 1, verbose_level);
+
+		i++;
+
+		if (f_v) {
+			cout << "-vector_activity" << endl;
+			Vector_activity_description->print();
+			cout << "i = " << i << endl;
+			cout << "argc = " << argc << endl;
+			if (i < argc) {
+				cout << "next argument is " << argv[i] << endl;
+			}
+		}
+	}
 	else if (ST.stringcmp(argv[i], "-vector_ge_activity") == 0) {
 		f_vector_ge_activity = true;
 		Vector_ge_activity_description =
@@ -1124,6 +1149,14 @@ void activity_description::worker(
 
 		do_variety_activity(verbose_level);
 	}
+	else if (f_vector_activity) {
+
+		if (f_v) {
+			cout << "activity_description::worker f_vector_activity" << endl;
+		}
+
+		do_vector_activity(with_labels, nb_output, Output, verbose_level);
+	}
 	else if (f_vector_ge_activity) {
 
 		if (f_v) {
@@ -1298,6 +1331,10 @@ void activity_description::print()
 	else if (f_variety_activity) {
 		cout << "-variety_activity" << endl;
 		Variety_activity_description->print();
+	}
+	else if (f_vector_activity) {
+		cout << "-vector_activity" << endl;
+		Vector_activity_description->print();
 	}
 	else if (f_vector_ge_activity) {
 		cout << "-vector_ge_activity" << endl;
@@ -3128,6 +3165,93 @@ void activity_description::do_variety_activity(
 	}
 
 }
+
+
+void activity_description::do_vector_activity(
+		std::vector<std::string> &with_labels,
+		int &nb_output,
+		other::orbiter_kernel_system::orbiter_symbol_table_entry *&Output,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "activity_description::do_vector_activity "
+				"activity for the following objects:";
+		Sym->print_with();
+	}
+
+
+
+	int *Idx;
+
+	Sym->Orbiter_top_level_session->find_symbols(Sym->with_labels, Idx);
+
+	if (Sym->with_labels.size() < 1) {
+		cout << "activity_description::do_vector_activity "
+				"this activity requires at least one input" << endl;
+		exit(1);
+	}
+
+	int nb_objects;
+	other::data_structures::vector_builder **pVB;
+
+	nb_objects = Sym->with_labels.size();
+	pVB = (other::data_structures::vector_builder **) NEW_pvoid(nb_objects);
+	int i;
+
+	for (i = 0; i < nb_objects; i++) {
+		other::data_structures::vector_builder *VB;
+
+		VB = (other::data_structures::vector_builder *)
+				Sym->Orbiter_top_level_session->get_object(Idx[i]);
+		pVB[i] = VB;
+
+	}
+
+	//vec = VB->V;
+	{
+
+		layer6_user_interface::activities_layer5::vector_activity Activity;
+
+		Activity.init(
+				Vector_activity_description,
+				pVB,
+				nb_objects,
+				with_labels,
+				verbose_level);
+
+
+
+		if (f_v) {
+			cout << "activity_description::do_vector_ge_activity "
+					"before Activity.perform_activity" << endl;
+		}
+		Activity.perform_activity(verbose_level);
+		if (f_v) {
+			cout << "activity_description::do_vector_ge_activity "
+					"after Activity.perform_activity" << endl;
+		}
+
+		// pass back the output (if there is one):
+		nb_output = Activity.nb_output;
+		Output = Activity.Output;
+
+	}
+
+	//FREE_pvoid((void **) pVB);
+
+	FREE_int(Idx);
+
+	if (f_v) {
+		cout << "activity_description::do_vector_ge_activity done" << endl;
+	}
+
+}
+
+
+
+
 
 void activity_description::do_vector_ge_activity(
 		std::vector<std::string> &with_labels,

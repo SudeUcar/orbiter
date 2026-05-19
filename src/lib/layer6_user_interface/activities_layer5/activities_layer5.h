@@ -1510,6 +1510,13 @@ public:
 	int f_create_distance_poset;
 	int create_distance_poset_vertex;
 
+	int f_test_if_distance_regular;
+	int test_if_distance_regular_vertex;
+
+	// ToDo: not yet documented
+	int f_test_if_almost_distance_regular;
+	int test_if_almost_distance_regular_vertex;
+
 
 	graph_theoretic_activity_description();
 	~graph_theoretic_activity_description();
@@ -1608,6 +1615,8 @@ public:
 			int verbose_level);
 
 };
+
+
 
 // #############################################################################
 // large_set_activity_description.cpp
@@ -2928,75 +2937,6 @@ public:
 
 
 
-
-
-// #############################################################################
-// vector_ge_activity_description.cpp
-// #############################################################################
-
-
-
-//! description of an activity associated with a vector of group elements
-
-
-class vector_ge_activity_description {
-
-public:
-
-	// TABLES/vector_ge_activity.csv
-
-	int f_report;
-
-	int f_report_with_options;
-	std::string report_options;
-
-	int f_report_elements_coded;
-
-	int f_export_GAP;
-
-	int f_transform_variety;
-	std::string transform_variety_label;
-
-	int f_multiply;
-
-	int f_conjugate;
-
-	int f_conjugate_by;
-	std::string conjugate_by_data;
-
-	int f_conjugate_inverse;
-
-	int f_select_subset;
-	std::string select_subset_vector_label;
-
-	int f_field_reduction;
-	int field_reduction_subfield_index;
-
-	int f_rational_canonical_form;
-	// returns two vectors:
-	// the rational canonical forms and the base change matrices
-
-	int f_products_of_pairs;
-
-	int f_order_of_products_of_pairs;
-
-	int f_apply_isomorphism_wedge_product_4to6;
-
-	// ToDo not yet documented
-	int f_filter_subfield;
-	int subfield_index;
-
-
-	vector_ge_activity_description();
-	~vector_ge_activity_description();
-	int read_arguments(
-		int argc, std::string *argv,
-		int verbose_level);
-	void print();
-
-};
-
-
 // #############################################################################
 // variety_activity_description.cpp
 // #############################################################################
@@ -3105,6 +3045,156 @@ public:
 
 };
 
+
+
+
+
+
+
+// #############################################################################
+// vector_activity_description.cpp
+// #############################################################################
+
+
+
+//! description of an activity associated with a vector of integers
+
+
+class vector_activity_description {
+
+public:
+
+	// TABLES/vector_activity.csv
+
+	int f_report;
+
+	int f_missing_sets;
+	int missing_sets_n;
+
+
+	vector_activity_description();
+	~vector_activity_description();
+	int read_arguments(
+		int argc, std::string *argv,
+		int verbose_level);
+	void print();
+
+};
+
+
+
+
+
+// #############################################################################
+// vector_activity.cpp
+// #############################################################################
+
+
+
+//! an activity associated with a vector of integers
+
+
+class vector_activity {
+
+public:
+
+	vector_activity_description *Descr;
+
+
+	int nb_objects;
+
+	std::vector<std::string> *with_labels;
+
+	other::data_structures::vector_builder **pVB; // [nb_objects]
+
+	int nb_output;
+	other::orbiter_kernel_system::orbiter_symbol_table_entry *Output; // [nb_output]
+
+
+
+	vector_activity();
+	~vector_activity();
+	void init(
+			vector_activity_description *Descr,
+			other::data_structures::vector_builder **pVB,
+			int nb_objects,
+			std::vector<std::string> &with_labels,
+			int verbose_level);
+	void perform_activity(
+			int verbose_level);
+
+
+};
+
+
+
+
+
+// #############################################################################
+// vector_ge_activity_description.cpp
+// #############################################################################
+
+
+
+//! description of an activity associated with a vector of group elements
+
+
+class vector_ge_activity_description {
+
+public:
+
+	// TABLES/vector_ge_activity.csv
+
+	int f_report;
+
+	int f_report_with_options;
+	std::string report_options;
+
+	int f_report_elements_coded;
+
+	int f_export_GAP;
+
+	int f_transform_variety;
+	std::string transform_variety_label;
+
+	int f_multiply;
+
+	int f_conjugate;
+
+	int f_conjugate_by;
+	std::string conjugate_by_data;
+
+	int f_conjugate_inverse;
+
+	int f_select_subset;
+	std::string select_subset_vector_label;
+
+	int f_field_reduction;
+	int field_reduction_subfield_index;
+
+	int f_rational_canonical_form;
+	// returns two vectors:
+	// the rational canonical forms and the base change matrices
+
+	int f_products_of_pairs;
+
+	int f_order_of_products_of_pairs;
+
+	int f_apply_isomorphism_wedge_product_4to6;
+
+	// ToDo not yet documented
+	int f_filter_subfield;
+	int subfield_index;
+
+
+	vector_ge_activity_description();
+	~vector_ge_activity_description();
+	int read_arguments(
+		int argc, std::string *argv,
+		int verbose_level);
+	void print();
+
+};
 
 
 

@@ -172,10 +172,15 @@ void vector_builder::init(
 					<< ", column " << Descr->file_column_label << endl;
 		}
 
+		if (Fio.file_size(Descr->file_column_name) <= 0) {
+			cout << "vector_builder::init the file does not exist. "
+					"File name: " << Descr->file_column_name << endl;
+			exit(1);
+		}
 		Fio.Csv_file_support->read_column_as_set_of_sets(
 				Descr->file_column_name, Descr->file_column_label,
 					SoS,
-					verbose_level);
+					0 /* verbose_level */);
 
 		if (SoS->nb_sets == 0) {
 			cout << "vector_builder::init the file seems to be empty" << endl;
@@ -198,7 +203,7 @@ void vector_builder::init(
 		f_has_k = true;
 		k = m;
 		if (f_v) {
-			cout << "vector_builder::init found a vector of length " << len << endl;
+			cout << "vector_builder::init found a matrix of size " << m << " x " << n << endl;
 		}
 
 	}
@@ -674,8 +679,14 @@ void vector_builder::print(
 		std::ostream &ost)
 {
 
-	Lint_vec_print(ost, v, len);
-	ost << endl;
+	if (f_has_k) {
+		Lint_matrix_print(v, k, len / k);
+		cout << endl;
+	}
+	else {
+		Lint_vec_print(ost, v, len);
+		ost << endl;
+	}
 }
 
 

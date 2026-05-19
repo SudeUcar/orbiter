@@ -56,7 +56,8 @@ surface_create_by_arc_lifting::~surface_create_by_arc_lifting()
 
 void surface_create_by_arc_lifting::init(
 		int arc_idx,
-		surface_classify_using_arc *SCA, int verbose_level)
+		surface_classify_using_arc *SCA,
+		int verbose_level)
 {
 	int f_v = (verbose_level >= 1);
 
@@ -100,7 +101,7 @@ void surface_create_by_arc_lifting::init(
 		cout << endl;
 	}
 
-	AL = NEW_OBJECT(arc_lifting);
+	AL = NEW_OBJECT(arc_lifting_trihedral_pair);
 
 
 	if (f_v) {

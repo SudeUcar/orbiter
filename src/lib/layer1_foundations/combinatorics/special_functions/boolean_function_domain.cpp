@@ -252,14 +252,15 @@ void boolean_function_domain::setup_polynomial_rings(
 		}
 		if (f_v) {
 			cout << "boolean_function_domain::setup_polynomial_rings "
-					"before Poly[degree].init" << endl;
+					"before Poly[degree].init_without_description" << endl;
 		}
-		Poly[degree].init(Fq, nb_vars, degree,
+		Poly[degree].init_without_description(
+				Fq, nb_vars, degree,
 				t_PART,
 				0 /* verbose_level */);
 		if (f_v) {
 			cout << "boolean_function_domain::setup_polynomial_rings "
-					"after Poly[degree].init" << endl;
+					"after Poly[degree].init_without_description" << endl;
 		}
 		if (f_v) {
 			cout << "boolean_function_domain::setup_polynomial_rings "

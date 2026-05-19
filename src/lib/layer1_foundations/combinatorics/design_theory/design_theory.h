@@ -69,6 +69,8 @@ public:
 			int verbose_level);
 	void make_Mathon_elliptic_semiplane_1987(
 			int verbose_level);
+	void make_design_from_blocks(
+			int v, std::string &label, int verbose_level);
 	void make_design_from_incidence_matrix(
 			std::string &label, int verbose_level);
 	void make_design_from_graph(
@@ -113,6 +115,10 @@ public:
 			int verbose_level);
 	void make_Mathon_elliptic_semiplane_1987_incma(
 			int *&Inc, int &V, int &B,
+			int verbose_level);
+	void make_design_from_blocks(
+			int *Blocks, int v, int b, int k,
+			int *&Inc,
 			int verbose_level);
 	void make_design_from_incidence_matrix(
 		int *&Inc, int &v, int &b, int &k,

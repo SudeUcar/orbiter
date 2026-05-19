@@ -73,15 +73,16 @@ void algebraic_geometry_global::analyze_del_Pezzo_surface(
 
 	if (f_v) {
 		cout << "algebraic_geometry_global::analyze_del_Pezzo_surface "
-				"before Poly->init" << endl;
+				"before Poly->init_without_description" << endl;
 	}
-	Poly4_3->init(P->Subspaces->F,
+	Poly4_3->init_without_description(
+			P->Subspaces->F,
 			Formula->nb_managed_vars /* nb_vars */, 4 /*Formula->degree*/,
 			t_PART,
 			verbose_level);
 	if (f_v) {
 		cout << "algebraic_geometry_global::analyze_del_Pezzo_surface "
-				"after Poly->init" << endl;
+				"after Poly->init_without_description" << endl;
 	}
 
 

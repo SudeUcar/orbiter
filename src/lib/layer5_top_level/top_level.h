@@ -36,7 +36,7 @@ namespace orbiter {
 			namespace cubic_surfaces_and_arcs {
 
 				// surfaces/surfaces_and_arcs:
-				class arc_lifting;
+				class arc_lifting_trihedral_pair;
 				class arc_orbits_on_pairs;
 				class arc_partition;
 				class classify_trihedral_pairs;

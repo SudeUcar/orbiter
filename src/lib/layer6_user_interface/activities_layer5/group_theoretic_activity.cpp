@@ -1099,6 +1099,7 @@ int group_theoretic_activity::perform_activity_part2(
 
 
 	}
+
 	else if (Descr->f_split_by_classes) {
 		if (f_v) {
 			cout << "group_theoretic_activity::perform_activity "
@@ -1133,6 +1134,7 @@ int group_theoretic_activity::perform_activity_part2(
 
 
 	}
+
 	else if (Descr->f_identify_elements_by_class) {
 		if (f_v) {
 			cout << "group_theoretic_activity::perform_activity "

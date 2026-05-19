@@ -2188,7 +2188,7 @@ void latex_interface::print_vector_horizontally_with_label(
 	}
 	//ost << "\\begin{array}{*{" << 1 << "}c}" << endl;
 	for (i = 0; i < len; i++) {
-		if (v[i].length() < 100) {
+		if (v[i].length() < 1000000) {
 			ost << v[i];
 		}
 		else {

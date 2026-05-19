@@ -111,15 +111,15 @@ void quartic_curve_domain::init_polynomial_domains(
 	Poly1_3 = NEW_OBJECT(algebra::ring_theory::homogeneous_polynomial_domain);
 	if (f_v) {
 		cout << "surface_domain::init_polynomial_domains "
-				"before Poly1_3->init" << endl;
+				"before Poly1_3->init_without_description" << endl;
 	}
-	Poly1_3->init(F,
+	Poly1_3->init_without_description(F,
 			3 /* nb_vars */, 1 /* degree */,
 			t_PART,
 			verbose_level - 2);
 	if (f_v) {
 		cout << "surface_domain::init_polynomial_domains "
-				"after Poly1_3->init" << endl;
+				"after Poly1_3->init_without_description" << endl;
 	}
 
 
@@ -127,15 +127,15 @@ void quartic_curve_domain::init_polynomial_domains(
 	Poly2_3 = NEW_OBJECT(algebra::ring_theory::homogeneous_polynomial_domain);
 	if (f_v) {
 		cout << "surface_domain::init_polynomial_domains "
-				"before Poly2_3->init" << endl;
+				"before Poly2_3->init_without_description" << endl;
 	}
-	Poly2_3->init(F,
+	Poly2_3->init_without_description(F,
 			3 /* nb_vars */, 2 /* degree */,
 			t_PART,
 			verbose_level - 2);
 	if (f_v) {
 		cout << "surface_domain::init_polynomial_domains "
-				"after Poly2_3->init" << endl;
+				"after Poly2_3->init_without_description" << endl;
 	}
 
 
@@ -143,44 +143,44 @@ void quartic_curve_domain::init_polynomial_domains(
 	Poly3_3 = NEW_OBJECT(algebra::ring_theory::homogeneous_polynomial_domain);
 	if (f_v) {
 		cout << "surface_domain::init_polynomial_domains "
-				"before Poly3_3->init" << endl;
+				"before Poly3_3->init_without_description" << endl;
 	}
-	Poly3_3->init(F,
+	Poly3_3->init_without_description(F,
 			3 /* nb_vars */, 3 /* degree */,
 			t_PART,
 			verbose_level - 2);
 	if (f_v) {
 		cout << "surface_domain::init_polynomial_domains "
-				"after Poly3_3->init" << endl;
+				"after Poly3_3->init_without_description" << endl;
 	}
 
 
 	Poly4_3 = NEW_OBJECT(algebra::ring_theory::homogeneous_polynomial_domain);
 	if (f_v) {
 		cout << "surface_domain::init_polynomial_domains "
-				"before Poly4_3->init" << endl;
+				"before Poly4_3->init_without_description" << endl;
 	}
-	Poly4_3->init(F,
+	Poly4_3->init_without_description(F,
 			3 /* nb_vars */, 4 /* degree */,
 			t_PART,
 			verbose_level - 2);
 	if (f_v) {
 		cout << "surface_domain::init_polynomial_domains "
-				"after Poly4_3->init" << endl;
+				"after Poly4_3->init_without_description" << endl;
 	}
 
 	Poly3_4 = NEW_OBJECT(algebra::ring_theory::homogeneous_polynomial_domain);
 	if (f_v) {
 		cout << "surface_domain::init_polynomial_domains "
-				"before Poly3_4->init" << endl;
+				"before Poly3_4->init_without_description" << endl;
 	}
-	Poly3_4->init(F,
+	Poly3_4->init_without_description(F,
 			4 /* nb_vars */, 3 /* degree */,
 			t_PART,
 			verbose_level - 2);
 	if (f_v) {
 		cout << "surface_domain::init_polynomial_domains "
-				"after Poly3_4->init" << endl;
+				"after Poly3_4->init_without_description" << endl;
 	}
 
 	Partials = NEW_OBJECTS(algebra::ring_theory::partial_derivative, 3);

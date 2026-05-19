@@ -3361,6 +3361,82 @@ void combinatorics_domain::conjugacy_classes_Sym_n_file(
 }
 
 
+int combinatorics_domain::load_layered_graph_and_test_if_distance_regular(
+		std::string &fname,
+		int *&ABC_by_layer, int &nb_layers,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "combinatorics_domain::load_layered_graph_and_test_if_distance_regular" << endl;
+	}
+
+	if (f_v) {
+		cout << "combinatorics_domain::load_layered_graph_and_test_if_distance_regular "
+				"fname=" << fname << endl;
+	}
+	combinatorics::graph_theory::layered_graph *LG;
+	other::orbiter_kernel_system::file_io Fio;
+
+	LG = NEW_OBJECT(combinatorics::graph_theory::layered_graph);
+
+	if (Fio.file_size(fname) <= 0) {
+		cout << "combinatorics_domain::load_layered_graph_and_test_if_distance_regular "
+				"file " << fname << " does not exist" << endl;
+		exit(1);
+	}
+
+	LG->read_file(fname, verbose_level - 1);
+
+	if (f_v) {
+		cout << "combinatorics_domain::load_layered_graph_and_test_if_distance_regular "
+				"Layered graph read from file" << endl;
+	}
+
+	LG->print_nb_nodes_per_level();
+
+
+	int f_drg;
+
+
+	if (f_v) {
+		cout << "combinatorics_domain::load_layered_graph_and_test_if_distance_regular "
+				"before LG->test_if_distance_regular" << endl;
+	}
+
+	f_drg = LG->test_if_distance_regular(
+			ABC_by_layer,
+			verbose_level);
+
+	if (f_v) {
+		cout << "combinatorics_domain::load_layered_graph_and_test_if_distance_regular "
+				"after LG->test_if_distance_regular" << endl;
+	}
+
+	nb_layers = LG->nb_layers;
+
+	if (f_drg) {
+		cout << "combinatorics_domain::load_layered_graph_and_test_if_distance_regular The graph is distance regular" << endl;
+
+		cout << "combinatorics_domain::load_layered_graph_and_test_if_distance_regular nb_layers = " << LG->nb_layers << endl;
+		cout << "combinatorics_domain::load_layered_graph_and_test_if_distance_regular ABC_by_layer:" << endl;
+		Int_matrix_print(ABC_by_layer, LG->nb_layers, 3);
+
+	}
+	else {
+		cout << "combinatorics_domain::load_layered_graph_and_test_if_distance_regular The graph is *not* distance regular" << endl;
+	}
+	//cout << "f_drg = " << f_drg << endl;
+
+	FREE_OBJECT(LG);
+
+	if (f_v) {
+		cout << "combinatorics_domain::load_layered_graph_and_test_if_distance_regular done" << endl;
+	}
+	return f_drg;
+
+}
 
 
 

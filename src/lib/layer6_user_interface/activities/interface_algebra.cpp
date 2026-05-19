@@ -160,6 +160,10 @@ interface_algebra::interface_algebra()
 	order_of_group_Dnq_q = 0;
 
 
+	f_boolean_function_as_polynomial = false;
+	boolean_function_as_polynomial_nb_variables = 0;
+	//std::string boolean_function_as_polynomial_text;
+
 }
 
 interface_algebra::~interface_algebra()
@@ -271,8 +275,10 @@ void interface_algebra::print_help(
 	else if (ST.stringcmp(argv[i], "-order_of_group_Dnq") == 0) {
 		cout << "-order_of_group_Dnq <int : n> <int : q>" << endl;
 	}
+	else if (ST.stringcmp(argv[i], "-boolean_function_as_polynomial") == 0) {
+		cout << "-boolean_function_as_polynomial <int : nb_var> <string : function>" << endl;
+	}
 }
-
 
 
 int interface_algebra::recognize_keyword(
@@ -386,6 +392,9 @@ int interface_algebra::recognize_keyword(
 		return true;
 	}
 	else if (ST.stringcmp(argv[i], "-order_of_group_Dnq") == 0) {
+		return true;
+	}
+	else if (ST.stringcmp(argv[i], "-boolean_function_as_polynomial") == 0) {
 		return true;
 	}
 	if (f_v) {
@@ -685,6 +694,16 @@ void interface_algebra::read_arguments(
 					<< order_of_group_Dnq_q << endl;
 		}
 	}
+	else if (ST.stringcmp(argv[i], "-boolean_function_as_polynomial") == 0) {
+		f_boolean_function_as_polynomial = true;
+		boolean_function_as_polynomial_nb_variables = ST.strtoi(argv[++i]);
+		boolean_function_as_polynomial_text.assign(argv[++i]);
+		if (f_v) {
+			cout << "-boolean_function_as_polynomial " << boolean_function_as_polynomial_nb_variables << " "
+					<< boolean_function_as_polynomial_text << endl;
+		}
+	}
+
 
 }
 
@@ -820,6 +839,10 @@ void interface_algebra::print()
 	if (f_order_of_group_Dnq) {
 		cout << "-order_of_group_Dnq " << order_of_group_Dnq_n << " "
 				<< order_of_group_Dnq_q << endl;
+	}
+	if (f_boolean_function_as_polynomial) {
+		cout << "-boolean_function_as_polynomial " << boolean_function_as_polynomial_nb_variables << " "
+				<< boolean_function_as_polynomial_text << endl;
 	}
 
 }
@@ -1547,6 +1570,35 @@ void interface_algebra::worker(
 
 	}
 
+	else if (f_boolean_function_as_polynomial)  {
+
+
+		algebra::basic_algebra::algebra_global Algebra;
+
+		int *func;
+		int len;
+
+		if (f_v) {
+			cout << "interface_algebra::worker "
+					"input = " << boolean_function_as_polynomial_text << endl;
+		}
+		Get_int_vector_from_label(
+				boolean_function_as_polynomial_text,
+				func, len, 0 /* verbose_level */);
+
+
+		string s;
+
+		s = Algebra.compute_polynomial_representation_boolean_text(
+				func,
+				boolean_function_as_polynomial_nb_variables,
+				verbose_level);
+		// input: func[Q] where Q = 2^n
+
+		cout << "The polynomial representation is " << endl;
+		cout << s << endl;
+
+	}
 
 
 	if (f_v) {

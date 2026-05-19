@@ -1534,6 +1534,12 @@ public:
 		// compute a random element among the group elements
 		// represented by the chain
 		// (chooses random cosets along the stabilizer chain)
+	void random_element_with_documentation(
+			int *elt, long int &rk, int *the_path, int verbose_level);
+	// compute a random element among the group
+	// elements represented by the chain
+	// (chooses random cosets along the stabilizer chain)
+	// the_path [A->base_len()]
 	void random_element_of_order(
 			int *elt, int order,
 		int verbose_level);

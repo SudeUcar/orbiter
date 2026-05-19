@@ -437,7 +437,8 @@ void surface_object_properties::compute_properties(
 	}
 	Type_lines_on_point->get_class_by_value(
 			Eckardt_points_index,
-		nb_Eckardt_points, 3 /* value */, 0 /* verbose_level */);
+		nb_Eckardt_points, 3 /* value */,
+		0 /* verbose_level */);
 	Sorting.int_vec_heapsort(Eckardt_points_index, nb_Eckardt_points);
 	if (f_v) {
 		cout << "surface_object::compute_properties "
@@ -658,10 +659,13 @@ void surface_object_properties::compute_properties(
 		int *H_planes;
 		other::data_structures::sorting Sorting;
 
-		T_planes.init(Eckardt_points_plane_type,
-				SO->Surf->P->Subspaces->Nb_subspaces[2], false, 0);
+		T_planes.init(
+				Eckardt_points_plane_type,
+				SO->Surf->P->Subspaces->Nb_subspaces[2],
+				false, 0);
 
-		T_planes.get_class_by_value(H_planes,
+		T_planes.get_class_by_value(
+				H_planes,
 				nb_Hesse_planes, 9 /* value */,
 				0 /* verbose_level */);
 
@@ -672,6 +676,10 @@ void surface_object_properties::compute_properties(
 			Hesse_planes[i] = H_planes[i];
 		}
 		FREE_int(H_planes);
+
+		Hesse_planes_sorted = NEW_lint(nb_Hesse_planes);
+		Lint_vec_copy(Hesse_planes, Hesse_planes_sorted, nb_Hesse_planes);
+		Lint_vec_heapsort(Hesse_planes_sorted, nb_Hesse_planes);
 
 
 		SO->Surf->P->Subspaces->point_plane_incidence_matrix(
@@ -720,7 +728,8 @@ void surface_object_properties::compute_axes(
 				int m;
 
 				Axes_index[nb_axes] = 2 * t + i;
-				Lint_vec_copy(SO->Surf->Schlaefli->Schlaefli_trihedral_pairs->Axes + t * 6 + i * 3,
+				Lint_vec_copy(
+						SO->Surf->Schlaefli->Schlaefli_trihedral_pairs->Axes + t * 6 + i * 3,
 						Axes_Eckardt_points + nb_axes * 3, 3);
 				for (l = 0; l < 3; l++) {
 					idx = SO->Surf->Schlaefli->Schlaefli_trihedral_pairs->Axes[6 * t + i * 3 + l];
@@ -2156,6 +2165,13 @@ void surface_object_properties::print_Hesse_planes(
 
 	ost << "\\subsection*{Hesse planes}" << endl;
 	ost << "Number of Hesse planes: " << nb_Hesse_planes << "\\\\" << endl;
+
+	ost << "Set of Hesse planes (sorted): ";
+	Lint_vec_print(ost, Hesse_planes_sorted, nb_Hesse_planes);
+	ost << "\\\\" << endl;
+
+
+
 	ost << "Set of Hesse planes: ";
 	Lint_vec_print(ost, Hesse_planes, nb_Hesse_planes);
 	ost << "\\\\" << endl;
@@ -2258,7 +2274,9 @@ void surface_object_properties::print_axes(
 		idx = Axes_index[i];
 		t_idx = idx / 2;
 		t_r = idx % 2;
-		ost << i << " : " << idx << " = $" << SO->Surf->Schlaefli->Schlaefli_trihedral_pairs->Trihedral_pair_labels[t_idx] << "$ = $T_{" << t_idx << "," << t_r << "}$ = " << endl;
+		ost << i << " : " << idx << " = $"
+				<< SO->Surf->Schlaefli->Schlaefli_trihedral_pairs->Trihedral_pair_labels[t_idx]
+				<< "$ = $T_{" << t_idx << "," << t_r << "}$ = " << endl;
 		for (j = 0; j < 3; j++) {
 			a = Axes_Eckardt_points[i * 3 + j];
 			ost << "$E_{" << SO->Surf->Schlaefli->Schlaefli_tritangent_planes->Eckard_point_label_tex[a] << "}$";

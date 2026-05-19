@@ -1032,6 +1032,7 @@ void coding_theory_domain::codewords_table(
 		algebra::field_theory::finite_field *F,
 		int n, int k,
 	int *code, // [k * n]
+	int *&messages, // [q^k * k]
 	int *&codewords, // [q^k * n]
 	long int &N, // q^k
 	int verbose_level)
@@ -1051,6 +1052,7 @@ void coding_theory_domain::codewords_table(
 	}
 	msg = NEW_int(k);
 	word = NEW_int(n);
+	messages = NEW_int(N * k);
 	codewords = NEW_int(N * n);
 
 	for (h = 0; h < N; h++) {
@@ -1060,6 +1062,7 @@ void coding_theory_domain::codewords_table(
 		F->Linear_algebra->mult_vector_from_the_left(
 				msg, code, word, k, n);
 
+		Int_vec_copy(msg, messages + h * k, k);
 		Int_vec_copy(word, codewords + h * n, n);
 	}
 	FREE_int(msg);
@@ -2032,7 +2035,7 @@ void coding_theory_domain::do_polynomial(
 			false /* f_compute_related_fields */,
 			0 /* verbose_level */);
 
-	Poly->init(
+	Poly->init_without_description(
 			Fq, polynomial_nb_vars, polynomial_degree,
 				Monomial_ordering_type,
 				0 /* verbose_level */);

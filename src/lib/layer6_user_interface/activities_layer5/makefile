@@ -61,6 +61,8 @@ MODULES = \
 	translation_plane_activity.o \
 	variety_activity_description.o \
 	variety_activity.o \
+	vector_activity_description.o \
+	vector_activity.o \
 	vector_ge_activity_description.o \
 	vector_ge_activity.o
 

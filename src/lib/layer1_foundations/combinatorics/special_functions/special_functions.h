@@ -316,7 +316,8 @@ public:
 	~polynomial_function_domain();
 	void init(
 			algebra::field_theory::finite_field *Fq,
-			int n, int verbose_level);
+			int n,
+			int verbose_level);
 	void setup_polynomial_rings(
 			int verbose_level);
 	void compute_polynomial_representation(

@@ -255,8 +255,15 @@ void easy_BMP_interface::draw_bitmap(
 		//indent = 0;
 		indent = (int)((C->box_width * (double)C->indent_100) / 100);
 	}
+
+	int indent_half;
+
+	indent_half = indent >> 1;
+
 	if (f_v) {
-		cout << "indent=" << indent << endl;
+		cout << "easy_BMP_interface::draw_bitmap indent=" << indent << endl;
+		cout << "easy_BMP_interface::draw_bitmap indent_half=" << indent_half << endl;
+		cout << "easy_BMP_interface::draw_bitmap box_width=" << C->box_width << endl;
 	}
 
 	std::vector<int> color_background;
@@ -354,7 +361,7 @@ void easy_BMP_interface::draw_bitmap(
 #endif
 						draw_rectangle_indented(
 								image,
-								I, J, C->box_width, indent,
+								I, J, C->box_width, indent_half,
 								color_background,
 								color);
 					}
@@ -369,7 +376,7 @@ void easy_BMP_interface::draw_bitmap(
 #endif
 					draw_rectangle_indented(
 							image,
-							I, J, C->box_width, indent,
+							I, J, C->box_width, indent_half,
 							color_background,
 							color);
 				}

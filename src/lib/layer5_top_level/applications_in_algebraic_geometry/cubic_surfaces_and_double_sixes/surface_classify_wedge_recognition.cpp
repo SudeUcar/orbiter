@@ -1027,9 +1027,52 @@ void surface_classify_wedge::sweep_Sylvester(
 
 	Fio.Csv_file_support->write_table_of_strings(
 			fname,
-			nb_rows3, nb_cols3, Table_reverse,
+			nb_rows1, nb_cols1, Table_reverse,
 			headings2,
 			verbose_level);
+
+
+
+	int iso_idx;
+
+	for (iso_idx = 0; iso_idx < nb_iso; iso_idx++) {
+
+		fname = "Sylvester_reverse_q" + std::to_string(q) + "_iso" + std::to_string(iso_idx) + ".csv";
+
+
+		std::string *Table3;
+
+		Table3 = new std::string[nb_rows1 * nb_cols1];
+
+		int nb_rows3;
+		int i, j;
+
+		nb_rows3 = 0;
+
+		for (i = 0; i < nb_rows1; i++) {
+
+			if (Table[i * nb_cols1 + 6] == std::to_string(iso_idx)) {
+				for (j = 0; j < nb_cols1; j++) {
+					Table3[nb_rows3 * nb_cols1 + j] = Table[i * nb_cols1 + j];
+				}
+				nb_rows3++;
+			}
+		}
+		std::string headings3;
+
+
+		headings3 = "Cnt,PlaneIso,PlaneAgo,Idx,Plane20,Lc5,IsoIdx,Transform";
+
+
+		Fio.Csv_file_support->write_table_of_strings(
+				fname,
+				nb_rows3, nb_cols1, Table3,
+				headings3,
+				verbose_level);
+
+		delete [] Table3;
+
+	}
 
 
 
@@ -1198,6 +1241,12 @@ void surface_classify_wedge::Sylvester_pentahedral_form_after_sweep(
 
 	int i;
 
+	if (f_v) {
+		cout << "surface_classify_wedge::Sylvester_pentahedral_form_after_sweep "
+				" Pentahedron5_ranks = " << endl;
+		Lint_vec_print(cout, Plane5_ranks, 5);
+		cout << endl;
+	}
 	for (i = 0; i < 5; i++) {
 		long int a, b;
 
@@ -1207,7 +1256,7 @@ void surface_classify_wedge::Sylvester_pentahedral_form_after_sweep(
 	}
 	if (f_v) {
 		cout << "surface_classify_wedge::Sylvester_pentahedral_form_after_sweep "
-				" Pentahedron5_ranks = " << endl;
+				" Pentahedron5_ranks in coordinates = " << endl;
 		Lint_vec_print(cout, Pentahedron5_ranks, 5);
 		cout << endl;
 	}

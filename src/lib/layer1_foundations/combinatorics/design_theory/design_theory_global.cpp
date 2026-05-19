@@ -214,6 +214,34 @@ void design_theory_global::make_Mathon_elliptic_semiplane_1987_incma(
 }
 
 
+void design_theory_global::make_design_from_blocks(
+		int *Blocks, int v, int b, int k,
+		int *&Inc,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "design_theory_global::make_design_from_blocks" << endl;
+	}
+
+	Inc = NEW_int(v * b);
+	Int_vec_zero(Inc, v * b);
+
+	int i, j, h;
+
+	for (j = 0; j < b; j++) {
+		for (h = 0; h < k; h++) {
+			i = Blocks[j * k + h];
+			Inc[i * b + j] = 1;
+		}
+	}
+
+
+	if (f_v) {
+		cout << "design_theory_global::make_design_from_blocks done" << endl;
+	}
+}
 
 void design_theory_global::make_design_from_incidence_matrix(
 	int *&Inc, int &v, int &b, int &k,

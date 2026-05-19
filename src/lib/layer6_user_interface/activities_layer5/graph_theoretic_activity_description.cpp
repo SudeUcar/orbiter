@@ -93,6 +93,12 @@ graph_theoretic_activity_description::graph_theoretic_activity_description()
 	f_create_distance_poset = false;
 	create_distance_poset_vertex = 0;
 
+	f_test_if_distance_regular = false;
+	test_if_distance_regular_vertex = 0;
+
+	f_test_if_almost_distance_regular = false;
+	test_if_almost_distance_regular_vertex = 0;
+
 }
 
 graph_theoretic_activity_description::~graph_theoretic_activity_description()
@@ -293,6 +299,22 @@ int graph_theoretic_activity_description::read_arguments(
 						<< create_distance_poset_vertex << endl;
 			}
 		}
+		else if (ST.stringcmp(argv[i], "-test_if_distance_regular") == 0) {
+			f_test_if_distance_regular = true;
+			test_if_distance_regular_vertex = ST.strtoi(argv[++i]);
+			if (f_v) {
+				cout << "-test_if_distance_regular "
+						<< test_if_distance_regular_vertex << endl;
+			}
+		}
+		else if (ST.stringcmp(argv[i], "-test_if_almost_distance_regular") == 0) {
+			f_test_if_almost_distance_regular = true;
+			test_if_almost_distance_regular_vertex = ST.strtoi(argv[++i]);
+			if (f_v) {
+				cout << "-test_if_almost_distance_regular "
+						<< test_if_almost_distance_regular_vertex << endl;
+			}
+		}
 		else if (ST.stringcmp(argv[i], "-end") == 0) {
 			if (f_v) {
 				cout << "-end" << endl;
@@ -400,6 +422,14 @@ void graph_theoretic_activity_description::print()
 	}
 	if (f_create_distance_poset) {
 		cout << "-create_distance_poset " << create_distance_poset_vertex << endl;
+	}
+	if (f_test_if_distance_regular) {
+		cout << "-test_if_distance_regular "
+				<< test_if_distance_regular_vertex << endl;
+	}
+	if (f_test_if_almost_distance_regular) {
+		cout << "-test_if_almost_distance_regular "
+				<< test_if_almost_distance_regular_vertex << endl;
 	}
 }
 

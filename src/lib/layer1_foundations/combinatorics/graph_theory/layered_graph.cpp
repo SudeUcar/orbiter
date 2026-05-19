@@ -1743,7 +1743,7 @@ void layered_graph::init_poset_from_file(
 			fp >> l1;
 			if (l1 == -1) {
 				break;
-				}
+			}
 			fp >> n1;
 			fp >> l2;
 			fp >> n2;
@@ -1769,7 +1769,9 @@ void layered_graph::init_poset_from_file(
 }
 
 int layered_graph::test_if_distance_regular(
+		int *&ABC_by_layer,
 		int verbose_level)
+// we are assuming that the graph is vertex transitive
 {
 	int f_v = (verbose_level >= 1);
 
@@ -1793,75 +1795,282 @@ int layered_graph::test_if_distance_regular(
 	}
 
 	int *ABC;
-	int l, n, a, b, h, location, l2, n2, cnt;
 
-	ABC = NEW_int(nb_nodes_total * 3);
-	Int_vec_zero(ABC, nb_nodes_total * 3);
-	cnt = 0;
-	for (l = 0; l < nb_layers; l++) {
-		for (n = 0; n < L[l].nb_nodes; n++, cnt++) {
-			a = L[l].Nodes[n].id;
-			for (h = 0; h < L[l].Nodes[n].nb_neighbors; h++) {
-				b = L[l].Nodes[n].neighbor_list[h];
 
-				location = Distance_information->perm_inv[b];
-				l2 = Distance_information->depth[location];
-				n2 = location - Distance_information->Fst[l2];
-				if (l2 == l + 1) {
-					ABC[cnt * 3 + 1]++; // b
-				}
-				else if (l2 == l) {
-					ABC[cnt * 3 + 0]++; // a
-				}
-				else if (l2 == l - 1) {
-					ABC[cnt * 3 + 2]++; // c
-				}
-				else {
-					cout << "layered_graph::test_if_distance_regular not distance regular" << endl;
-					return false;
-				}
-			}
-		}
-
+	if (f_v) {
+		cout << "layered_graph::test_if_distance_regular "
+				"before Distance_information->compute_ABC" << endl;
 	}
+	Distance_information->compute_ABC(
+			this,
+			ABC, verbose_level);
+	if (f_v) {
+		cout << "layered_graph::test_if_distance_regular "
+				"after Distance_information->compute_ABC" << endl;
+	}
+
+
 	if (f_v) {
 		cout << "layered_graph::test_if_distance_regular "
 				"ABC based on all vertices:" << endl;
 		Int_matrix_print(ABC, nb_nodes_total, 3);
 	}
 
-	int *ABC_by_layer;
-	int cmp, fst;
 
-	other::data_structures::sorting Sorting;
+	other::data_structures::tally_vector_data *T;
 
-	ABC_by_layer = NEW_int(nb_layers * 3);
-	Int_vec_zero(ABC_by_layer, nb_layers * 3);
+	T = NEW_OBJECTS(other::data_structures::tally_vector_data, nb_layers);
+
+	int l, fst;
+
+
 	for (l = 0; l < nb_layers; l++) {
-		for (n = 1; n < L[l].nb_nodes; n++, cnt++) {
-			fst = Distance_information->Fst[l];
-			cmp = Sorting.int_vec_compare(ABC + fst * 3, ABC + (fst + n) * 3, 3);
-			if (cmp){
-				cout << "layered_graph::test_if_distance_regular not distance regular, vertex 0 and vertex " << n << " in level " << l << " differ" << endl;
-				return false;
-			}
+
+		fst = Distance_information->Fst[l];
+
+		if (f_v) {
+			cout << "layered_graph::test_if_distance_regular "
+					"before T[l].init" << endl;
 		}
-		Int_vec_copy(ABC + fst * 3, ABC_by_layer + l * 3, 3);
+
+
+		T[l].init(
+				ABC + fst * 3, L[l].nb_nodes /* data_length */, 3 /* data_set_sz */,
+				verbose_level);
+		// data[data_length * data_set_sz]
+
 	}
-	if (f_v) {
-		cout << "layered_graph::test_if_distance_regular "
-				"ABC based on layers:" << endl;
-		Int_matrix_print(ABC_by_layer, nb_layers, 3);
+
+	int *Nb_types;
+
+	Nb_types = NEW_int(nb_layers);
+
+	for (l = 0; l < nb_layers; l++) {
+		Nb_types[l] = T[l].nb_types;
 	}
+
+	for (l = 0; l < nb_layers; l++) {
+		cout << l << " : " << Nb_types[l] << endl;
+	}
+
+	int f_drg;
+
+	f_drg = true;
+
+	for (l = 0; l < nb_layers; l++) {
+		if (Nb_types[l] != 1) {
+			f_drg = false;
+		}
+	}
+
+
+	if (f_drg) {
+
+		//int *ABC_by_layer;
+
+		ABC_by_layer = NEW_int(nb_layers * 3);
+		Int_vec_zero(ABC_by_layer, nb_layers * 3);
+
+		for (l = 0; l < nb_layers; l++) {
+
+			int i;
+
+			i = 0;
+
+
+			cout << T[l].Frequency[i] << " x ";
+			Int_vec_print(cout, T[l].Reps + i * T[l].data_set_sz, T[l].data_set_sz);
+			cout << endl;
+
+			Int_vec_copy(T[l].Reps + i * 3, ABC_by_layer + l * 3, 3);
+
+		}
+
+		if (f_v) {
+			cout << "layered_graph::test_if_distance_regular nb_layers = " << nb_layers << endl;
+			cout << "layered_graph::test_if_distance_regular ABC_by_layer:" << endl;
+			Int_matrix_print(ABC_by_layer, nb_layers, 3);
+		}
+	}
+
 
 
 	FREE_OBJECT(Distance_information);
+	FREE_OBJECTS(T);
+	FREE_int(ABC);
+	FREE_int(Nb_types);
 
 	if (f_v) {
 		cout << "layered_graph::test_if_distance_regular done" << endl;
 	}
-	return true;
+	return f_drg;
 }
+
+
+int layered_graph::test_if_almost_distance_regular(
+		int *&ABC_by_layer, int &nb_layers,
+		int *&NABC_last_layer, int &nb_types,
+		other::data_structures::tally_vector_data *&T,
+		int verbose_level)
+// we are assuming that the graph is vertex transitive
+// ABC_by_layer[(nb_layers - 1) * 3]
+// NABC_last_layer[nb_types * 4]
+// T[nb_layers]
+{
+	int f_v = (verbose_level >= 1);
+
+
+	if (f_v) {
+		cout << "layered_graph::test_if_almost_distance_regular" << endl;
+	}
+
+	layer1_foundations::combinatorics::graph_theory::distance_information *Distance_information;
+
+	Distance_information = NEW_OBJECT(layer1_foundations::combinatorics::graph_theory::distance_information);
+
+	if (f_v) {
+		cout << "layered_graph::test_if_almost_distance_regular "
+				"before Distance_information->init_layered_graph" << endl;
+	}
+	Distance_information->init_layered_graph(this, verbose_level);
+	if (f_v) {
+		cout << "layered_graph::test_if_almost_distance_regular "
+				"after Distance_information->init_layered_graph" << endl;
+	}
+
+	int *ABC;
+
+
+	if (f_v) {
+		cout << "layered_graph::test_if_almost_distance_regular "
+				"before Distance_information->compute_ABC" << endl;
+	}
+	Distance_information->compute_ABC(
+			this,
+			ABC, verbose_level);
+	if (f_v) {
+		cout << "layered_graph::test_if_almost_distance_regular "
+				"after Distance_information->compute_ABC" << endl;
+	}
+
+
+	if (f_v) {
+		cout << "layered_graph::test_if_almost_distance_regular "
+				"ABC based on all vertices:" << endl;
+		Int_matrix_print(ABC, nb_nodes_total, 3);
+	}
+
+
+	nb_layers = Distance_information->nb_layers;
+
+	//other::data_structures::tally_vector_data *T;
+
+	T = NEW_OBJECTS(other::data_structures::tally_vector_data, nb_layers);
+
+	int l, fst;
+
+
+	for (l = 0; l < nb_layers; l++) {
+
+		fst = Distance_information->Fst[l];
+
+		if (f_v) {
+			cout << "layered_graph::test_if_almost_distance_regular "
+					"before T[l].init" << endl;
+		}
+
+
+		T[l].init(
+				ABC + fst * 3, L[l].nb_nodes /* data_length */, 3 /* data_set_sz */,
+				verbose_level);
+		// data[data_length * data_set_sz]
+
+	}
+
+	int *Nb_types;
+
+	Nb_types = NEW_int(nb_layers);
+
+	for (l = 0; l < nb_layers; l++) {
+		Nb_types[l] = T[l].nb_types;
+	}
+
+	for (l = 0; l < nb_layers; l++) {
+		cout << l << " : " << Nb_types[l] << endl;
+	}
+
+	int f_almost_drg;
+
+	f_almost_drg = true;
+
+	for (l = 0; l < nb_layers - 1; l++) {
+		if (Nb_types[l] != 1) {
+			f_almost_drg = false;
+		}
+	}
+
+
+	if (f_almost_drg) {
+
+		//int *ABC_by_layer;
+
+		ABC_by_layer = NEW_int(nb_layers * 3);
+		Int_vec_zero(ABC_by_layer, nb_layers * 3);
+
+
+		for (l = 0; l < nb_layers - 1; l++) {
+
+			int i;
+
+			i = 0;
+
+
+			cout << T[l].Frequency[i] << " x ";
+			Int_vec_print(cout, T[l].Reps + i * T[l].data_set_sz, T[l].data_set_sz);
+			cout << endl;
+
+			Int_vec_copy(T[l].Reps + i * 3, ABC_by_layer + l * 3, 3);
+
+		}
+
+		if (f_v) {
+			cout << "layered_graph::test_if_almost_distance_regular nb_layers = " << nb_layers << endl;
+			cout << "layered_graph::test_if_almost_distance_regular ABC_by_layer:" << endl;
+			Int_matrix_print(ABC_by_layer, nb_layers - 1, 3);
+		}
+
+		nb_types = T[nb_layers - 1].nb_types;
+		NABC_last_layer = NEW_int(nb_types * 4);
+		Int_vec_zero(NABC_last_layer, nb_types * 4);
+
+		int i;
+
+		for (i = 0; i < nb_types; i++) {
+			NABC_last_layer[i * 4 + 0] = T[nb_layers - 1].Frequency[i];
+			Int_vec_copy(T[nb_layers - 1].Reps + i * 3, NABC_last_layer + i * 4 + 1, 3);
+
+		}
+		if (f_v) {
+			cout << "layered_graph::test_if_almost_distance_regular nb_types = " << nb_types << endl;
+			cout << "layered_graph::test_if_almost_distance_regular NABC_last_layer:" << endl;
+			Int_matrix_print(NABC_last_layer, nb_types, 4);
+		}
+	}
+
+
+
+	FREE_OBJECT(Distance_information);
+	//FREE_OBJECTS(T);
+	FREE_int(ABC);
+	FREE_int(Nb_types);
+
+	if (f_v) {
+		cout << "layered_graph::test_if_almost_distance_regular done" << endl;
+	}
+	return f_almost_drg;
+}
+
+
 
 // example file created in DISCRETA/sgls2.cpp for the subgroup lattice of Sym(4):
 #if 0

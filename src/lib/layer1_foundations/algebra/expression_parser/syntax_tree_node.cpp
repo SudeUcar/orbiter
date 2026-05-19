@@ -1569,6 +1569,10 @@ int syntax_tree_node::highest_order_term(
 	return d;
 }
 
+
+
+
+
 void syntax_tree_node::get_monopoly(
 		std::string &variable,
 		std::vector<int> &Coeff, std::vector<int> &Exp,
@@ -1859,6 +1863,7 @@ void syntax_tree_node::get_exponent_and_coefficient_of_variable(
 
 int syntax_tree_node::exponent_of_variable(
 		std::string &variable, int verbose_level)
+// must be a terminal node or a multiplication node
 {
 	int f_v = (verbose_level >= 1);
 
@@ -1909,6 +1914,105 @@ int syntax_tree_node::exponent_of_variable(
 	}
 	return exp;
 }
+
+
+int syntax_tree_node::degree(
+		int verbose_level)
+// must be a terminal node or a multiplication node
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "syntax_tree_node::degree" << endl;
+	}
+
+	int degree = 0;
+
+	if (f_terminal) {
+		degree = T->degree() * get_exponent();
+	}
+	else if (type == operation_type_mult) {
+		if (f_v) {
+			cout << "syntax_tree_node::degree multiplication node" << endl;
+		}
+
+		int i, e;
+
+		degree = 0;
+
+		for (i = 0; i < nb_nodes; i++) {
+			if (f_v) {
+				cout << "syntax_tree_node::degree" << endl;
+			}
+			e = Nodes[i]->degree(
+					0 /* verbose_level */);
+			if (f_v) {
+				cout << "syntax_tree_node::degree "
+						"child " << i << " has degree " << e << endl;
+			}
+			degree += e;
+		}
+
+		degree *= get_exponent();
+
+		if (f_v) {
+			cout << "syntax_tree_node::degree multiplication node degree = " << degree << endl;
+		}
+
+
+	}
+	else if (type == operation_type_add) {
+		if (f_v) {
+			cout << "syntax_tree_node::degree addition node" << endl;
+		}
+
+		int i, e;
+
+		degree = 0;
+
+		int *Degree;
+
+		Degree = NEW_int(nb_nodes);
+
+		for (i = 0; i < nb_nodes; i++) {
+			if (f_v) {
+				cout << "syntax_tree_node::degree" << endl;
+			}
+			e = Nodes[i]->degree(
+					0 /* verbose_level */);
+
+			Degree[i] = e;
+
+			if (f_v) {
+				cout << "syntax_tree_node::degree "
+						"child " << i << " has degree " << e << endl;
+			}
+		}
+
+		exponent = get_exponent();
+
+		degree = Int_vec_maximum(Degree, nb_nodes);
+
+		if (exponent) {
+			degree *= get_exponent();
+
+		}
+		else {
+		}
+
+		FREE_int(Degree);
+
+		if (f_v) {
+			cout << "syntax_tree_node::degree addition node degree = " << degree << endl;
+		}
+	}
+	if (f_v) {
+		cout << "syntax_tree_node::degree "
+				"done, degree = " << degree << endl;
+	}
+	return degree;
+}
+
 
 int syntax_tree_node::exponent_of_variable_destructive(
 		std::string &variable)

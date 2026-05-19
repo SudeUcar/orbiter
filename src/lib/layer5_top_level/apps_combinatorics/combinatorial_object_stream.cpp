@@ -99,10 +99,50 @@ void combinatorial_object_stream::do_canonical_form_and_write_files(
 	do_canonical_form(
 			Canonical_form_Descr,
 			f_projective_space, PA,
-			verbose_level);
+			verbose_level - 1);
 	if (f_v) {
 		cout << "combinatorial_object_stream::do_canonical_form_and_write_files "
 				"after do_canonical_form" << endl;
+	}
+
+
+	if (Canonical_form_Descr->f_filter_ago_at_least) {
+
+		cout << "combinatorial_object_stream::do_canonical_form_and_write_files "
+				"filter_ago_at_least" << Canonical_form_Descr->filter_ago_at_least_value << endl;
+
+		long int ago0 = Canonical_form_Descr->filter_ago_at_least_value;
+
+		long int input_idx;
+
+		long int *Index_filtered;
+		int nb_filtered = 0;
+
+		Index_filtered = NEW_lint(IS->nb_objects_to_test);
+
+		for (input_idx = 0; input_idx < IS->nb_objects_to_test; input_idx++) {
+
+			if (Classification_of_objects->Output->Ago[input_idx] >= ago0) {
+				Index_filtered[nb_filtered++] = input_idx;
+			}
+
+		}
+
+		cout << "combinatorial_object_stream::do_canonical_form_and_write_files "
+				"nb_filtered = " << nb_filtered << endl;
+
+		if (f_v) {
+			cout << "combinatorial_object_stream::do_canonical_form_and_write_files "
+					"before IS->filter_objects" << endl;
+		}
+		IS->filter_objects(Index_filtered, nb_filtered, verbose_level);
+		if (f_v) {
+			cout << "combinatorial_object_stream::do_canonical_form_and_write_files "
+					"after IS->filter_objects" << endl;
+		}
+
+		FREE_lint(Index_filtered);
+
 	}
 
 	string fname_base;
@@ -1591,9 +1631,9 @@ void combinatorial_object_stream::do_algebraic_degree(
 
 		if (f_v) {
 			cout << "combinatorial_object_stream::do_algebraic_degree "
-					"before HPD->init i=" << i << endl;
+					"before HPD->init_without_description i=" << i << endl;
 		}
-		HPD[i].init(
+		HPD[i].init_without_description(
 				PA->F,
 				n /* nb_vars */, i /* degree */,
 				t_PART,
@@ -1909,9 +1949,9 @@ void combinatorial_object_stream::make_polynomial_representation(
 
 		if (f_v) {
 			cout << "combinatorial_object_stream::make_polynomial_representation "
-					"before HPD->init i=" << i << endl;
+					"before HPD->init_without_description i=" << i << endl;
 		}
-		HPD[i].init(
+		HPD[i].init_without_description(
 				PA->F,
 				n /* nb_vars */, i /* degree */,
 				t_PART,

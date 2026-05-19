@@ -181,15 +181,16 @@ void quadratic_form::init_form_and_Gram_matrix(
 
 	if (f_v) {
 		cout << "quadratic_form::init_form_and_Gram_matrix "
-				"before Poly->init" << endl;
+				"before Poly->init_without_description" << endl;
 	}
-	Poly->init(F,
+	Poly->init_without_description(
+			F,
 			n /* nb_vars */, 2 /* degree */,
 			t_LEX,
 			verbose_level);
 	if (f_v) {
 		cout << "quadratic_form::init_form_and_Gram_matrix "
-				"after Poly->init" << endl;
+				"after Poly->init_without_description" << endl;
 	}
 	the_quadratic_form = NEW_int(Poly->get_nb_monomials());
 	Int_vec_zero(the_quadratic_form, Poly->get_nb_monomials());

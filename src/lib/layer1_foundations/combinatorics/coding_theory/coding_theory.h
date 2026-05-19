@@ -34,15 +34,27 @@ public:
 	std::string label;
 
 	int n;
-	long int N;
+	long int N; // 1 << n (= 2^n)
 
 	int nb_rows, nb_cols;
-	int *v;
-	int *Index_of_codeword;
-	int *Place_values;
-	int *Characteristic_function;
-	int *Distance;
-	int *Distance_H;
+
+	int *v; // [n]
+
+	int *Index_of_codeword; // [nb_rows * nb_cols]
+		// if the word at position (i,j) is a codeword, Index_of_codeword is the index of codeword plus one
+		// Otherwise zero
+
+	int *Place_values; // [nb_rows * nb_cols]
+		// the place value of the word in Hamming space at position (i,j) in the diagram
+
+	int *Characteristic_function; // [nb_rows * nb_cols]
+		// is one if the word at position (i,j) is a codeword
+
+	int *Distance; // [nb_rows * nb_cols]
+		// the same as Distance_H,
+		// but now the words are indexed in the standard order.
+
+	int *Distance_H; // [nb_rows * nb_cols]
 		// the distance of a word to the code.
 		// Can be used to detect deep holes.
 
@@ -164,6 +176,7 @@ public:
 			algebra::field_theory::finite_field *F,
 			int n, int k,
 		int *code, // [k * n]
+		int *&messages, // [q^k * k]
 		int *&codewords, // [q^k * n]
 		long int &N, // q^k
 		int verbose_level);

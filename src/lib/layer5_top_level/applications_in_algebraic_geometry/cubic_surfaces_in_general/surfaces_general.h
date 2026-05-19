@@ -83,6 +83,9 @@ public:
 	surface_object_with_group *SOG;
 
 
+	geometry::algebraic_geometry::arc_lifting_with_two_lines *AL;
+
+
 	surface_create();
 	~surface_create();
 	void create_cubic_surface(
@@ -124,12 +127,12 @@ public:
 			int iso,
 			std::vector<std::string> &select_double_six_string,
 			int verbose_level);
-	void create_surface_by_arc_lifting(
+	void create_surface_by_arc_lifting_with_trihedral_pairs(
 			std::string &arc_lifting_text,
 			int verbose_level);
 	void create_surface_by_arc_lifting_with_two_lines(
-			std::string &arc_lifting_text,
-			std::string &arc_lifting_two_lines_text,
+			std::string &arc_text,
+			std::string &two_lines_text,
 			int verbose_level);
 	void create_surface_Cayley_form(
 			int k, int l, int m, int n,
@@ -197,6 +200,10 @@ public:
 			std::string &fname_csv, std::string &col_heading,
 			int verbose_level);
 	void do_report2(
+			std::ostream &ost,
+			other::graphics::draw_options *Draw_options,
+			int verbose_level);
+	void do_report_creation(
 			std::ostream &ost,
 			other::graphics::draw_options *Draw_options,
 			int verbose_level);
@@ -285,11 +292,12 @@ public:
 	int family_general_abcd_c;
 	int family_general_abcd_d;
 
-	int f_arc_lifting;
-	std::string arc_lifting_text;
-	std::string arc_lifting_two_lines_text;
+	int f_arc_lifting_with_trihedral_pair;
+	std::string arc_lifting_with_trihedral_pair_arc_text;
 
 	int f_arc_lifting_with_two_lines;
+	std::string arc_lifting_with_two_lines_arc_text;
+	std::string arc_lifting_with_two_lines_lines_text;
 
 
 	// surface_create_3.tex

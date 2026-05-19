@@ -1193,20 +1193,131 @@ void graph_theoretic_activity::perform_activity(
 		if (f_v) {
 			cout << "graph_theoretic_activity::perform_activity "
 					"f_create_distance_poset" << endl;
+			cout << "graph_theoretic_activity::perform_activity "
+					"vertex = " << Descr->create_distance_poset_vertex << endl;
 		}
 
 		layer1_foundations::combinatorics::graph_theory::layered_graph *Layered_graph;
+		layer1_foundations::combinatorics::graph_theory::distance_information *Distance_information;
 
-		Layered_graph = CG[0]->create_distance_poset(
+		CG[0]->create_distance_poset(
 				Descr->create_distance_poset_vertex,
+				Distance_information,
+				Layered_graph,
 				verbose_level);
-		// saves the layered graph to file
 
 
+		if (f_v) {
+			cout << "colored_graph::create_distance_poset "
+					"before Layered_graph->place" << endl;
+		}
+
+
+		Layered_graph->place(0 /*verbose_level*/);
+
+		other::orbiter_kernel_system::file_io Fio;
+		std::string fname;
+
+		fname = CG[0]->label + "_distance_poset.layered_graph";
+
+
+		if (f_v) {
+			cout << "colored_graph::create_distance_poset "
+					"before Layered_graph->write_file" << endl;
+		}
+
+
+		Layered_graph->write_file(
+					fname, 0 /* verbose_level*/);
+
+		if (f_v) {
+			cout << "colored_graph::create_distance_poset written file "
+				<< fname << " of size " << Fio.file_size(fname) << endl;
+		}
+
+		FREE_OBJECT(Distance_information);
 		FREE_OBJECT(Layered_graph);
 
 	}
+	else if (Descr->f_test_if_distance_regular) {
+		if (f_v) {
+			cout << "graph_theoretic_activity::perform_activity "
+					"-test_if_distance_regular" << endl;
+			cout << "graph_theoretic_activity::perform_activity "
+					"vertex = " << Descr->test_if_distance_regular_vertex << endl;
+		}
 
+		int f_drg;
+		int *ABC_by_layer;
+		int nb_layers;
+
+		CG[0]->test_if_distance_regular_assuming_vertex_transitive(
+				Descr->test_if_distance_regular_vertex,
+				f_drg,
+				ABC_by_layer, nb_layers,
+				verbose_level);
+
+
+		if (f_drg) {
+			cout << "The graph is distance regular" << endl;
+			cout << "nb_layers = " << nb_layers << endl;
+			cout << "structure constants:" << endl;
+			Int_matrix_print(ABC_by_layer, nb_layers, 3);
+
+			FREE_int(ABC_by_layer);
+		}
+		else {
+			cout << "The graph is *not* distance regular" << endl;
+
+		}
+
+	}
+	else if (Descr->f_test_if_almost_distance_regular) {
+
+		if (f_v) {
+			cout << "graph_theoretic_activity::perform_activity "
+					"-test_if_almost_distance_regular" << endl;
+			cout << "graph_theoretic_activity::perform_activity "
+					"vertex = " << Descr->test_if_almost_distance_regular_vertex << endl;
+		}
+
+		int f_almost_drg;
+		int *ABC_by_layer;
+		int nb_layers;
+		int *NABC_last_layer;
+		int nb_types;
+		other::data_structures::tally_vector_data *T;
+
+		CG[0]->test_if_almost_distance_regular_assuming_vertex_transitive(
+				Descr->test_if_almost_distance_regular_vertex,
+				f_almost_drg,
+				ABC_by_layer, nb_layers,
+				NABC_last_layer, nb_types,
+				T,
+				verbose_level);
+
+		if (f_almost_drg) {
+			cout << "The graph is almost distance regular" << endl;
+			cout << "nb_layers = " << nb_layers << endl;
+			cout << "structure constants:" << endl;
+			Int_matrix_print(ABC_by_layer, nb_layers - 1, 3);
+
+			cout << "nb_types = " << nb_types << endl;
+			cout << "colored_graph::test_if_almost_distance_regular_assuming_vertex_transitive "
+					"NABC_last_layer:" << endl;
+			Int_matrix_print(NABC_last_layer, nb_types, 4);
+
+
+			FREE_int(ABC_by_layer);
+			FREE_int(NABC_last_layer);
+			FREE_OBJECTS(T);
+		}
+		else {
+			cout << "The graph is *not* almost distance regular" << endl;
+
+		}
+
+	}
 
 	if (f_v) {
 		int i;

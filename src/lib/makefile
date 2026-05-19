@@ -524,7 +524,7 @@ ORBITER_MODULES= \
 		layer4_classification/set_stabilizer/substructure_stats_and_selection.o \
 		layer4_classification/solvers_package/exact_cover.o \
 		layer4_classification/solvers_package/exact_cover_arguments.o \
-		layer5_top_level/applications_in_algebraic_geometry/cubic_surfaces_and_arcs/arc_lifting.o \
+		layer5_top_level/applications_in_algebraic_geometry/cubic_surfaces_and_arcs/arc_lifting_trihedral_pair.o \
 		layer5_top_level/applications_in_algebraic_geometry/cubic_surfaces_and_arcs/arc_orbits_on_pairs.o \
 		layer5_top_level/applications_in_algebraic_geometry/cubic_surfaces_and_arcs/arc_partition.o \
 		layer5_top_level/applications_in_algebraic_geometry/cubic_surfaces_and_arcs/classify_trihedral_pairs.o \
@@ -758,6 +758,8 @@ ORBITER_USER_INTERFACE_MODULES= \
 		layer6_user_interface/activities_layer5/translation_plane_activity.o \
 		layer6_user_interface/activities_layer5/variety_activity_description.o \
 		layer6_user_interface/activities_layer5/variety_activity.o \
+		layer6_user_interface/activities_layer5/vector_activity_description.o \
+		layer6_user_interface/activities_layer5/vector_activity.o \
 		layer6_user_interface/activities_layer5/vector_ge_activity_description.o \
 		layer6_user_interface/activities_layer5/vector_ge_activity.o \
 		layer6_user_interface/control_everything/activity_description.o \

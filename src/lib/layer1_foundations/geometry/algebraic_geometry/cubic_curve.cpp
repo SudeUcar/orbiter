@@ -96,14 +96,16 @@ void cubic_curve::init(
 
 	Poly = NEW_OBJECT(algebra::ring_theory::homogeneous_polynomial_domain);
 
-	Poly->init(F,
+	Poly->init_without_description(
+			F,
 			3 /* nb_vars */, 3 /* degree */,
 			t_PART,
 			verbose_level);
 
 	Poly2 = NEW_OBJECT(algebra::ring_theory::homogeneous_polynomial_domain);
 
-	Poly2->init(F,
+	Poly2->init_without_description(
+			F,
 			3 /* nb_vars */, 2 /* degree */,
 			t_PART,
 			verbose_level);

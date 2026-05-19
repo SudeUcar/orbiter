@@ -78,12 +78,13 @@ surface_create_description::surface_create_description()
 	family_general_abcd_c = 0;
 	family_general_abcd_d = 0;
 
-	f_arc_lifting = false;
-	//arc_lifting_text = NULL;
-	//arc_lifting_two_lines_text = NULL;
+	f_arc_lifting_with_trihedral_pair = false;
+	//arc_lifting_with_trihedral_pair_arc_text = NULL;
 
 
 	f_arc_lifting_with_two_lines = false;
+	//std::string arc_lifting_with_two_lines_arc_text;
+	//std::string arc_lifting_with_two_lines_lines_text;
 
 
 
@@ -253,20 +254,22 @@ int surface_create_description::read_arguments(
 						<< endl;
 			}
 		}
-		else if (ST.stringcmp(argv[i], "-arc_lifting") == 0) {
-			f_arc_lifting = true;
-			arc_lifting_text.assign(argv[++i]);
+		else if (ST.stringcmp(argv[i], "-arc_lifting_with_trihedral_pair") == 0) {
+			f_arc_lifting_with_trihedral_pair = true;
+			arc_lifting_with_trihedral_pair_arc_text.assign(argv[++i]);
 			if (f_v) {
-				cout << "-arc_lifting " << arc_lifting_text << endl;
+				cout << "-arc_lifting " << arc_lifting_with_trihedral_pair_arc_text << endl;
 			}
 		}
 		else if (ST.stringcmp(argv[i], "-arc_lifting_with_two_lines") == 0) {
 			f_arc_lifting_with_two_lines = true;
-			arc_lifting_text.assign(argv[++i]);
-			arc_lifting_two_lines_text.assign(argv[++i]);
+			arc_lifting_with_two_lines_arc_text.assign(argv[++i]);
+			arc_lifting_with_two_lines_lines_text.assign(argv[++i]);
 			if (f_v) {
-				cout << "-arc_lifting_with_two_lines " << arc_lifting_text
-						<< " " << arc_lifting_two_lines_text << endl;
+				cout << "-arc_lifting_with_two_lines "
+						<< arc_lifting_with_two_lines_arc_text
+						<< " " << arc_lifting_with_two_lines_lines_text
+						<< endl;
 			}
 		}
 		else if (ST.stringcmp(argv[i], "-Cayley_form") == 0) {
@@ -471,12 +474,12 @@ void surface_create_description::print()
 				<< family_general_abcd_c << " " << family_general_abcd_d
 				<< endl;
 	}
-	if (f_arc_lifting) {
-		cout << "-arc_lifting " << arc_lifting_text << endl;
+	if (f_arc_lifting_with_trihedral_pair) {
+		cout << "-arc_lifting " << 	arc_lifting_with_trihedral_pair_arc_text << endl;
 	}
 	if (f_arc_lifting_with_two_lines) {
-		cout << "-arc_lifting_with_two_lines " << arc_lifting_text
-				<< " " << arc_lifting_two_lines_text << endl;
+		cout << "-arc_lifting_with_two_lines " << arc_lifting_with_two_lines_arc_text
+				<< " " << arc_lifting_with_two_lines_lines_text << endl;
 	}
 	if (f_Cayley_form) {
 		cout << "-Cayley_form "

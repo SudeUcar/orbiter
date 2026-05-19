@@ -237,15 +237,15 @@ void blt_set_domain::create_extension_fields(
 
 	if (f_v) {
 		cout << "blt_set_domain::create_extension_fields "
-				"before Poly2->init" << endl;
+				"before Poly2->init_without_description" << endl;
 	}
-	Poly2->init(
+	Poly2->init_without_description(
 			F2, 2, max_degree,
 				t_PART,
 				verbose_level);
 	if (f_v) {
 		cout << "blt_set_domain::create_extension_fields "
-				"after Poly2->init" << endl;
+				"after Poly2->init_without_description" << endl;
 	}
 
 
@@ -266,15 +266,15 @@ void blt_set_domain::create_extension_fields(
 
 	if (f_v) {
 		cout << "blt_set_domain::create_extension_fields "
-				"before Poly3->init" << endl;
+				"before Poly3->init_without_description" << endl;
 	}
-	Poly3->init(
+	Poly3->init_without_description(
 			F3, 2, max_degree,
 				t_PART,
 				verbose_level);
 	if (f_v) {
 		cout << "blt_set_domain::create_extension_fields "
-				"after Poly3->init" << endl;
+				"after Poly3->init_without_description" << endl;
 	}
 
 

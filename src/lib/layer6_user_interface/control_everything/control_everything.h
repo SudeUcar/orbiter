@@ -145,6 +145,12 @@ public:
 	layer6_user_interface::activities_layer5::variety_activity_description
 		*Variety_activity_description;
 
+	// ToDo: not documented
+	int f_vector_activity;
+	layer6_user_interface::activities_layer5::vector_activity_description
+		*Vector_activity_description;
+
+
 	int f_vector_ge_activity;
 	layer6_user_interface::activities_layer5::vector_ge_activity_description
 		*Vector_ge_activity_description;
@@ -244,6 +250,11 @@ public:
 			other::orbiter_kernel_system::orbiter_symbol_table_entry *&Output,
 			int verbose_level);
 	void do_variety_activity(
+			int verbose_level);
+	void do_vector_activity(
+			std::vector<std::string> &with_labels,
+			int &nb_output,
+			other::orbiter_kernel_system::orbiter_symbol_table_entry *&Output,
 			int verbose_level);
 	void do_vector_ge_activity(
 			std::vector<std::string> &with_labels,

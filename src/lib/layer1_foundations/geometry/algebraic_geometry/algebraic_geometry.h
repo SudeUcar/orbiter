@@ -192,9 +192,16 @@ public:
 	~arc_lifting_with_two_lines();
 	void create_surface(
 		surface_domain *Surf,
-		long int *Arc6, long int line1, long int line2,
+		long int *Arc6, long int input_line1, long int input_line2,
 		int verbose_level);
 	// The arc must be given as points in PG(3,q), not in PG(2,q).
+	void report(
+			std::ostream &ost,
+			int verbose_level);
+	void latex_matrix(
+			int *M, int m, int n,
+			std::ostream &ost);
+
 };
 
 
@@ -1496,6 +1503,7 @@ public:
 
 	long int *Tritangent_plane_rk; // [45]
 		// list of tritangent planes in Schlaefli labeling
+	long int *Tritangent_plane_rk_sorted; // [45]
 	int nb_tritangent_planes;
 
 	long int *Lines_in_tritangent_planes;
@@ -1755,7 +1763,7 @@ public:
 	int rank_of_system(
 			int len, long int *S,
 			int verbose_level);
-	void create_system(
+	void create_system_from_lines(
 			int len, long int *S,
 			int *&System, int &nb_rows,
 			int verbose_level);
@@ -2006,7 +2014,8 @@ public:
 	other::data_structures::tally *Type_lines_on_point;
 
 
-	long int *Hesse_planes;
+	long int *Hesse_planes; // [Hesse_planes_sorted]
+	long int *Hesse_planes_sorted; // [Hesse_planes_sorted]
 	int nb_Hesse_planes;
 	int *Eckardt_point_Hesse_plane_incidence;
 		// [nb_Eckardt_points * nb_Hesse_planes]

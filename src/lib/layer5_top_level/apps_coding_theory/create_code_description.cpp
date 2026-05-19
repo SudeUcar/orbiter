@@ -161,7 +161,7 @@ int create_code_description::read_arguments(
 			}
 			if (f_v) {
 				cout << "-nonlinear_code_long " << nonlinear_code_long_n << endl;
-				for (int h = 0; h < n; h++) {
+				for (int h = 0; h < nonlinear_code_long_generators.size(); h++) {
 					cout << " " << nonlinear_code_long_generators[h] << endl;
 				}
 			}
@@ -277,7 +277,7 @@ void create_code_description::print()
 	}
 	if (f_long_code) {
 		cout << "-long_code " << long_code_n << endl;
-		for (int h = 0; h < long_code_n; h++) {
+		for (int h = 0; h < long_code_generators.size(); h++) {
 			cout << " " << long_code_generators[h] << endl;
 		}
 	}
@@ -286,7 +286,7 @@ void create_code_description::print()
 	}
 	if (f_nonlinear_code_long) {
 		cout << "-nonlinear_code_long " << nonlinear_code_long_n << endl;
-		for (int h = 0; h < nonlinear_code_long_n; h++) {
+		for (int h = 0; h < nonlinear_code_long_generators.size(); h++) {
 			cout << " " << nonlinear_code_long_generators[h] << endl;
 		}
 	}

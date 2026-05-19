@@ -14,4 +14,5 @@ ROW,C1,C2,C3
 1,"\verb'-order_of_group_Anq' "," n q "," Compute the order of the group of Lie type $A_n(q)$ "
 1,"\verb'-order_of_group_Bnq' "," n q "," Compute the order of the group of Lie type $B_n(q)$ "
 1,"\verb'-order_of_group_Dnq' "," n q "," Compute the order of the group of Lie type $D_n(q)$ "
+1,"\verb'-boolean_function_as_polynomial' "," n v "," Compute the polynomial representation of the boolean function $v$ in $n$ variables. The function refers to a vector object. The length of the vector is $2^n.$ The entries of the vector are ordered accoring to the binary representation of integers. "
 END

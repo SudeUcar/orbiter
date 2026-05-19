@@ -83,7 +83,8 @@ polynomial_function_domain::~polynomial_function_domain()
 
 void polynomial_function_domain::init(
 		algebra::field_theory::finite_field *Fq,
-		int n, int verbose_level)
+		int n,
+		int verbose_level)
 {
 	int f_v = (verbose_level >= 1);
 	geometry::other_geometry::geometry_global Gg;
@@ -189,22 +190,53 @@ void polynomial_function_domain::setup_polynomial_rings(
 	A_poly = NEW_pint(max_degree + 1);
 	B_poly = NEW_pint(max_degree + 1);
 	C_poly = NEW_pint(max_degree + 1);
+
+	long int *Nb_monomials;
+
+	Nb_monomials = NEW_lint(max_degree + 1);
+
+
 	for (degree = 1; degree <= max_degree; degree++) {
+
+
+		Nb_monomials[degree] = Poly[1].nb_monomials_expected(
+			degree, nb_vars,
+			0 /*verbose_level */);
+
+	}
+
+	if (f_v) {
+		cout << "polynomial_function_domain::setup_polynomial_rings "
+				"degree : nb_variables : nb_monomials" << endl;
+		for (degree = 1; degree <= max_degree; degree++) {
+			cout << setw(10) << degree << " : " << setw(10) << nb_vars << " : " << setw(10) << Nb_monomials[degree] << endl;
+		}
+	}
+
+	FREE_lint(Nb_monomials);
+
+
+
+	for (degree = 1; degree <= max_degree; degree++) {
+		if (f_v) {
+			cout << "polynomial_function_domain::setup_polynomial_rings "
+					"degree = " << degree << " / " << max_degree << endl;
+		}
 		if (f_v) {
 			cout << "polynomial_function_domain::setup_polynomial_rings "
 					"setting up polynomial ring of degree " << degree << endl;
 		}
 		if (f_v) {
 			cout << "polynomial_function_domain::setup_polynomial_rings "
-					"before Poly[" << degree << "].init" << endl;
+					"before Poly[" << degree << "].init_without_description" << endl;
 		}
-		Poly[degree].init(
+		Poly[degree].init_without_description(
 				Fq, nb_vars, degree,
 				t_PART,
 				verbose_level - 1);
 		if (f_v) {
 			cout << "polynomial_function_domain::setup_polynomial_rings "
-					"after Poly[degree].init" << endl;
+					"after Poly[degree].init_without_description" << endl;
 		}
 		if (f_v) {
 			cout << "polynomial_function_domain::setup_polynomial_rings "
@@ -238,8 +270,13 @@ void polynomial_function_domain::setup_polynomial_rings(
 	}
 }
 
+
+
+
 void polynomial_function_domain::compute_polynomial_representation(
 		int *func, int *coeff, int verbose_level)
+// input: func[Q]
+// output: coeff[N], where N = Poly[max_degree].get_nb_monomials()
 {
 	int f_v = (verbose_level >= 1);
 	int f_vv = false; //(verbose_level >= 2);
@@ -259,6 +296,10 @@ void polynomial_function_domain::compute_polynomial_representation(
 			cout << func[s];
 		}
 		cout << endl;
+
+		cout << "polynomial_function_domain::compute_polynomial_representation content analysis:" << endl;
+		Int_vec_content_analysis(func, Q, verbose_level);
+
 		cout << "Poly[n].nb_monomials=" << Poly[n].get_nb_monomials() << endl;
 	}
 	m1 = Fq->negate(1); // minus one
@@ -461,6 +502,10 @@ void polynomial_function_domain::compute_polynomial_representation(
 			cout << "an error has occurred in position " << h << endl;
 			exit(1);
 		}
+
+		cout << "polynomial_function_domain::compute_polynomial_representation content analysis of the equation:" << endl;
+		Int_vec_content_analysis(coeff, Poly[max_degree].get_nb_monomials(), verbose_level);
+
 		FREE_int(f);
 	}
 

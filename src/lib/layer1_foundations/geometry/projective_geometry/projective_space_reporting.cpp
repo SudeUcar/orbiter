@@ -286,19 +286,23 @@ void projective_space_reporting::report_polynomial_rings(
 
 	ost << "\\subsection*{The polynomial rings associated "
 			"with ${\\rm \\PG}(" << P->Subspaces->n << "," << P->Subspaces->F->q << ")$}" << endl;
-	Poly1->init(P->Subspaces->F,
+	Poly1->init_without_description(
+			P->Subspaces->F,
 			P->Subspaces->n + 1 /* nb_vars */, 1 /* degree */,
 			t_PART,
 			verbose_level);
-	Poly2->init(P->Subspaces->F,
+	Poly2->init_without_description(
+			P->Subspaces->F,
 			P->Subspaces->n + 1 /* nb_vars */, 2 /* degree */,
 			t_PART,
 			verbose_level);
-	Poly3->init(P->Subspaces->F,
+	Poly3->init_without_description(
+			P->Subspaces->F,
 			P->Subspaces->n + 1 /* nb_vars */, 3 /* degree */,
 			t_PART,
 			verbose_level);
-	Poly4->init(P->Subspaces->F,
+	Poly4->init_without_description(
+			P->Subspaces->F,
 			P->Subspaces->n + 1 /* nb_vars */, 4 /* degree */,
 			t_PART,
 			verbose_level);

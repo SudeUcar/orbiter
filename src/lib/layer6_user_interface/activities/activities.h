@@ -170,6 +170,12 @@ class interface_algebra {
 	int order_of_group_Dnq_q;
 
 
+
+	int f_boolean_function_as_polynomial;
+	int boolean_function_as_polynomial_nb_variables;
+	std::string boolean_function_as_polynomial_text;
+
+
 public:
 	interface_algebra();
 	~interface_algebra();
@@ -847,6 +853,13 @@ class interface_toolkit {
 	int f_draw_matrix;
 	other::graphics::draw_bitmap_control *Draw_bitmap_control;
 
+
+	int f_destring;
+	std::string destring_fname_in;
+	std::string destring_col;
+	std::string destring_fname_out;
+
+
 	int f_reformat;
 	std::string reformat_fname_in;
 	std::string reformat_fname_out;
@@ -1022,6 +1035,12 @@ public:
 			std::string *argv, int &i, int verbose_level);
 	void print();
 	void worker(
+			int verbose_level);
+	int worker1(
+			int verbose_level);
+	int worker2(
+			int verbose_level);
+	int worker3(
 			int verbose_level);
 
 };

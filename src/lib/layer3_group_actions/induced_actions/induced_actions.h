@@ -711,7 +711,7 @@ public:
 	algebra::basic_algebra::matrix_group *M;
 	algebra::field_theory::finite_field *F;
 	int low_level_point_size;
-	int degree;
+	long int degree;
 
 	// wedge product
 	int dimension; // = HPD->nb_monomials

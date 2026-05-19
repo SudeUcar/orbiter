@@ -1761,15 +1761,47 @@ void any_group::random_element(
 
 	int *Elt;
 	int *data;
+	long int rk;
+	int *the_path;
+	int *tl;
 
 	Elt = NEW_int(A1->elt_size_in_int);
 	data = NEW_int(A1->make_element_size);
+	the_path = NEW_int(A1->base_len());
+	tl = NEW_int(A1->base_len());
 
 
-	H->random_element(Elt, 0 /* verbose_level */);
+	//H->random_element(Elt, 0 /* verbose_level */);
+	H->random_element_with_documentation(
+			Elt, rk, the_path, 0 /* verbose_level */);
 
+
+	string s_path;
+	string s_tl;
+
+	s_path = Int_vec_stringify(the_path, A1->base_len());
+
+	int i;
+	for (i = 0; i < A1->base_len(); i++) {
+
+		tl[i] = A1->transversal_length_i(i);
+
+	}
+
+	s_tl = Int_vec_stringify(tl, A1->base_len());
 
 	A1->Group_element->code_for_make_element(data, Elt);
+
+	string s_perm;
+	string s_cycle_type;
+
+	int *cycles;
+	int nb_cycles;
+	int sign, ord;
+
+
+	cycles = NEW_int(A1->degree);
+
 
 	if (f_v) {
 
@@ -1798,6 +1830,22 @@ void any_group::random_element(
 		Int_vec_print(cout, perm, A1->degree);
 		cout << endl;
 
+		s_perm = Int_vec_stringify(perm, A1->degree);
+
+		A1->Group_element->cycle_type(
+				Elt,
+				cycles, nb_cycles,
+				0 /* verbose_level */);
+
+		s_cycle_type = Int_vec_stringify(cycles, nb_cycles);
+
+
+		sign = A1->Group_element->element_signum_of_permutation(
+				Elt);
+
+		ord = A1->Group_element->element_order(
+				Elt);
+
 	}
 
 	algebra::ring_theory::longinteger_object a;
@@ -1808,19 +1856,62 @@ void any_group::random_element(
 	}
 
 
+	std::string *Table;
+	int nb_rows, nb_cols;
+
+	nb_rows = 1;
+	nb_cols = 9;
+
+
+	Table = new std::string[nb_rows * nb_cols];
+
+
+	std::string options;
+
+	string s_elt, s_elt_coded;
+
+
+	s_elt = A1->Group_element->element_stringify(Elt, options);
+
+	s_elt_coded = Int_vec_stringify(data, A1->make_element_size);
+
+	Table[0 * nb_cols + 0] = std::to_string(rk);
+	Table[0 * nb_cols + 1] = "\"" + s_path + "\"";
+	Table[0 * nb_cols + 2] = "\"" + s_tl + "\"";
+	Table[0 * nb_cols + 3] = "\"" + s_elt + "\"";
+	Table[0 * nb_cols + 4] = "\"" + s_elt_coded + "\"";
+	Table[0 * nb_cols + 5] = "\"" + s_perm + "\"";
+	Table[0 * nb_cols + 6] = "\"" + s_cycle_type + "\"";
+	Table[0 * nb_cols + 7] = std::to_string(sign);
+	Table[0 * nb_cols + 8] = std::to_string(ord);
+
+
 	other::orbiter_kernel_system::file_io Fio;
 	string fname;
 
 	fname = elt_label + ".csv";
 
-	Fio.Csv_file_support->int_matrix_write_csv(
-			fname, data, 1, A->make_element_size);
+	std::string headings1;
+
+
+	headings1 = "Rk,Path,Tl,ElementLatex,ElementCoded,Perm,CycleType,Sign,Order";
+
+
+	Fio.Csv_file_support->write_table_of_strings(
+			fname,
+			nb_rows, nb_cols, Table,
+			headings1,
+			verbose_level);
+
 
 	if (f_v) {
 		cout << "Written file " << fname << " of size " << Fio.file_size(fname) << endl;
 	}
 
+	delete [] Table;
 
+	FREE_int(the_path);
+	FREE_int(tl);
 	FREE_int(Elt);
 	FREE_OBJECT(H);
 

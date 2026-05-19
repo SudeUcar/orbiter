@@ -54,6 +54,49 @@ void sims::random_element(
 	}
 }
 
+void sims::random_element_with_documentation(
+		int *elt, long int &rk, int *the_path, int verbose_level)
+// compute a random element among the group
+// elements represented by the chain
+// (chooses random cosets along the stabilizer chain)
+// the_path [A->base_len()]
+{
+	int f_v = (verbose_level >= 1);
+	int i;
+	other::orbiter_kernel_system::os_interface Os;
+
+	if (f_v) {
+		cout << "sims::random_element_with_documentation" << endl;
+		cout << "sims::random_element_with_documentation orbit_len=";
+		Int_vec_print(cout, orbit_len, A->base_len());
+		cout << endl;
+		//cout << "transversals:" << endl;
+		//print_transversals();
+	}
+	for (i = 0; i < A->base_len(); i++) {
+		path[i] = Os.random_integer(orbit_len[i]);
+	}
+
+	Int_vec_copy(path, the_path, A->base_len());
+
+	rk = path_rank_lint();
+
+	if (f_v) {
+		cout << "sims::random_element_with_documentation" << endl;
+		cout << "path=";
+		Int_vec_print(cout, path, A->base_len());
+		cout << endl;
+	}
+	element_from_path(elt, verbose_level /*- 1 */);
+
+	if (f_v) {
+		cout << "sims::random_element_with_documentation done" << endl;
+	}
+}
+
+
+
+
 void sims::random_element_of_order(
 		int *elt,
 		int order, int verbose_level)

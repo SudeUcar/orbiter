@@ -409,7 +409,8 @@ void finite_field_activity::perform_activity(
 		Algebra.algebraic_normal_form(
 				F,
 				Descr->algebraic_normal_form_n,
-				func, len, verbose_level - 2);
+				func, len,
+				verbose_level - 2);
 		if (f_v) {
 			cout << "finite_field_activity::perform_activity "
 					"after Algebra.algebraic_normal_form" << endl;
@@ -674,42 +675,25 @@ void finite_field_activity::perform_activity(
 					"f_get_primitive_polynomial" << endl;
 		}
 
-		algebra::ring_theory::unipoly_domain FX(F);
+		algebra::ring_theory::ring_theory_global R;
 
-		algebra::ring_theory::unipoly_object m;
-		algebra::ring_theory::longinteger_object rk;
+		int degree = Descr->get_primitive_polynomial_degree;
 
-		FX.create_object_by_rank(m, 0, verbose_level);
 
-		FX.get_a_primitive_polynomial(
-				m, Descr->get_primitive_polynomial_degree,
+		if (f_v) {
+			cout << "finite_field_activity::perform_activity "
+					"before R.get_a_primitive_polynomial" << endl;
+		}
+		R.get_a_primitive_polynomial(
+				F,
+				degree,
 				verbose_level);
-
-		FX.rank_longinteger(m, rk);
-
 		if (f_v) {
 			cout << "finite_field_activity::perform_activity "
-					"get_primitive_polynomial: ";
-			//cout << d << " : " << rk << " : ";
-			cout << "\"" << rk << "\", ";
-
-			string s;
-
-			s = FX.stringify_object(m);
-			//FX.print_object(m, cout);
-			cout << s << " //" << endl;
+					"after R.get_a_primitive_polynomial" << endl;
 		}
 
 
-		if (f_v) {
-			cout << "finite_field_activity::perform_activity "
-					"before FX.delete_object(m)" << endl;
-		}
-		FX.delete_object(m);
-		if (f_v) {
-			cout << "finite_field_activity::perform_activity "
-					"after FX.delete_object(m)" << endl;
-		}
 	}
 
 	else if (Descr->f_get_primitive_polynomial_in_range) {
@@ -719,45 +703,28 @@ void finite_field_activity::perform_activity(
 					"f_get_primitive_polynomial_in_range" << endl;
 		}
 
-		algebra::ring_theory::unipoly_domain FX(F);
-		int d;
 
-		for (d = Descr->get_primitive_polynomial_in_range_min;
-				d < Descr->get_primitive_polynomial_in_range_max; d++) {
-			algebra::ring_theory::unipoly_object m;
-			algebra::ring_theory::longinteger_object rk;
+		algebra::ring_theory::ring_theory_global R;
+		int degree_min, degree_max;
 
-			FX.create_object_by_rank(
-					m, 0, verbose_level);
+		degree_min = Descr->get_primitive_polynomial_in_range_min;
+		degree_max = Descr->get_primitive_polynomial_in_range_max;
 
-			FX.get_a_primitive_polynomial(
-					m, d, verbose_level);
-
-			FX.rank_longinteger(m, rk);
-
-			if (f_v) {
-				cout << "finite_field_activity::perform_activity "
-						"get_primitive_polynomial: ";
-				//cout << d << " : " << rk << " : ";
-				cout << "\"" << rk << "\",  ";
-				string s;
-
-				s = FX.stringify_object(m);
-				//FX.print_object(m, cout);
-				cout << s << " //" << endl;
-			}
-
-
-			if (f_v) {
-				cout << "finite_field_activity::perform_activity "
-						"before FX.delete_object(m)" << endl;
-			}
-			FX.delete_object(m);
-			if (f_v) {
-				cout << "finite_field_activity::perform_activity "
-						"after FX.delete_object(m)" << endl;
-			}
+		if (f_v) {
+			cout << "finite_field_activity::perform_activity "
+					"before R.get_primitive_polynomial_in_range" << endl;
 		}
+		R.get_primitive_polynomial_in_range(
+				F,
+				degree_min, degree_max,
+				verbose_level);
+		if (f_v) {
+			cout << "finite_field_activity::perform_activity "
+					"after R.get_primitive_polynomial_in_range" << endl;
+		}
+
+
+
 	}
 
 

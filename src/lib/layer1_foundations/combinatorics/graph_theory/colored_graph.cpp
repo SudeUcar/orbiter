@@ -4315,8 +4315,10 @@ void colored_graph::distance_from_vertex(
 	}
 }
 
-layer1_foundations::combinatorics::graph_theory::layered_graph *colored_graph::create_distance_poset(
+void colored_graph::create_distance_poset(
 		int given_vertex,
+		layer1_foundations::combinatorics::graph_theory::distance_information *&Distance_information,
+		layer1_foundations::combinatorics::graph_theory::layered_graph *&Layered_graph,
 		int verbose_level)
 {
 	int f_v = (verbose_level >= 1);
@@ -4328,10 +4330,18 @@ layer1_foundations::combinatorics::graph_theory::layered_graph *colored_graph::c
 
 	int *Distance;
 
+	if (f_v) {
+		cout << "colored_graph::create_distance_poset "
+				"before distance_from_vertex" << endl;
+	}
 	distance_from_vertex(
 			given_vertex,
 			Distance,
 			verbose_level - 2);
+	if (f_v) {
+		cout << "colored_graph::create_distance_poset "
+				"after distance_from_vertex" << endl;
+	}
 
 
 	if (f_v) {
@@ -4346,7 +4356,9 @@ layer1_foundations::combinatorics::graph_theory::layered_graph *colored_graph::c
 
 	Tally->init(
 			Distance,
-			nb_points, false /* f_second */, 0 /* verbose_level */);
+			nb_points,
+			false /* f_second */,
+			0 /* verbose_level */);
 
 	other::data_structures::set_of_sets *SoS;
 	int *types;
@@ -4367,7 +4379,7 @@ layer1_foundations::combinatorics::graph_theory::layered_graph *colored_graph::c
 		SoS->print();
 	}
 
-	layer1_foundations::combinatorics::graph_theory::distance_information *Distance_information;
+	//layer1_foundations::combinatorics::graph_theory::distance_information *Distance_information;
 
 	Distance_information = NEW_OBJECT(layer1_foundations::combinatorics::graph_theory::distance_information);
 
@@ -4381,7 +4393,7 @@ layer1_foundations::combinatorics::graph_theory::layered_graph *colored_graph::c
 				"after Distance_information->init_SoS" << endl;
 	}
 
-	layer1_foundations::combinatorics::graph_theory::layered_graph *Layered_graph;
+	//layer1_foundations::combinatorics::graph_theory::layered_graph *Layered_graph;
 
 
 	Layered_graph = NEW_OBJECT(layer1_foundations::combinatorics::graph_theory::layered_graph);
@@ -4394,7 +4406,8 @@ layer1_foundations::combinatorics::graph_theory::layered_graph *colored_graph::c
 				"before Layered_graph->init" << endl;
 	}
 	Layered_graph->init(
-			Distance_information->nb_layers, Distance_information->Nb_nodes, fname_base,
+			Distance_information->nb_layers,
+			Distance_information->Nb_nodes, fname_base,
 			verbose_level - 2);
 	if (f_v) {
 		cout << "colored_graph::create_distance_poset "
@@ -4411,7 +4424,9 @@ layer1_foundations::combinatorics::graph_theory::layered_graph *colored_graph::c
 			Layered_graph->L[l].Nodes[n].f_has_data1 = true;
 			Layered_graph->L[l].Nodes[n].data1 = a;
 
-			cout << "layer " << l << " node " << n << " has vertex label = " << a << endl;
+			if (false) {
+				cout << "layer " << l << " node " << n << " has vertex label = " << a << endl;
+			}
 		}
 	}
 
@@ -4444,9 +4459,13 @@ layer1_foundations::combinatorics::graph_theory::layered_graph *colored_graph::c
 				l2 = Distance_information->depth[location];
 				n2 = location - Distance_information->Fst[l2];
 
-				cout << "adding edge " << a << " - " << b << " : " << l << " " << n << " " << l2 << " " << n2 << endl;
-
-				Layered_graph->add_edge(l, n, l2, n2, 0 /* edge_color */, 0 /* verbose_level */);
+				if (false) {
+					cout << "adding edge " << a << " - " << b << " : "
+							<< l << " " << n << " " << l2 << " " << n2 << endl;
+				}
+				Layered_graph->add_edge(
+						l, n, l2, n2, 0 /* edge_color */,
+						0 /* verbose_level */);
 
 
 			}
@@ -4454,45 +4473,186 @@ layer1_foundations::combinatorics::graph_theory::layered_graph *colored_graph::c
 		}
 	}
 
-	if (f_v) {
-		cout << "colored_graph::create_distance_poset "
-				"before Layered_graph->place" << endl;
-	}
 
 
-	Layered_graph->place(0 /*verbose_level*/);
-
-	other::orbiter_kernel_system::file_io Fio;
-	std::string fname;
-
-	fname = label + "_distance_poset.layered_graph";
-
-
-	if (f_v) {
-		cout << "colored_graph::create_distance_poset "
-				"before Layered_graph->write_file" << endl;
-	}
-
-
-	Layered_graph->write_file(
-				fname, 0 /* verbose_level*/);
-
-	if (f_v) {
-		cout << "colored_graph::create_distance_poset written file "
-			<< fname << " of size " << Fio.file_size(fname) << endl;
-	}
-
-
-
+	FREE_OBJECT(Tally);
+	FREE_OBJECT(SoS);
 	FREE_int(types);
 	FREE_int(Distance);
-	FREE_OBJECT(Distance_information);
 
 	if (f_v) {
 		cout << "colored_graph::create_distance_poset done" << endl;
 	}
-	return Layered_graph;
 }
+
+
+void colored_graph::test_if_distance_regular_assuming_vertex_transitive(
+		int vertex,
+		int &f_drg,
+		int *&ABC_by_layer, int &nb_layers,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+
+	if (f_v) {
+		cout << "colored_graph::test_if_distance_regular_assuming_vertex_transitive" << endl;
+		cout << "colored_graph::test_if_distance_regular_assuming_vertex_transitive vertex = " << vertex << endl;
+	}
+
+	int given_vertex = vertex;
+
+	layer1_foundations::combinatorics::graph_theory::distance_information *Distance_information;
+	layer1_foundations::combinatorics::graph_theory::layered_graph *Layered_graph;
+
+	if (f_v) {
+		cout << "colored_graph::test_if_distance_regular_assuming_vertex_transitive "
+				"before create_distance_poset" << endl;
+	}
+	create_distance_poset(
+			given_vertex,
+			Distance_information,
+			Layered_graph,
+			verbose_level);
+	if (f_v) {
+		cout << "colored_graph::test_if_distance_regular_assuming_vertex_transitive "
+				"after create_distance_poset" << endl;
+	}
+
+
+
+
+	if (f_v) {
+		cout << "colored_graph::test_if_distance_regular_assuming_vertex_transitive "
+				"before Layered_graph->test_if_distance_regular" << endl;
+	}
+
+	f_drg = Layered_graph->test_if_distance_regular(
+			ABC_by_layer,
+			verbose_level);
+
+	if (f_v) {
+		cout << "colored_graph::test_if_distance_regular_assuming_vertex_transitive "
+				"after Layered_graph->test_if_distance_regular" << endl;
+	}
+
+	nb_layers = Layered_graph->nb_layers;
+
+	if (f_drg) {
+		cout << "colored_graph::test_if_distance_regular_assuming_vertex_transitive "
+				"The graph is distance regular" << endl;
+
+		cout << "colored_graph::test_if_distance_regular_assuming_vertex_transitive "
+				"nb_layers = " << Layered_graph->nb_layers << endl;
+		cout << "colored_graph::test_if_distance_regular_assuming_vertex_transitive "
+				"ABC_by_layer:" << endl;
+		Int_matrix_print(ABC_by_layer, Layered_graph->nb_layers, 3);
+
+	}
+	else {
+		cout << "colored_graph::test_if_distance_regular_assuming_vertex_transitive "
+				"The graph is *not* distance regular" << endl;
+	}
+	//cout << "f_drg = " << f_drg << endl;
+
+	FREE_OBJECT(Layered_graph);
+	FREE_OBJECT(Distance_information);
+
+	if (f_v) {
+		cout << "colored_graph::test_if_distance_regular_assuming_vertex_transitive" << endl;
+	}
+
+}
+
+
+
+
+void colored_graph::test_if_almost_distance_regular_assuming_vertex_transitive(
+		int vertex,
+		int &f_almost_drg,
+		int *&ABC_by_layer, int &nb_layers,
+		int *&NABC_last_layer, int &nb_types,
+		other::data_structures::tally_vector_data *&T,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+
+	if (f_v) {
+		cout << "colored_graph::test_if_almost_distance_regular_assuming_vertex_transitive" << endl;
+		cout << "colored_graph::test_if_almost_distance_regular_assuming_vertex_transitive vertex = " << vertex << endl;
+	}
+
+	int given_vertex = vertex;
+
+	layer1_foundations::combinatorics::graph_theory::distance_information *Distance_information;
+	layer1_foundations::combinatorics::graph_theory::layered_graph *Layered_graph;
+
+	if (f_v) {
+		cout << "colored_graph::test_if_almost_distance_regular_assuming_vertex_transitive "
+				"before create_distance_poset" << endl;
+	}
+	create_distance_poset(
+			given_vertex,
+			Distance_information,
+			Layered_graph,
+			verbose_level);
+	if (f_v) {
+		cout << "colored_graph::test_if_almost_distance_regular_assuming_vertex_transitive "
+				"after create_distance_poset" << endl;
+	}
+
+
+
+
+	if (f_v) {
+		cout << "colored_graph::test_if_almost_distance_regular_assuming_vertex_transitive "
+				"before Layered_graph->test_if_almost_distance_regular" << endl;
+	}
+
+	f_almost_drg = Layered_graph->test_if_almost_distance_regular(
+			ABC_by_layer, nb_layers,
+			NABC_last_layer, nb_types,
+			T,
+			verbose_level);
+
+	if (f_v) {
+		cout << "colored_graph::test_if_almost_distance_regular_assuming_vertex_transitive "
+				"after Layered_graph->test_if_almost_distance_regular" << endl;
+	}
+
+	nb_layers = Layered_graph->nb_layers;
+
+	if (f_almost_drg) {
+		cout << "colored_graph::test_if_almost_distance_regular_assuming_vertex_transitive "
+				"The graph is almost distance regular" << endl;
+
+		cout << "colored_graph::test_if_almost_distance_regular_assuming_vertex_transitive "
+				"nb_layers = " << Layered_graph->nb_layers << endl;
+		cout << "colored_graph::test_if_almost_distance_regular_assuming_vertex_transitive "
+				"ABC_by_layer:" << endl;
+		Int_matrix_print(ABC_by_layer, Layered_graph->nb_layers - 1, 3);
+		cout << "colored_graph::test_if_almost_distance_regular_assuming_vertex_transitive "
+				"NABC_last_layer:" << endl;
+		Int_matrix_print(NABC_last_layer, nb_types, 4);
+
+	}
+	else {
+		cout << "colored_graph::test_if_almost_distance_regular_assuming_vertex_transitive "
+				"The graph is *not* almost distance regular" << endl;
+	}
+	//cout << "f_drg = " << f_drg << endl;
+
+	FREE_OBJECT(Layered_graph);
+	FREE_OBJECT(Distance_information);
+
+	if (f_v) {
+		cout << "colored_graph::test_if_almost_distance_regular_assuming_vertex_transitive" << endl;
+	}
+
+}
+
+
 
 
 

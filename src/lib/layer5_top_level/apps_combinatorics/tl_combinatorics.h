@@ -644,6 +644,13 @@ public:
 	int f_sporadic;
 	std::string sporadic_name;
 
+
+	// ToDo undocumented:
+	int f_from_blocks;
+	int from_blocks_v;
+	std::string from_blocks_label;
+
+
 	int f_from_incidence_matrix;
 	std::string from_incidence_matrix_label;
 

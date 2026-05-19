@@ -35,6 +35,9 @@ classification_of_objects_description::classification_of_objects_description()
 
 	f_save_transversal = false;
 
+	f_filter_ago_at_least = false;
+	filter_ago_at_least_value = 0;
+
 	f_nauty_control = false;
 	Nauty_control = NULL;
 	//f_save_nauty_input_graphs = false;
@@ -103,6 +106,14 @@ int classification_of_objects_description::read_arguments(
 				cout << "-save_transversal " << endl;
 			}
 		}
+		else if (ST.stringcmp(argv[i], "-filter_ago_at_least") == 0) {
+			f_filter_ago_at_least = true;
+			filter_ago_at_least_value = ST.strtoi(argv[++i]);
+			if (f_v) {
+				cout << "-filter_ago_at_least " << filter_ago_at_least_value << endl;
+			}
+		}
+
 		else if (ST.stringcmp(argv[i], "-nauty_control") == 0) {
 
 			if (f_v) {
@@ -179,6 +190,9 @@ void classification_of_objects_description::print()
 
 	if (f_save_transversal) {
 		cout << "-save_transversal " << endl;
+	}
+	if (f_filter_ago_at_least) {
+		cout << "-filter_ago_at_least " << filter_ago_at_least_value << endl;
 	}
 	if (f_nauty_control) {
 		cout << "-nauty_control " << endl;

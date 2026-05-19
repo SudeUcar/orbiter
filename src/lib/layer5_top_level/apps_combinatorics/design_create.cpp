@@ -186,6 +186,28 @@ void design_create::init(
 
 	}
 
+	else if (Descr->f_from_blocks) {
+		if (f_v) {
+			cout << "design_create::init "
+					"-from_blocks " << Descr->from_blocks_label << endl;
+		}
+
+		if (f_v) {
+			cout << "design_create::init "
+					"before Design_object->make_design_from_blocks" << endl;
+		}
+		Design_object->make_design_from_blocks(
+				Descr->from_blocks_v,
+				Descr->from_blocks_label,
+				verbose_level - 1);
+		if (f_v) {
+			cout << "design_create::init "
+					"after Design_object->make_design_from_blocks" << endl;
+		}
+
+
+	}
+
 	else if (Descr->f_from_incidence_matrix) {
 		if (f_v) {
 			cout << "design_create::init "

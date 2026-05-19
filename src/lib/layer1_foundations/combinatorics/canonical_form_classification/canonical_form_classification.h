@@ -300,6 +300,9 @@ public:
 
 	int f_save_transversal;
 
+	int f_filter_ago_at_least;
+	long int filter_ago_at_least_value;
+
 	// nauty related stuff:
 
 	int f_nauty_control;
@@ -902,6 +905,9 @@ public:
 			int verbose_level);
 	// the objects will be stored in Objects,
 	// which is an array of pointers to any_combinatorial_object
+	void filter_objects(
+			long int *Index_of_objects, int nb_objects,
+			int verbose_level);
 
 
 };

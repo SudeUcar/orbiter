@@ -114,6 +114,8 @@ namespace orbiter {
 			class translation_plane_activity;
 			class variety_activity_description;
 			class variety_activity;
+			class vector_activity_description;
+			class vector_activity;
 			class vector_ge_activity_description;
 			class vector_ge_activity;
 

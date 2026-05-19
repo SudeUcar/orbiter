@@ -1117,6 +1117,10 @@ namespace other {
 #define Int_vec_heapsort(v, len) other::orbiter_kernel_system::Orbiter->Int_vec->heapsort(v, len)
 #define Lint_vec_heapsort(v, len) other::orbiter_kernel_system::Orbiter->Lint_vec->heapsort(v, len)
 
+
+#define Int_vec_content_analysis(v, len, verbose_level) other::orbiter_kernel_system::Orbiter->Int_vec->content_analysis(v, len, verbose_level)
+#define Int_vec_content(v, len, SoS, types, nb_types, verbose_level) other::orbiter_kernel_system::Orbiter->Int_vec->content(v, len, SoS, types, nb_types, verbose_level)
+
 #define Get_vector(A) other::orbiter_kernel_system::Orbiter->get_object_of_type_vector(A)
 #define Has_text(A) other::orbiter_kernel_system::Orbiter->is_text_available(A)
 #define Get_text(A) other::orbiter_kernel_system::Orbiter->get_text(A)

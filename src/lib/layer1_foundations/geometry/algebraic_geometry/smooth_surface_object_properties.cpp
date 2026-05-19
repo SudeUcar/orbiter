@@ -33,6 +33,7 @@ smooth_surface_object_properties::smooth_surface_object_properties()
 	SO = NULL;
 
 	Tritangent_plane_rk = NULL;
+	Tritangent_plane_rk_sorted = NULL;
 	nb_tritangent_planes = 0;
 
 	Lines_in_tritangent_planes = NULL;
@@ -51,6 +52,9 @@ smooth_surface_object_properties::~smooth_surface_object_properties()
 	Record_death();
 	if (Tritangent_plane_rk) {
 		FREE_lint(Tritangent_plane_rk);
+	}
+	if (Tritangent_plane_rk_sorted) {
+		FREE_lint(Tritangent_plane_rk_sorted);
 	}
 
 
@@ -217,6 +221,12 @@ void smooth_surface_object_properties::compute_tritangent_planes_by_rank(
 					<< Tritangent_plane_rk[tritangent_plane_idx] << endl;
 		}
 	}
+
+	Tritangent_plane_rk_sorted = NEW_lint(nb_tritangent_planes);
+	Lint_vec_copy(Tritangent_plane_rk, Tritangent_plane_rk_sorted, nb_tritangent_planes);
+	Lint_vec_heapsort(Tritangent_plane_rk_sorted, nb_tritangent_planes);
+
+
 	if (f_v) {
 		cout << "smooth_surface_object_properties::compute_tritangent_planes_by_rank done" << endl;
 	}
@@ -364,6 +374,40 @@ void smooth_surface_object_properties::print_tritangent_planes(
 
 	//ost << "\\clearpage" << endl;
 	ost << "\\subsection*{Tritangent planes}" << endl;
+
+
+	ost << "The number of tritangent planes is " << nb_tritangent_planes << "\\\\" << endl;
+
+
+	//long int *Rk_sorted;
+
+	//Rk_sorted = NEW_lint(nb_tritangent_planes);
+
+	//Lint_vec_copy(Tritangent_plane_rk, Rk_sorted, nb_tritangent_planes);
+	//Lint_vec_heapsort(Rk_sorted, nb_tritangent_planes);
+
+
+	if (Tritangent_plane_rk_sorted) {
+		ost << "The tritangent planes in Orbiter ranks sorted:\\\\" << endl;
+
+		Lint_vec_print(ost, Tritangent_plane_rk_sorted, nb_tritangent_planes);
+		ost << "\\\\" << endl;
+	}
+	else {
+		ost << "The sorted vector of tritangent planes has not been computed.\\\\" << endl;
+
+	}
+
+	ost << "The tritangent planes in Orbiter ranks in the Schlaefli ordering are:\\\\" << endl;
+
+	Lint_vec_print(ost, Tritangent_plane_rk, nb_tritangent_planes);
+	ost << "\\\\" << endl;
+
+
+
+
+	//FREE_lint(Rk_sorted);
+
 	ost << "The " << nb_tritangent_planes << " tritangent "
 			"planes are:\\\\" << endl;
 	for (i = 0; i < nb_tritangent_planes; i++) {

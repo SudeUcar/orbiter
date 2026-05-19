@@ -4107,16 +4107,16 @@ void ring_theory_global::do_export_partials(
 
 	if (f_v) {
 		cout << "ring_theory_global::do_export_partials "
-				"before Poly_reduced_degree->init" << endl;
+				"before Poly_reduced_degree->init_without_description" << endl;
 	}
-	Poly_reduced_degree->init(
+	Poly_reduced_degree->init_without_description(
 			Poly->get_F(),
 			Poly->nb_variables, Poly->degree - 1,
 			Poly->Monomial_ordering_type,
 			0 /*verbose_level*/);
 	if (f_v) {
 		cout << "ring_theory_global::do_export_partials "
-				"after Poly_reduced_degree->init" << endl;
+				"after Poly_reduced_degree->init_without_description" << endl;
 	}
 
 	if (f_v) {
@@ -4180,6 +4180,455 @@ void ring_theory_global::multiply_int_matrices(
 		cout << "ring_theory_global::multiply_int_matrices done" << endl;
 	}
 }
+
+void ring_theory_global::create_system_from_lines(
+		geometry::projective_geometry::projective_space *P,
+		algebra::ring_theory::homogeneous_polynomial_domain *Poly_ring,
+		int len, long int *S,
+		int *&System, int &nb_rows,
+		int verbose_level)
+{
+	//verbose_level = 1;
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_lines" << endl;
+	}
+
+	int n;
+
+	n = P->Subspaces->n + 1;
+
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_lines len = " << len << endl;
+		cout << "ring_theory_global::create_system_from_lines n = " << n << endl;
+	}
+
+	vector<long int> Pts;
+
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_lines "
+				"before P->Subspaces->points_covered_by_lines" << endl;
+	}
+	P->Subspaces->points_covered_by_lines(
+			S, len,
+			Pts,
+			verbose_level - 2);
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_lines "
+				"after P->Subspaces->points_covered_by_lines" << endl;
+	}
+
+
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_lines list of "
+				"covered points by lines has been created" << endl;
+	}
+
+	int *Pt_coords;
+
+	nb_rows = Pts.size();
+
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_lines "
+				"nb_rows = " << nb_rows << endl;
+		cout << "ring_theory_global::create_system_from_lines "
+				"n = " << n << endl;
+	}
+	Pt_coords = NEW_int(nb_rows * n);
+	int i;
+
+	for (i = 0; i < nb_rows; i++) {
+		P->unrank_point(Pt_coords + i * n, Pts[i]);
+		//unrank_point(Pt_coords + i * n, Pts[i]);
+	}
+
+	if (f_v && false) {
+		cout << "ring_theory_global::create_system_from_lines list of "
+				"covered points in coordinates:" << endl;
+		Int_matrix_print(Pt_coords, nb_rows, n);
+	}
+
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_lines "
+				"nb_rows = " << nb_rows << endl;
+	}
+
+
+	int nb_cols;
+
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_lines "
+				"before Poly_ring->make_system" << endl;
+	}
+	Poly_ring->make_system(
+			Pt_coords, nb_rows,
+			System, nb_cols,
+			verbose_level - 2);
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_lines "
+				"after Poly_ring->make_system" << endl;
+	}
+
+
+	FREE_int(Pt_coords);
+
+
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_lines "
+				"The system has been created" << endl;
+	}
+	if (f_v && false) {
+		cout << "ring_theory_global::create_system_from_lines "
+				"The system:" << endl;
+		Int_matrix_print(System, nb_rows, Poly_ring->get_nb_monomials());
+	}
+
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_lines done" << endl;
+	}
+}
+
+
+
+void ring_theory_global::create_system_from_points(
+		geometry::projective_geometry::projective_space *P,
+		algebra::ring_theory::homogeneous_polynomial_domain *Poly_ring,
+		int nb_pts, long int *Pts,
+		int *&System, int &nb_rows,
+		int verbose_level)
+{
+	//verbose_level = 1;
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_points" << endl;
+	}
+
+	int n;
+
+	n = P->Subspaces->n + 1;
+
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_points nb_pts = " << nb_pts << endl;
+		cout << "ring_theory_global::create_system_from_points n = " << n << endl;
+	}
+
+
+
+
+	int *Pt_coords;
+
+	nb_rows = nb_pts;
+
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_points "
+				"nb_rows = " << nb_rows << endl;
+		cout << "ring_theory_global::create_system_from_points "
+				"n = " << n << endl;
+	}
+	Pt_coords = NEW_int(nb_rows * n);
+	int i;
+
+	for (i = 0; i < nb_rows; i++) {
+		P->unrank_point(Pt_coords + i * n, Pts[i]);
+	}
+
+	if (f_v && false) {
+		cout << "ring_theory_global::create_system_from_points list of "
+				"covered points in coordinates:" << endl;
+		Int_matrix_print(Pt_coords, nb_rows, n);
+	}
+
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_points "
+				"nb_rows = " << nb_rows << endl;
+	}
+
+
+	int nb_cols;
+
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_points "
+				"before Poly_ring->make_system" << endl;
+	}
+	Poly_ring->make_system(
+			Pt_coords, nb_rows,
+			System, nb_cols,
+			verbose_level - 2);
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_points "
+				"after Poly_ring->make_system" << endl;
+	}
+
+
+	FREE_int(Pt_coords);
+
+
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_points "
+				"The system has been created" << endl;
+	}
+	if (f_v && false) {
+		cout << "ring_theory_global::create_system_from_points "
+				"The system:" << endl;
+		Int_matrix_print(System, nb_rows, Poly_ring->get_nb_monomials());
+	}
+
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_points done" << endl;
+	}
+}
+
+
+
+
+int ring_theory_global::rank_of_system(
+		geometry::projective_geometry::projective_space *P,
+		algebra::ring_theory::homogeneous_polynomial_domain *Poly_ring,
+		int len, long int *S,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+	int *System;
+	int nb_rows;
+	int r;
+
+	if (f_v) {
+		cout << "ring_theory_global::rank_of_system" << endl;
+	}
+
+	if (f_v) {
+		cout << "ring_theory_global::rank_of_system "
+				"before create_system_from_lines" << endl;
+	}
+	create_system_from_lines(
+			P, Poly_ring, len, S, System, nb_rows,
+			verbose_level - 2);
+	if (f_v) {
+		cout << "ring_theory_global::rank_of_system "
+				"after create_system_from_lines" << endl;
+	}
+
+
+	int *base_cols;
+
+	base_cols = NEW_int(Poly_ring->get_nb_monomials());
+
+	r = P->Subspaces->F->Linear_algebra->Gauss_simple(
+			System,
+			nb_rows, Poly_ring->get_nb_monomials(),
+			base_cols,
+			0 /* verbose_level */);
+
+	if (f_v) {
+		cout << "ring_theory_global::rank_of_system "
+				"rank of system is " << r << endl;
+	}
+
+	FREE_int(base_cols);
+	FREE_int(System);
+
+	if (f_v) {
+		cout << "ring_theory_global::rank_of_system done" << endl;
+	}
+
+	return r;
+}
+
+
+
+int ring_theory_global::system_based_on_points_solve(
+		geometry::projective_geometry::projective_space *P,
+		algebra::ring_theory::homogeneous_polynomial_domain *Poly_ring,
+		int len, long int *Pts,
+		int &kernel_m, int &kernel_n, int *&kernel,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+	int *System;
+	int nb_rows;
+	int r;
+
+	if (f_v) {
+		cout << "ring_theory_global::system_based_on_points_solve" << endl;
+	}
+
+	if (f_v) {
+		cout << "ring_theory_global::system_based_on_points_solve "
+				"before create_system_from_points" << endl;
+	}
+	create_system_from_points(
+			P, Poly_ring, len, Pts, System, nb_rows,
+			verbose_level - 2);
+	if (f_v) {
+		cout << "ring_theory_global::system_based_on_points_solve "
+				"after create_system_from_points" << endl;
+	}
+
+
+	int *base_cols;
+
+	base_cols = NEW_int(Poly_ring->get_nb_monomials());
+
+	r = P->Subspaces->F->Linear_algebra->Gauss_simple(
+			System,
+			nb_rows, Poly_ring->get_nb_monomials(),
+			base_cols,
+			0 /* verbose_level */);
+
+	if (f_v) {
+		cout << "ring_theory_global::system_based_on_points_solve "
+				"rank of system is " << r << endl;
+	}
+
+
+	if (f_v) {
+		cout << "ring_theory_global::system_based_on_points_solve "
+				"before P->Subspaces->F->matrix_get_kernel" << endl;
+	}
+	P->Subspaces->F->Linear_algebra->matrix_get_kernel(
+			System,
+			r, Poly_ring->get_nb_monomials(), base_cols, r,
+		kernel_m, kernel_n, kernel,
+		0 /* verbose_level */);
+
+	// the kernel is written as columns,
+	// ie, kernel_m = Poly_ring->get_nb_monomials()
+	if (f_v) {
+		cout << "ring_theory_global::system_based_on_points_solve "
+				"after P->Subspaces->F->matrix_get_kernel" << endl;
+	}
+	if (f_v) {
+		cout << "ring_theory_global::system_based_on_points_solve "
+				"kernel = ";
+		Int_matrix_print(kernel, kernel_m, kernel_n);
+		cout << endl;
+	}
+
+
+
+	FREE_int(base_cols);
+	FREE_int(System);
+
+	if (f_v) {
+		cout << "ring_theory_global::system_based_on_points_solve done" << endl;
+	}
+
+	return r;
+}
+
+
+
+void ring_theory_global::get_a_primitive_polynomial(
+		algebra::field_theory::finite_field *F,
+		int degree,
+		int verbose_level)
+{
+	//verbose_level = 1;
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "ring_theory_global::get_a_primitive_polynomial" << endl;
+	}
+
+	algebra::ring_theory::unipoly_domain FX(F);
+
+	algebra::ring_theory::unipoly_object m;
+	algebra::ring_theory::longinteger_object rk;
+
+	FX.create_object_by_rank(m, 0, verbose_level);
+
+	FX.get_a_primitive_polynomial(
+			m,
+			degree,
+			verbose_level);
+
+	FX.rank_longinteger(m, rk);
+
+	if (f_v) {
+		cout << "ring_theory_global::get_a_primitive_polynomial "
+				"get_a_primitive_polynomial ";
+		//cout << d << " : " << rk << " : ";
+		cout << "\"" << rk << "\", ";
+
+		string s;
+
+		s = FX.stringify_object(m);
+		//FX.print_object(m, cout);
+		cout << s << " //" << endl;
+	}
+
+
+	if (f_v) {
+		cout << "ring_theory_global::get_a_primitive_polynomial "
+				"before FX.delete_object(m)" << endl;
+	}
+	FX.delete_object(m);
+	if (f_v) {
+		cout << "ring_theory_global::get_a_primitive_polynomial "
+				"after FX.delete_object(m)" << endl;
+	}
+
+	if (f_v) {
+		cout << "ring_theory_global::get_a_primitive_polynomial done" << endl;
+	}
+
+
+}
+
+void ring_theory_global::get_primitive_polynomial_in_range(
+		algebra::field_theory::finite_field *F,
+		int degree_min, int degree_max,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "ring_theory_global::get_primitive_polynomial_in_range" << endl;
+	}
+
+	algebra::ring_theory::unipoly_domain FX(F);
+	int d;
+
+	for (d = degree_min;
+			d < degree_max; d++) {
+		algebra::ring_theory::unipoly_object m;
+		algebra::ring_theory::longinteger_object rk;
+
+		FX.create_object_by_rank(
+				m, 0, verbose_level);
+
+		FX.get_a_primitive_polynomial(
+				m, d, verbose_level);
+
+		FX.rank_longinteger(m, rk);
+
+		if (f_v) {
+			cout << "ring_theory_global::get_primitive_polynomial_in_range "
+					"get_primitive_polynomial: ";
+			//cout << d << " : " << rk << " : ";
+			cout << "\"" << rk << "\",  ";
+			string s;
+
+			s = FX.stringify_object(m);
+			//FX.print_object(m, cout);
+			cout << s << " //" << endl;
+		}
+
+
+		if (f_v) {
+			cout << "ring_theory_global::get_primitive_polynomial_in_range "
+					"before FX.delete_object(m)" << endl;
+		}
+		FX.delete_object(m);
+		if (f_v) {
+			cout << "ring_theory_global::get_primitive_polynomial_in_range "
+					"after FX.delete_object(m)" << endl;
+		}
+	}
+}
+
 
 }}}}
 

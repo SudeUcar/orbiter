@@ -162,6 +162,8 @@ public:
 	int schreier_vector_determine_depth_recursion(
 		int n, int *pts, int *prev, int f_use_pts_inv,
 		int *pts_inv, int *depth, int *ancestor, int pos);
+	int Hamming_weight(
+			long int a);
 
 };
 
@@ -1034,6 +1036,13 @@ public:
 			int *v, int len);
 	void heapsort(
 			int *v, int len);
+	void content_analysis(
+			int *v, int len, int verbose_level);
+	void content(
+			int *v, int len,
+			other::data_structures::set_of_sets *&SoS,
+			int *&types, int &nb_types,
+			int verbose_level);
 
 };
 

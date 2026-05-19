@@ -140,7 +140,7 @@ trihedral_pair_with_action::~trihedral_pair_with_action()
 }
 
 void trihedral_pair_with_action::init(
-		arc_lifting *AL, int verbose_level)
+		arc_lifting_trihedral_pair *AL, int verbose_level)
 {
 	int f_v = (verbose_level >= 1);
 

@@ -1443,6 +1443,85 @@ void int_vec::heapsort(
 
 }
 
+void int_vec::content_analysis(
+		int *v, int len,
+		int verbose_level)
+{
+
+	other::data_structures::tally T;
+
+	T.init(v,
+			len, false /* f_second */,
+			0 /* verbose_level*/);
+
+	cout << "int_vec::content_analysis "
+			"place values of the given function:" << endl;
+	T.print(true /* f_backwards*/);
+
+	other::data_structures::set_of_sets *SoS;
+
+	int *types;
+	int nb_types;
+
+	SoS = T.get_set_partition_and_types(
+			types, nb_types, verbose_level);
+
+	SoS->sort_all(
+			0 /*verbose_level*/);
+	int i;
+
+	for (i = 0; i < nb_types; i++) {
+		cout << i << " : " << types[i] << " : " << SoS->Set_size[i] << " : ";
+		Lint_vec_print(cout, SoS->Sets[i], SoS->Set_size[i]);
+		cout << endl;
+	}
+
+	FREE_OBJECT(SoS);
+	FREE_int(types);
+
+}
+
+void int_vec::content(
+		int *v, int len,
+		other::data_structures::set_of_sets *&SoS,
+		int *&types, int &nb_types,
+		int verbose_level)
+{
+
+	other::data_structures::tally T;
+
+	T.init(v,
+			len, false /* f_second */,
+			0 /* verbose_level*/);
+
+	cout << "int_vec::content_analysis "
+			"place values of the given function:" << endl;
+	T.print(true /* f_backwards*/);
+
+	//other::data_structures::set_of_sets *SoS;
+
+	//int *types;
+	//int nb_types;
+
+	SoS = T.get_set_partition_and_types(
+			types, nb_types, verbose_level);
+
+	SoS->sort_all(
+			0 /*verbose_level*/);
+	int i;
+
+	for (i = 0; i < nb_types; i++) {
+		cout << i << " : " << types[i] << " : " << SoS->Set_size[i] << " : ";
+		Lint_vec_print(cout, SoS->Sets[i], SoS->Set_size[i]);
+		cout << endl;
+	}
+
+	//FREE_OBJECT(SoS);
+	//FREE_int(types);
+
+}
+
+
 
 }}}}
 

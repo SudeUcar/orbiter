@@ -1,4 +1,4 @@
-// arc_lifting.cpp
+// arc_lifting_trihedral_pair.cpp
 // 
 // Anton Betten, Fatma Karaoglu
 //
@@ -19,7 +19,7 @@ namespace applications_in_algebraic_geometry {
 namespace cubic_surfaces_and_arcs {
 
 
-arc_lifting::arc_lifting()
+arc_lifting_trihedral_pair::arc_lifting_trihedral_pair()
 {
 	Record_birth();
 	q = 0;
@@ -39,7 +39,7 @@ arc_lifting::arc_lifting()
 
 }
 
-arc_lifting::~arc_lifting()
+arc_lifting_trihedral_pair::~arc_lifting_trihedral_pair()
 {
 	Record_death();
 	if (the_equation) {
@@ -54,21 +54,21 @@ arc_lifting::~arc_lifting()
 }
 
 
-void arc_lifting::create_surface_and_group(
+void arc_lifting_trihedral_pair::create_surface_and_group(
 		applications_in_algebraic_geometry::cubic_surfaces_in_general::surface_with_action *Surf_A,
 	long int *Arc6, int verbose_level)
 {
 	int f_v = (verbose_level >= 1);
 
 	if (f_v) {
-		cout << "arc_lifting::create_surface_and_group" << endl;
+		cout << "arc_lifting_trihedral_pair::create_surface_and_group" << endl;
 	}
 
 
 
-	arc_lifting::arc = Arc6;
-	arc_lifting::arc_size = 6;
-	arc_lifting::Surf_A = Surf_A;
+	arc_lifting_trihedral_pair::arc = Arc6;
+	arc_lifting_trihedral_pair::arc_size = 6;
+	arc_lifting_trihedral_pair::Surf_A = Surf_A;
 	Surf = Surf_A->Surf;
 	F = Surf->F;
 	q = F->q;
@@ -76,7 +76,7 @@ void arc_lifting::create_surface_and_group(
 
 
 	if (f_v) {
-		cout << "arc_lifting::create_surface_and_group "
+		cout << "arc_lifting_trihedral_pair::create_surface_and_group "
 				"before create_web_of_cubic_curves" << endl;
 	}
 	create_web_of_cubic_curves(verbose_level - 2);
@@ -107,13 +107,13 @@ void arc_lifting::create_surface_and_group(
 }
 
 
-void arc_lifting::create_web_of_cubic_curves(
+void arc_lifting_trihedral_pair::create_web_of_cubic_curves(
 		int verbose_level)
 {
 	int f_v = (verbose_level >= 1);
 	
 	if (f_v) {
-		cout << "arc_lifting::create_web_of_cubic_curves" << endl;
+		cout << "arc_lifting_trihedral_pair::create_web_of_cubic_curves" << endl;
 	}
 
 
@@ -123,11 +123,11 @@ void arc_lifting::create_web_of_cubic_curves(
 	Web = NEW_OBJECT(geometry::algebraic_geometry::web_of_cubic_curves);
 
 	if (f_v) {
-		cout << "arc_lifting::create_web_of_cubic_curves before Web->init" << endl;
+		cout << "arc_lifting_trihedral_pair::create_web_of_cubic_curves before Web->init" << endl;
 	}
 	Web->init(Surf, arc, verbose_level);
 	if (f_v) {
-		cout << "arc_lifting::create_web_of_cubic_curves after Web->init" << endl;
+		cout << "arc_lifting_trihedral_pair::create_web_of_cubic_curves after Web->init" << endl;
 	}
 
 
@@ -135,50 +135,55 @@ void arc_lifting::create_web_of_cubic_curves(
 
 
 	if (f_v) {
-		cout << "arc_lifting::create_web_of_cubic_curves done" << endl;
+		cout << "arc_lifting_trihedral_pair::create_web_of_cubic_curves done" << endl;
 	}
 }
 
 
 
 
-void arc_lifting::report(
+void arc_lifting_trihedral_pair::report(
 		std::ostream &ost, int verbose_level)
 {
 	int f_v = (verbose_level >= 1);
 
 	if (f_v) {
-		cout << "arc_lifting::report" << endl;
+		cout << "arc_lifting_trihedral_pair::report" << endl;
 	}
 
 
 	if (f_v) {
-		cout << "arc_lifting::report before Web->report" << endl;
+		cout << "arc_lifting_trihedral_pair::report "
+				"before Web->report" << endl;
 	}
 	Web->report(ost, verbose_level);
 	if (f_v) {
-		cout << "arc_lifting::report after Web->report" << endl;
+		cout << "arc_lifting_trihedral_pair::report "
+				"after Web->report" << endl;
 	}
 
 	if (f_v) {
-		cout << "arc_lifting::report before Trihedral_pair->report" << endl;
+		cout << "arc_lifting_trihedral_pair::report "
+				"before Trihedral_pair->report" << endl;
 	}
 	Trihedral_pair->report(ost, verbose_level);
 	if (f_v) {
-		cout << "arc_lifting::report after Trihedral_pair->report" << endl;
+		cout << "arc_lifting::report "
+				"after Trihedral_pair->report" << endl;
 	}
 
 
 	if (f_v) {
-		cout << "arc_lifting::report done" << endl;
+		cout << "arc_lifting_trihedral_pair::report done" << endl;
 	}
 }
 
 
-void arc_lifting::report_equation(
+void arc_lifting_trihedral_pair::report_equation(
 		std::ostream &ost)
 {
-	Surf_A->Surf->PolynomialDomains->print_equation_in_trihedral_form(ost,
+	Surf_A->Surf->PolynomialDomains->print_equation_in_trihedral_form(
+			ost,
 				Trihedral_pair->The_six_plane_equations,
 				Trihedral_pair->lambda,
 				the_equation);

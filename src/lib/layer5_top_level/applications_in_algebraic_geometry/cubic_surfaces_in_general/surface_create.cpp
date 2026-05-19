@@ -45,6 +45,8 @@ surface_create::surface_create()
 	nice_gens = NULL;
 
 	SOG = NULL;
+
+	AL = NULL;
 }
 
 
@@ -75,6 +77,9 @@ surface_create::~surface_create()
 	}
 	if (SOG) {
 		FREE_OBJECT(SOG);
+	}
+	if (AL) {
+		FREE_OBJECT(AL);
 	}
 }
 
@@ -543,20 +548,20 @@ int surface_create::create_surface_from_description(
 
 
 	}
-	else if (Descr->f_arc_lifting) {
+	else if (Descr->f_arc_lifting_with_trihedral_pair) {
 
 		if (f_v) {
 			cout << "surface_create::create_surface_from_description "
-					"before create_surface_by_arc_lifting" << endl;
+					"before create_surface_by_arc_lifting_with_trihedral_pairs" << endl;
 		}
 
-		create_surface_by_arc_lifting(
-				Descr->arc_lifting_text,
+		create_surface_by_arc_lifting_with_trihedral_pairs(
+				Descr->arc_lifting_with_trihedral_pair_arc_text,
 				verbose_level - 2);
 
 		if (f_v) {
 			cout << "surface_create::create_surface_from_description "
-					"after create_surface_by_arc_lifting" << endl;
+					"after create_surface_by_arc_lifting_with_trihedral_pairs" << endl;
 		}
 
 
@@ -569,8 +574,8 @@ int surface_create::create_surface_from_description(
 		}
 
 		create_surface_by_arc_lifting_with_two_lines(
-				Descr->arc_lifting_text,
-				Descr->arc_lifting_two_lines_text,
+				Descr->arc_lifting_with_two_lines_arc_text,
+				Descr->arc_lifting_with_two_lines_lines_text,
 				verbose_level - 2);
 
 		if (f_v) {
@@ -1330,23 +1335,23 @@ void surface_create::create_surface_from_catalogue(
 	}
 }
 
-void surface_create::create_surface_by_arc_lifting(
-		std::string &arc_lifting_text,
+void surface_create::create_surface_by_arc_lifting_with_trihedral_pairs(
+		std::string &arc_text,
 		int verbose_level)
 {
 	int f_v = (verbose_level >= 1);
 
 	if (f_v) {
-		cout << "surface_create::create_surface_by_arc_lifting" << endl;
+		cout << "surface_create::create_surface_by_arc_lifting_with_trihedral_pairs" << endl;
 	}
 
 	long int *arc;
 	int arc_size;
 
-	Lint_vec_scan(Descr->arc_lifting_text, arc, arc_size);
+	Lint_vec_scan(arc_text, arc, arc_size);
 
 	if (arc_size != 6) {
-		cout << "surface_create::create_surface_by_arc_lifting "
+		cout << "surface_create::create_surface_by_arc_lifting_with_trihedral_pairs "
 				"arc_size != 6" << endl;
 		exit(1);
 	}
@@ -1366,33 +1371,33 @@ void surface_create::create_surface_by_arc_lifting(
 #if 1
 	// classifying the trihedral pairs is expensive:
 	if (f_v) {
-		cout << "surface_create::create_surface_by_arc_lifting "
+		cout << "surface_create::create_surface_by_arc_lifting_with_trihedral_pairs "
 				"before Surf_A->Classify_trihedral_pairs->classify" << endl;
 	}
 	Surf_A->Classify_trihedral_pairs->classify(
 			Control1, Control2,
 			0 /*verbose_level*/);
 	if (f_v) {
-		cout << "surface_create::create_surface_by_arc_lifting "
+		cout << "surface_create::create_surface_by_arc_lifting_with_trihedral_pairs "
 				"after Surf_A->Classify_trihedral_pairs->classify" << endl;
 	}
 #endif
 
 
-	cubic_surfaces_and_arcs::arc_lifting *AL;
+	cubic_surfaces_and_arcs::arc_lifting_trihedral_pair *AL;
 	int coeffs20[20];
 	long int Lines27[27];
 
-	AL = NEW_OBJECT(cubic_surfaces_and_arcs::arc_lifting);
+	AL = NEW_OBJECT(cubic_surfaces_and_arcs::arc_lifting_trihedral_pair);
 
 
 	if (f_v) {
-		cout << "surface_create::create_surface_by_arc_lifting before "
+		cout << "surface_create::create_surface_by_arc_lifting_with_trihedral_pairs before "
 				"AL->create_surface" << endl;
 	}
 	AL->create_surface_and_group(Surf_A, arc, verbose_level - 2);
 	if (f_v) {
-		cout << "surface_create::create_surface_by_arc_lifting after "
+		cout << "surface_create::create_surface_by_arc_lifting_with_trihedral_pairs after "
 				"AL->create_surface" << endl;
 	}
 
@@ -1428,7 +1433,7 @@ void surface_create::create_surface_by_arc_lifting(
 	SO = NEW_OBJECT(geometry::algebraic_geometry::surface_object);
 
 	if (f_v) {
-		cout << "surface_create::create_surface_by_arc_lifting "
+		cout << "surface_create::create_surface_by_arc_lifting_with_trihedral_pairs "
 				"before SO->init_with_27_lines" << endl;
 	}
 	SO->init_with_27_lines(
@@ -1438,7 +1443,7 @@ void surface_create::create_surface_by_arc_lifting(
 			false /* f_find_double_six_and_rearrange_lines */,
 			verbose_level - 2);
 	if (f_v) {
-		cout << "surface_create::create_surface_by_arc_lifting "
+		cout << "surface_create::create_surface_by_arc_lifting_with_trihedral_pairs "
 				"after SO->init_with_27_lines" << endl;
 	}
 
@@ -1455,13 +1460,13 @@ void surface_create::create_surface_by_arc_lifting(
 
 	FREE_lint(arc);
 	if (f_v) {
-		cout << "surface_create::create_surface_by_arc_lifting done" << endl;
+		cout << "surface_create::create_surface_by_arc_lifting_with_trihedral_pairs done" << endl;
 	}
 }
 
 void surface_create::create_surface_by_arc_lifting_with_two_lines(
-		std::string &arc_lifting_text,
-		std::string &arc_lifting_two_lines_text,
+		std::string &arc_text,
+		std::string &two_lines_text,
 		int verbose_level)
 {
 	int f_v = (verbose_level >= 1);
@@ -1479,7 +1484,7 @@ void surface_create::create_surface_by_arc_lifting_with_two_lines(
 	long int line1, line2;
 	long int *lines;
 
-	Lint_vec_scan(arc_lifting_text, arc, arc_size);
+	Lint_vec_scan(arc_text, arc, arc_size);
 
 	if (arc_size != 6) {
 		cout << "surface_create::create_surface_by_arc_lifting_with_two_lines "
@@ -1487,7 +1492,7 @@ void surface_create::create_surface_by_arc_lifting_with_two_lines(
 		exit(1);
 	}
 
-	Lint_vec_scan(arc_lifting_two_lines_text, lines, lines_size);
+	Lint_vec_scan(two_lines_text, lines, lines_size);
 
 	if (lines_size != 2) {
 		cout << "surface_create::init lines_size != 2" << endl;
@@ -1507,7 +1512,7 @@ void surface_create::create_surface_by_arc_lifting_with_two_lines(
 		cout << endl;
 	}
 
-	geometry::algebraic_geometry::arc_lifting_with_two_lines *AL;
+	//geometry::algebraic_geometry::arc_lifting_with_two_lines *AL;
 	int coeffs20[20];
 	long int Lines27[27];
 
@@ -1525,8 +1530,17 @@ void surface_create::create_surface_by_arc_lifting_with_two_lines(
 				"AL->create_surface" << endl;
 	}
 
+
 	Int_vec_copy(AL->coeff, coeffs20, 20);
 	Lint_vec_copy(AL->lines27, Lines27, 27);
+
+
+	if (f_v) {
+		cout << "surface_create::create_surface_by_arc_lifting_with_two_lines after "
+				"coeffs20=";
+		Int_vec_print(cout, coeffs20, 20);
+		cout << endl;
+	}
 
 
 	string label_txt, label_tex;
@@ -1575,7 +1589,7 @@ void surface_create::create_surface_by_arc_lifting_with_two_lines(
 
 	f_has_group = false;
 
-	FREE_OBJECT(AL);
+	//FREE_OBJECT(AL);
 
 
 	FREE_lint(arc);
@@ -3088,6 +3102,19 @@ void surface_create::do_report(
 			}
 
 
+			if (f_v) {
+				cout << "surface_create::do_report "
+						"before do_report_creation" << endl;
+			}
+			do_report_creation(
+					ost, Draw_options, verbose_level - 2);
+			if (f_v) {
+				cout << "surface_create::do_report "
+						"after do_report_creation" << endl;
+			}
+
+
+
 			L.foot(ost);
 		}
 		other::orbiter_kernel_system::file_io Fio;
@@ -3276,6 +3303,478 @@ void surface_create::do_report2(
 }
 
 
+void surface_create::do_report_creation(
+		std::ostream &ost,
+		other::graphics::draw_options *Draw_options,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "surface_create::do_report_creation" << endl;
+	}
+
+
+	if (Descr->f_family_Eckardt) {
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before create_Eckardt_surface" << endl;
+		}
+
+#if 0
+		create_Eckardt_surface(
+				Descr->family_Eckardt_a,
+				Descr->family_Eckardt_b,
+				verbose_level - 2);
+#endif
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after create_Eckardt_surface" << endl;
+		}
+	}
+	else if (Descr->f_family_G13) {
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before create_surface_G13" << endl;
+		}
+
+#if 0
+		create_surface_G13(
+				Descr->family_G13_a,
+				verbose_level - 2);
+#endif
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after create_surface_G13" << endl;
+		}
+
+	}
+
+	else if (Descr->f_family_F13) {
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before create_surface_F13" << endl;
+		}
+
+#if 0
+		create_surface_F13(
+				Descr->family_F13_a,
+				verbose_level - 2);
+#endif
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after create_surface_F13" << endl;
+		}
+
+	}
+
+
+	else if (Descr->f_family_bes) {
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before create_surface_bes" << endl;
+		}
+
+#if 0
+		create_surface_bes(
+				Descr->family_bes_a,
+				Descr->family_bes_c,
+				verbose_level - 2);
+#endif
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after create_surface_bes" << endl;
+		}
+
+
+	}
+
+
+	else if (Descr->f_family_general_abcd) {
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before create_surface_general_abcd" << endl;
+		}
+
+#if 0
+		create_surface_general_abcd(
+				Descr->family_general_abcd_a,
+				Descr->family_general_abcd_b,
+				Descr->family_general_abcd_c,
+				Descr->family_general_abcd_d,
+				verbose_level - 2);
+#endif
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after create_surface_general_abcd" << endl;
+		}
+
+	}
+
+
+
+	else if (Descr->f_by_coefficients) {
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before create_surface_by_coefficients" << endl;
+		}
+
+#if 0
+		create_surface_by_coefficients(
+				Descr->coefficients_text,
+				Descr->select_double_six_string,
+				verbose_level - 2);
+#endif
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after create_surface_by_coefficients" << endl;
+		}
+
+
+	}
+
+	else if (Descr->f_by_rank) {
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before create_surface_by_rank" << endl;
+		}
+
+
+#if 0
+		create_surface_by_rank(
+				Descr->rank_text,
+				Descr->rank_defining_q,
+				Descr->select_double_six_string,
+				verbose_level - 2);
+#endif
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after create_surface_by_rank" << endl;
+		}
+
+	}
+
+	else if (Descr->f_catalogue) {
+
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before create_surface_from_catalogue" << endl;
+		}
+
+#if 0
+		create_surface_from_catalogue(
+				Descr->iso,
+				Descr->select_double_six_string,
+				verbose_level - 2);
+#endif
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after create_surface_from_catalogue" << endl;
+		}
+
+
+
+	}
+	else if (Descr->f_arc_lifting_with_trihedral_pair) {
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before create_surface_by_arc_lifting" << endl;
+		}
+
+#if 0
+		create_surface_by_arc_lifting(
+				Descr->arc_lifting_text,
+				verbose_level - 2);
+#endif
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after create_surface_by_arc_lifting" << endl;
+		}
+
+
+	}
+	else if (Descr->f_arc_lifting_with_two_lines) {
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before AL->report" << endl;
+		}
+
+		AL->report(
+				ost,
+				verbose_level);
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after AL->report" << endl;
+		}
+
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before SO->SOP->print_equation" << endl;
+		}
+		SO->SOP->print_equation(ost);
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after SO->SOP->print_equation" << endl;
+		}
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before print_summary" << endl;
+		}
+		SO->SOP->print_summary(ost);
+
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before print_lines" << endl;
+		}
+		SO->SOP->print_lines(ost);
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before print_points" << endl;
+		}
+		SO->SOP->print_points(ost);
+
+		cout << "surface_create::do_report_creation "
+				"before print_Eckardt_points" << endl;
+		SO->SOP->print_Eckardt_points(ost);
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"print_Hesse_planes" << endl;
+		}
+		SO->SOP->print_Hesse_planes(ost);
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"print_axes" << endl;
+		}
+		SO->SOP->print_axes(ost);
+
+		if (SO->SOP->SmoothProperties) {
+
+			if (f_v) {
+				cout << "surface_create::do_report_creation "
+						"SO->SOP->SmoothProperties->print_tritangent_planes" << endl;
+			}
+			SO->SOP->SmoothProperties->print_tritangent_planes(ost);
+		}
+		else {
+			if (f_v) {
+				cout << "surface_create::do_report_creation "
+						"SO->SOP->SmoothProperties does not exist" << endl;
+			}
+
+		}
+
+	}
+	else if (Descr->f_Cayley_form) {
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before create_surface_Cayley_form" << endl;
+		}
+
+
+#if 0
+		create_surface_Cayley_form(
+				Descr->Cayley_form_k,
+				Descr->Cayley_form_l,
+				Descr->Cayley_form_m,
+				Descr->Cayley_form_n,
+				verbose_level - 2);
+#endif
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after create_surface_Cayley_form" << endl;
+		}
+
+	}
+	else if (Descr->f_Pentahedral_form) {
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before create_surface_Pentahedral_form" << endl;
+		}
+
+#if 0
+		int *param25;
+		int len;
+
+		Int_vec_scan(Descr->Pentahedral_form_params25_text, param25, len);
+
+		if (len != 25) {
+			cout << "surface_create::do_report_creation "
+					"number of parameters must be 25" << endl;
+		}
+
+		create_surface_Pentahedral_form(
+				param25,
+				verbose_level - 1);
+#endif
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after create_surface_Pentahedral_form" << endl;
+		}
+
+	}
+
+	else if (Descr->f_by_equation) {
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before create_surface_by_equation" << endl;
+		}
+
+#if 0
+		int f_has_managed_variables;
+
+		if (Descr->equation_managed_variables.length()) {
+			f_has_managed_variables = true;
+		}
+		else {
+			f_has_managed_variables = false;
+		}
+		create_surface_by_equation(
+				Descr->equation_ring_label,
+				Descr->equation_name_of_formula,
+				Descr->equation_name_of_formula_tex,
+				f_has_managed_variables,
+				Descr->equation_managed_variables,
+				Descr->equation_text,
+				Descr->equation_parameters,
+				Descr->equation_parameters_tex,
+				Descr->equation_parameter_values,
+				Descr->select_double_six_string,
+				verbose_level - 2);
+#endif
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after create_surface_by_equation" << endl;
+		}
+	}
+	else if (Descr->f_by_symbolic_object) {
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before create_surface_by_equation" << endl;
+		}
+
+#if 0
+
+		if (!create_surface_by_symbolic_object(
+				Descr->by_symbolic_object_ring_label,
+				Descr->by_symbolic_object_name_of_formula,
+				Descr->select_double_six_string,
+				verbose_level - 2)) {
+			if (f_v) {
+				cout << "surface_create::do_report_creation "
+						"cannot create surface" << endl;
+			}
+			return false;
+		}
+#endif
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after create_surface_by_equation" << endl;
+		}
+	}
+
+
+	else if (Descr->f_by_double_six) {
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before create_surface_by_double_six" << endl;
+		}
+
+#if 0
+		create_surface_by_double_six(
+				Descr->by_double_six_label,
+				Descr->by_double_six_label_tex,
+				Descr->by_double_six_text,
+				verbose_level - 2);
+#endif
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after create_surface_by_double_six" << endl;
+		}
+	}
+
+	else if (Descr->f_by_skew_hexagon) {
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before create_surface_by_skew_hexagon" << endl;
+		}
+#if 0
+		create_surface_by_skew_hexagon(
+				Descr->by_skew_hexagon_label,
+				Descr->by_skew_hexagon_label_tex,
+				verbose_level - 2);
+#endif
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after create_surface_by_skew_hexagon" << endl;
+		}
+	}
+	else if (Descr->f_random) {
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"f_random" << endl;
+		}
+
+#if 0
+		int eqn20[20];
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"before create_surface_at_random" << endl;
+		}
+		create_surface_at_random(eqn20, verbose_level - 2);
+
+		if (f_v) {
+			cout << "surface_create::do_report_creation "
+					"after create_surface_at_random" << endl;
+		}
+
+		cout << "We created a cubic surface with 27 lines at random. "
+				"The equation is:" << endl;
+		Int_vec_print(cout, eqn20, 20);
+		cout << endl;
+#endif
+
+	}
+
+	else {
+		cout << "surface_create::do_report_creation we do not "
+				"recognize the type of surface" << endl;
+		exit(1);
+	}
+
+
+}
 void surface_create::do_report_group_elements2(
 		std::ostream &ost,
 		std::string &fname_csv, std::string &col_heading,
@@ -3621,6 +4120,366 @@ void surface_create::export_all_quartic_curves(
 	}
 }
 
+#if 0
+void surface_create::report_arc_lifting_with_two_lines(
+		std::ostream &ost,
+		int verbose_level)
+// line1 = b1
+// line2 = b2
+// and Arc6 is the six-arc arising as image of
+// the half double-six a1, a2, a3, a4, a5, a6
+// The arc must be given as points in PG(3,q), not in PG(2,q).
+// The partition is missing.
+{
+	int f_v = (verbose_level >= 1);
+
+#if 0
+	int f_vv = (verbose_level >= 2);
+	int q;
+	int base_cols[4];
+	int Basis[16];
+	int Transversals[4 * 8];
+	int rk;
+	geometry::algebraic_geometry::algebraic_geometry_global Gg;
+#endif
+
+	if (f_v) {
+		cout << "surface_create::report_arc_lifting_with_two_lines" << endl;
+	}
+
+	ost << endl;
+	ost << "\\subsection*{Arc Lifting with 2 Lines}" << endl;
+	ost << endl;
+
+	int i, j;
+	long int Pi;
+	int v[4];
+
+	for (i = 0; i < 6; i++) {
+
+		ost << "$";
+
+		Pi = AL->Arc6[i];
+
+		SO->Surf->unrank_point(v, Pi);
+
+		ost << i << " : ";
+		ost << "P_{" << i << "}=";
+
+
+
+		ost << "P_{" << Pi << "}=";
+		ost << "\\bP(";
+		//int_vec_print_fully(ost, v, 4);
+		for (j = 0; j < 4; j++) {
+			SO->F->Io->print_element(ost, v[j]);
+			if (j < 4 - 1) {
+				ost << ", ";
+			}
+		}
+		ost << ")";
+		ost << " = \\bP(";
+		for (j = 0; j < 4; j++) {
+			ost << v[j];
+			if (j < 4 - 1) {
+				ost << ", ";
+			}
+		}
+		ost << ")";
+
+
+
+		ost << "$\\\\" << endl;
+
+	}
+
+#if 0
+	long int *Arc6;
+	int arc_size; // = 6
+
+	long int line1, line2;
+
+	long int plane_rk;
+
+	int *Arc_coords; // [6 * 4]
+
+	long int P[6];
+
+	long int transversal_01;
+	long int transversal_23;
+	long int transversal_45;
+
+	long int transversal[4];
+
+	long int input_Lines[9];
+
+	int coeff[20];
+	long int lines27[27];
+#endif
+
+
+
+	ost << "The rearranged arc is:\\\\" << endl;
+
+	for (i = 0; i < 6; i++) {
+
+		ost << "$";
+
+		Pi = AL->P[i];
+
+		SO->Surf->unrank_point(v, Pi);
+
+		ost << i << " : ";
+		ost << "P_{" << i << "}=";
+
+
+
+		ost << "P_{" << Pi << "}=";
+		ost << "\\bP(";
+		//int_vec_print_fully(ost, v, 4);
+		for (j = 0; j < 4; j++) {
+			SO->F->Io->print_element(ost, v[j]);
+			if (j < 4 - 1) {
+				ost << ", ";
+			}
+		}
+		ost << ")";
+		ost << " = \\bP(";
+		for (j = 0; j < 4; j++) {
+			ost << v[j];
+			if (j < 4 - 1) {
+				ost << ", ";
+			}
+		}
+		ost << ")";
+
+
+
+		ost << "$\\\\" << endl;
+
+	}
+
+
+	int Basis[8];
+	int Basis_plane[12];
+
+
+	ost << "Line 1 has Orbiter rank $" << AL->line1 << "$ \\\\" << endl;
+
+	Surf->unrank_line(Basis, AL->line1);
+	latex_matrix(Basis, 2, 4, ost);
+
+
+
+	ost << "Line 2 has Orbiter rank $" << AL->line2 << "$ \\\\" << endl;
+
+	Surf->unrank_line(Basis, AL->line2);
+	latex_matrix(Basis, 2, 4, ost);
+
+	ost << "The plane has Orbiter rank $" << AL->plane_rk << "$ \\\\" << endl;
+	Surf->unrank_line(Basis_plane, AL->plane_rk);
+	latex_matrix(Basis_plane, 3, 4, ost);
+
+
+
+	ost << "transversal 01 has Orbiter rank $" << AL->transversal_01 << "$ \\\\" << endl;
+
+	Surf->unrank_line(Basis, AL->transversal_01);
+	latex_matrix(Basis, 2, 4, ost);
+
+
+	ost << "transversal 23 has Orbiter rank $" << AL->transversal_23 << "$ \\\\" << endl;
+
+	Surf->unrank_line(Basis, AL->transversal_23);
+	latex_matrix(Basis, 2, 4, ost);
+
+	ost << "transversal 45 has Orbiter rank $" << AL->transversal_45 << "$ \\\\" << endl;
+
+	Surf->unrank_line(Basis, AL->transversal_45);
+	latex_matrix(Basis, 2, 4, ost);
+
+
+	for (i = 0; i < 4; i++) {
+
+		ost << "transversal " << i << " has Orbiter rank $" << AL->transversal[i] << "$ \\\\" << endl;
+
+		Surf->unrank_line(Basis, AL->transversal[i]);
+		latex_matrix(Basis, 2, 4, ost);
+
+	}
+
+	ost << "The 9 lines in the starter configuration are: \\\\" << endl;
+
+
+	for (i = 0; i < 9; i++) {
+
+		ost << "line " << i << " has Orbiter rank $" << AL->input_Lines[i] << "$ \\\\" << endl;
+
+		Surf->unrank_line(Basis, AL->input_Lines[i]);
+		latex_matrix(Basis, 2, 4, ost);
+
+	}
+
+
+	int n;
+
+	n = Surf->P->Subspaces->n + 1;
+
+	if (f_v) {
+		cout << "surface_create::report_arc_lifting_with_two_lines n = " << n << endl;
+	}
+
+	vector<long int> Pts;
+
+	if (f_v) {
+		cout << "surface_create::report_arc_lifting_with_two_lines "
+				"before Surf->P->Subspaces->points_covered_by_lines" << endl;
+	}
+	Surf->P->Subspaces->points_covered_by_lines(
+			AL->input_Lines, 9 /*len*/,
+			Pts,
+			verbose_level - 2);
+	if (f_v) {
+		cout << "surface_create::report_arc_lifting_with_two_lines "
+				"after Surf->P->Subspaces->points_covered_by_lines" << endl;
+	}
+
+
+	if (f_v) {
+		cout << "surface_create::report_arc_lifting_with_two_lines list of "
+				"covered points by lines has been created" << endl;
+	}
+
+	int *Pt_coords;
+
+	int nb_pts;
+	nb_pts = Pts.size();
+
+	if (f_v) {
+		cout << "ring_theory_global::create_system_from_lines "
+				"nb_pts = " << nb_pts << endl;
+		cout << "ring_theory_global::create_system_from_lines "
+				"n = " << n << endl;
+	}
+	Pt_coords = NEW_int(nb_pts * n);
+	//int i;
+
+	for (i = 0; i < nb_pts; i++) {
+		Surf->P->unrank_point(Pt_coords + i * n, Pts[i]);
+		//unrank_point(Pt_coords + i * n, Pts[i]);
+	}
+
+
+	ost << "The number of points on the nine lines is " << nb_pts << "\\\\" << endl;
+	for (i = 0; i < nb_pts; i++) {
+		ost << i << " : " << Pts[i] << " : ";
+		Int_vec_print(ost, Pt_coords + i * n, n);
+		ost << "\\\\" << endl;
+	}
+
+
+	int *System;
+	int *System2;
+	int nb_rows, nb_cols;
+
+
+	if (f_v) {
+		cout << "surface_create::report_arc_lifting_with_two_lines "
+				"before create_system_from_lines" << endl;
+	}
+	Surf->create_system_from_lines(
+			9 /*len*/, AL->input_Lines, System, nb_rows,
+			verbose_level - 2);
+	if (f_v) {
+		cout << "surface_create::report_arc_lifting_with_two_lines "
+				"after create_system_from_lines" << endl;
+	}
+
+
+	nb_cols = Surf->PolynomialDomains->Poly3_4->get_nb_monomials();
+
+	ost << "The system forcing the cubic surface to pass through all 9 lines is: \\\\" << endl;
+
+	latex_matrix(System, nb_rows, nb_cols, ost);
+
+
+	System2 = NEW_int(nb_rows * nb_cols);
+
+	Int_vec_copy(System, System2, nb_rows * nb_cols);
+
+	int base_cols[20];
+	int r;
+
+	r = F->Linear_algebra->Gauss_simple(
+			System2,
+			nb_rows, nb_cols,
+		base_cols, 0 /* verbose_level */);
+
+	ost << "The rank of the system is " << r << "\\\\" << endl;
+	ost << "The rref is: \\\\" << endl;
+
+	latex_matrix(System2, r, nb_cols, ost);
+
+	ost << "The base columns are";
+	Int_vec_print(ost, base_cols, r);
+	ost << " \\\\" << endl;
+
+
+	int kernel_m, kernel_n;
+	int *kernel;
+
+	kernel = NEW_int(nb_cols * nb_cols);
+
+	if (f_v) {
+		cout << "surface_create::report_arc_lifting_with_two_lines "
+				"before F->matrix_get_kernel" << endl;
+	}
+	F->Linear_algebra->matrix_get_kernel(
+			System,
+			r, nb_cols, base_cols, r,
+		kernel_m, kernel_n, kernel,
+		0 /* verbose_level */);
+	if (f_v) {
+		cout << "surface_create::report_arc_lifting_with_two_lines "
+				"after F->matrix_get_kernel" << endl;
+	}
+	if (f_v) {
+		cout << "surface_create::report_arc_lifting_with_two_lines "
+				"Nullspace = ";
+		Int_vec_print(cout, kernel, nb_cols);
+		cout << endl;
+	}
+
+
+	ost << "The nullspace is generated by\\\\" << endl;
+	latex_matrix(kernel, kernel_m, kernel_n, ost);
+
+	FREE_int(Pt_coords);
+	FREE_int(System);
+	FREE_int(System2);
+	FREE_int(kernel);
+
+	if (f_v) {
+		cout << "surface_create::report_arc_lifting_with_two_lines done" << endl;
+	}
+}
+
+void surface_create::latex_matrix(
+		int *M, int m, int n,
+		std::ostream &ost)
+{
+	other::l1_interfaces::latex_interface Li;
+
+	ost << "$=";
+	ost << "\\left[" << endl;
+	Li.int_matrix_print_tex(
+			ost,
+			M, m, n);
+	ost << "\\right]" << endl;
+	ost << "$\\\\" << endl;
+
+}
+#endif
 
 }}}}
 

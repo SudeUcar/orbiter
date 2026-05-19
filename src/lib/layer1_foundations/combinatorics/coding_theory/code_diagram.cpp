@@ -134,10 +134,14 @@ void code_diagram::place_codewords(
 	int h, i, j;
 
 	for (h = 0; h < N; h++) {
+
 		place_binary(h, i, j);
+
 		Place_values[i * nb_cols + j] = h;
+
 		//M2[i * nb_cols + j] = 1;
 	}
+
 	if (f_v) {
 		cout << "code_diagram::place_codewords placing position values done" << endl;
 	}
@@ -146,7 +150,9 @@ void code_diagram::place_codewords(
 	if (f_v) {
 		cout << "code_diagram::place_codewords placing codewords" << endl;
 	}
+
 	Int_vec_zero(Index_of_codeword, nb_rows * nb_cols);
+
 	for (h = 0; h < nb_words; h++) {
 
 		convert_to_binary(n, Words[h], v);
@@ -162,7 +168,9 @@ void code_diagram::place_codewords(
 		place_binary(Words[h], i, j);
 
 		Index_of_codeword[i * nb_cols + j] = h + 1;
+
 		Characteristic_function[i * nb_cols + j] = 1;
+
 		Distance_H[i * nb_cols + j] = 0; // distance is zero
 
 #if 0
@@ -176,7 +184,8 @@ void code_diagram::place_codewords(
 
 	}
 	if (f_v) {
-		cout << "code_diagram::place_codewords placing codewords done" << endl;
+		cout << "code_diagram::place_codewords "
+				"placing codewords done" << endl;
 		//Int_matrix_print(Index_of_codeword, nb_rows, nb_cols);
 	}
 
@@ -271,22 +280,35 @@ void code_diagram::compute_distances(
 	for (d = 0; d < n; d++) {
 		if (f_v) {
 			cout << "code_diagram::compute_distances "
-					"computing words of distance " << d + 1 << " from the code" << endl;
+					"computing words of distance "
+					<< d + 1 << " from the code" << endl;
 		}
 		for (h = 0; h < nb_rows * nb_cols; h++) {
+
 			if (Distance_H[h] == d) {
+
 				Dist_from_code_enumerator[d]++;
+
 				i = h / nb_cols;
 				j = h % nb_cols;
+
 				convert_to_binary(n, h, v);
+					// v[] is the codeword as a vector
+
 				for (s = 0; s < n; s++) {
+
 					original_value = v[s];
+
 					v[s] = (v[s] + 1) % 2;
+
 					place_binary(v, n, i, j);
+
 					a = i * nb_cols + j;
+
 					if (Distance_H[a] > d + 1) {
 						Distance_H[a] = d + 1;
 					}
+
 					v[s] = original_value;
 				}
 			}

@@ -529,7 +529,8 @@ void number_theoretic_transform::init(
 
 	Hom = NEW_OBJECT(ring_theory::homogeneous_polynomial_domain);
 
-	Hom->init(F, 2, N[k] - 1, t_LEX, verbose_level);
+	Hom->init_without_description(
+			F, 2, N[k] - 1, t_LEX, verbose_level);
 	if (Hom->get_nb_monomials() != N[k]) {
 		cout << "Hom->get_nb_monomials() != N[k]" << endl;
 		exit(1);

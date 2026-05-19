@@ -686,6 +686,25 @@ int formula::is_homogeneous(
 	return true;
 }
 
+
+int formula::get_degree(
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "formula::get_degree" << endl;
+	}
+
+	degree = tree->degree(verbose_level - 3);
+
+	if (f_v) {
+		cout << "formula::get_degree done, degree = " << degree << endl;
+	}
+	return degree;
+}
+
+
 void formula::get_subtrees(
 		ring_theory::homogeneous_polynomial_domain *Poly,
 		syntax_tree_node **&Subtrees, int &nb_monomials,
@@ -896,7 +915,8 @@ void formula::print_easy(
 
 		Poly = NEW_OBJECT(ring_theory::homogeneous_polynomial_domain);
 
-		Poly->init(Fq, nb_managed_vars, degree,
+		Poly->init_without_description(
+				Fq, nb_managed_vars, degree,
 				Monomial_ordering_type,
 				0 /*verbose_level*/);
 
