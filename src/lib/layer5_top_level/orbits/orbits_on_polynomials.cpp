@@ -1188,7 +1188,7 @@ void orbits_on_polynomials::create_vector_of_strings_detailed(
 
 		s_singular_points = Lint_vec_stl_stringify(V->Singular_points);
 
-		v[10] = "\"" + s_lines + "\"";
+		v[10] = "\"" + s_singular_points + "\"";
 
 
 		FREE_OBJECT(V);
