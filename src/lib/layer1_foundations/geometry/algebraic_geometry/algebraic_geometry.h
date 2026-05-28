@@ -2624,6 +2624,15 @@ public:
 			int verbose_level);
 	void enumerate_points(
 			int verbose_level);
+	void enumerate_points_as_vector(
+			std::vector<long int> &Points,
+			int verbose_level);
+
+#if 0
+	void enumerate_points_and_lines(
+			int verbose_level);
+#endif
+
 	void enumerate_lines(
 			int verbose_level);
 	void set_lines(

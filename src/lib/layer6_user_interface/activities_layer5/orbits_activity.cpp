@@ -628,7 +628,7 @@ void orbits_activity::do_export(
 
 		OC->Orb->export_something(
 				Descr->export_something_what,
-				Descr->export_something_data1, fname,
+				Descr->export_something_extra, fname,
 				verbose_level);
 
 		if (f_v) {
@@ -649,7 +649,7 @@ void orbits_activity::do_export(
 
 		OC->On_subsets->export_something_worker(
 				Descr->export_something_what,
-				Descr->export_something_data1, fname,
+				Descr->export_something_extra, fname,
 				verbose_level);
 
 	}
@@ -693,7 +693,8 @@ void orbits_activity::do_export(
 
 		OC->On_polynomials->export_something(
 				Descr->export_something_what,
-				Descr->export_something_data1, fname,
+				Descr->export_something_extra,
+				fname,
 				verbose_level);
 
 		if (f_v) {
@@ -719,7 +720,7 @@ void orbits_activity::do_export(
 
 		OC->Of_One_polynomial->export_something(
 				Descr->export_something_what,
-				Descr->export_something_data1, fname,
+				Descr->export_something_extra, fname,
 				verbose_level);
 
 		if (f_v) {

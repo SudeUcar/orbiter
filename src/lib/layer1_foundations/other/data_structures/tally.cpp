@@ -521,6 +521,45 @@ void tally::print_bare(
 	}
 }
 
+void tally::print_ago_sum_latex()
+{
+	int i, f, l, a;
+
+	cout << "\\left( ";
+	for (i = nb_types - 1; i >= 0; i--) {
+		f = type_first[i];
+		l = type_len[i];
+		a = data_sorted[f];
+		cout << "\\frac{" << l << "}{" << a << "}";
+		if (i) {
+			cout << " + ";
+		}
+	}
+	cout << " \\right)";
+	cout << endl;
+
+}
+
+void tally::print_ago_sum()
+{
+	int i, f, l, a;
+
+
+	cout << "( ";
+	for (i = nb_types - 1; i >= 0; i--) {
+		f = type_first[i];
+		l = type_len[i];
+		a = data_sorted[f];
+		cout << " " << l << " / " << a << " ";
+		if (i) {
+			cout << " + ";
+		}
+	}
+	cout << " )";
+	cout << endl;
+
+}
+
 std::string tally::stringify_bare(
 		int f_backwards)
 {

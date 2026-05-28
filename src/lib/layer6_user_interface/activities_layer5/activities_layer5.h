@@ -1756,7 +1756,7 @@ public:
 
 	int f_export_something;
 	std::string export_something_what;
-	int export_something_data1;
+	std::string export_something_extra; // used to be data1
 
 	int f_export_trees;
 

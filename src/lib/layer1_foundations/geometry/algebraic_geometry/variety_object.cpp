@@ -884,7 +884,178 @@ void variety_object::enumerate_points(
 }
 
 
+void variety_object::enumerate_points_as_vector(
+		std::vector<long int> &Points,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
 
+	if (f_v) {
+		cout << "variety_object::enumerate_points_as_vector" << endl;
+	}
+
+	long int *Pts;
+	int nb_pts;
+
+	if (f_v) {
+		cout << "variety_object::enumerate_points_as_vector before "
+				"Ring->enumerate_points" << endl;
+	}
+	Ring->enumerate_points_lint(
+			eqn, Pts, nb_pts,
+			0/*verbose_level - 1*/);
+
+	if (f_v) {
+		cout << "variety_object::enumerate_points_as_vector after "
+				"Ring->enumerate_points" << endl;
+	}
+
+
+	int i;
+
+	for (i = 0; i < nb_pts; i++) {
+		Points.push_back(Pts[i]);
+	}
+
+	FREE_lint(Pts);
+
+
+	if (f_v) {
+		cout << "variety_object::enumerate_points_as_vector done" << endl;
+	}
+}
+
+
+
+#if 0
+void variety_object::enumerate_points_and_lines(
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "variety_object::enumerate_points_and_lines" << endl;
+	}
+
+	geometry::other_geometry::geometry_global Geo;
+	vector<long int> Points;
+	vector<long int> The_Lines;
+
+	if (f_v) {
+		cout << "variety_object::enumerate_points_and_lines "
+				"before enumerate_points_as_vector" << endl;
+	}
+	enumerate_points_as_vector(
+		Points,
+		0 /*verbose_level - 1*/);
+	if (f_v) {
+		cout << "variety_object::enumerate_points_and_lines "
+				"after enumerate_points_as_vector" << endl;
+	}
+	if (f_v) {
+		cout << "variety_object::enumerate_points_and_lines "
+				"The surface has " << Points.size() << " points" << endl;
+	}
+
+
+	if (f_v) {
+		cout << "variety_object::enumerate_points_and_lines before "
+				"Geo.find_lines_which_are_contained" << endl;
+	}
+	Geo.find_lines_which_are_contained(
+			Surf->P,
+			Points, The_Lines, 0 /*verbose_level - 1*/);
+	if (f_v) {
+		cout << "variety_object::enumerate_points_and_lines after "
+				"Geo.find_lines_which_are_contained" << endl;
+	}
+
+	if (f_v) {
+		cout << "variety_object::enumerate_points_and_lines The surface "
+				"has " << The_Lines.size() << " lines" << endl;
+	}
+#if 0
+	if (nb_lines != 27) {
+		cout << "variety_object::enumerate_points_and_lines the surface "
+				"does not have 27 lines" << endl;
+		//FREE_lint(Points);
+		//Points = NULL;
+		return false;
+	}
+#endif
+
+
+#if 1
+	if (F->q == 2) {
+		if (f_v) {
+			cout << "variety_object::enumerate_points_and_lines "
+					"before find_real_lines" << endl;
+		}
+
+		find_real_lines(The_Lines, verbose_level);
+
+		if (f_v) {
+			cout << "variety_object::enumerate_points_and_lines "
+					"after find_real_lines" << endl;
+		}
+	}
+#endif
+
+	int i;
+	long int *Pts;
+	int nb_pts;
+	long int *Lines;
+	int nb_lines;
+
+	nb_pts = Points.size();
+	Pts = NEW_lint(nb_pts);
+	for (i = 0; i < nb_pts; i++) {
+		Pts[i] = Points[i];
+	}
+
+	nb_lines = The_Lines.size();
+	Lines = NEW_lint(nb_lines);
+	for (i = 0; i < nb_lines; i++) {
+		Lines[i] = The_Lines[i];
+	}
+
+	if (f_v) {
+		cout << "variety_object::enumerate_points_and_lines "
+				"nb_pts=" << nb_pts << " nb_lines=" << nb_lines << endl;
+		cout << "Lines:";
+		Lint_vec_print(cout, Lines, nb_lines);
+		cout << endl;
+	}
+
+
+	if (Variety_object->Point_sets) {
+		FREE_OBJECT(Variety_object->Point_sets);
+	}
+	Variety_object->Point_sets = NEW_OBJECT(other::data_structures::set_of_sets);
+
+	Variety_object->Point_sets->init_single(
+			Variety_object->Projective_space->Subspaces->N_points /* underlying_set_size */,
+			Pts, nb_pts, 0 /* verbose_level */);
+
+	FREE_lint(Pts);
+
+	if (Variety_object->Line_sets) {
+		FREE_OBJECT(Variety_object->Line_sets);
+	}
+	Variety_object->Line_sets = NEW_OBJECT(other::data_structures::set_of_sets);
+
+	Variety_object->Line_sets->init_single(
+			Variety_object->Projective_space->Subspaces->N_lines /* underlying_set_size */,
+			Lines, nb_lines, 0 /* verbose_level */);
+
+	FREE_lint(Lines);
+
+
+	if (f_v) {
+		cout << "variety_object::enumerate_points_and_lines done" << endl;
+	}
+}
+#endif
 
 
 void variety_object::enumerate_lines(
@@ -911,7 +1082,8 @@ void variety_object::enumerate_lines(
 	}
 	Geo.find_lines_which_are_contained(
 			Projective_space,
-			Points, The_Lines, 0 /*verbose_level - 1*/);
+			Points, The_Lines,
+			0 /*verbose_level - 1*/);
 	if (f_v) {
 		cout << "surface_object::enumerate_lines after "
 				"Geo.find_lines_which_are_contained" << endl;

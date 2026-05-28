@@ -2535,7 +2535,7 @@ void orbits_on_something::report_quick(
 
 
 void orbits_on_something::export_something(
-		std::string &what, int data1,
+		std::string &what, std::string &extra,
 		std::string &fname, int verbose_level)
 {
 	int f_v = (verbose_level >= 1);
@@ -2554,7 +2554,7 @@ void orbits_on_something::export_something(
 		cout << "orbits_on_something::export_something before export_something_worker" << endl;
 	}
 	export_something_worker(
-			fname_base, what, data1, fname, verbose_level);
+			fname_base, what, extra, fname, verbose_level);
 	if (f_v) {
 		cout << "orbits_on_something::export_something after export_something_worker" << endl;
 	}
@@ -2567,7 +2567,7 @@ void orbits_on_something::export_something(
 
 void orbits_on_something::export_something_worker(
 		std::string &fname_base,
-		std::string &what, int data1,
+		std::string &what, std::string &extra,
 		std::string &fname,
 		int verbose_level)
 {
@@ -2576,6 +2576,11 @@ void orbits_on_something::export_something_worker(
 	if (f_v) {
 		cout << "orbits_on_something::export_something_worker" << endl;
 	}
+
+	int data1;
+
+	data1 = std::stoi(extra);
+
 
 	other::data_structures::string_tools ST;
 	other::orbiter_kernel_system::file_io Fio;
@@ -2587,6 +2592,7 @@ void orbits_on_something::export_something_worker(
 			cout << "orbits_on_something::export_something_worker type orbit" << endl;
 		}
 		fname = fname_base + "_orbit_" + std::to_string(data1) + ".csv";
+
 
 		int orbit_idx = data1;
 		std::vector<int> Orb;

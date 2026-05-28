@@ -2682,6 +2682,8 @@ public:
 			std::stringstream &sstr, int f_backwards);
 	void print_bare(
 			int f_backwards);
+	void print_ago_sum_latex();
+	void print_ago_sum();
 	std::string stringify_bare(
 			int f_backwards);
 	void print_bare_tex(

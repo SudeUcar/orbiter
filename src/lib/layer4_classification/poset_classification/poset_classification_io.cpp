@@ -1473,7 +1473,8 @@ void poset_classification::wedge_product_export_magma(
 
 
 void poset_classification::export_something(
-		std::string &what, int data1,
+		std::string &what,
+		std::string &export_something_extra,
 		std::string &fname, int verbose_level)
 {
 	int f_v = (verbose_level >= 1);
@@ -1490,7 +1491,8 @@ void poset_classification::export_something(
 				"before export_something_worker" << endl;
 	}
 	export_something_worker(
-			what, data1, fname, verbose_level);
+			what, export_something_extra,
+			fname, verbose_level);
 	if (f_v) {
 		cout << "poset_classification::export_something "
 				"after export_something_worker" << endl;
@@ -1512,7 +1514,8 @@ void poset_classification::export_something(
 }
 
 void poset_classification::export_something_worker(
-		std::string &what, int data1,
+		std::string &what,
+		std::string &export_something_extra,
 		std::string &fname,
 		int verbose_level)
 {
@@ -1535,6 +1538,10 @@ void poset_classification::export_something_worker(
 		//fname = problem_label_with_path + "_orbits" + "_level_" + std::to_string(data1) + ".csv";
 		//fname = problem_label_with_path + "_reps_lvl_" + std::to_string(data1) + ".csv";
 
+		int data1;
+
+		data1 = std::stoi(export_something_extra);
+
 		fname = make_fname_for_representatives_at_level(data1);
 
 		write_representatives_at_level_csv_fname(
@@ -1548,6 +1555,10 @@ void poset_classification::export_something_worker(
 		if (f_v) {
 			cout << "poset_classification::export_something_worker set_orbits" << endl;
 		}
+
+		int data1;
+
+		data1 = std::stoi(export_something_extra);
 
 		fname = problem_label_with_path + "_set_orbits" + "_level_" + std::to_string(data1) + ".csv";
 

@@ -555,19 +555,33 @@ public:
 			std::string *&Table,
 			int &nb_rows, int &nb_cols,
 			int verbose_level);
+	void prepare_data_detailed(
+			geometry::projective_geometry::projective_space *P,
+			std::string &headings,
+			std::string *&Table,
+			int &nb_rows, int &nb_cols,
+			int verbose_level);
 	void create_heading(
+			std::string &heading, int &nb_cols);
+	void create_heading_detailed(
 			std::string &heading, int &nb_cols);
 	void create_vector_of_strings(
 			int orbit_idx,
 			std::vector<std::string> &v,
 			int verbose_level);
+	void create_vector_of_strings_detailed(
+			int orbit_idx,
+			geometry::projective_geometry::projective_space *P,
+			std::vector<std::string> &v,
+			int verbose_level);
 
 	void export_something(
-			std::string &what, int data1,
+			std::string &what, std::string &extra,
 			std::string &fname, int verbose_level);
 	void export_something_worker(
 			std::string &fname_base,
-			std::string &what, int data1,
+			std::string &what,
+			std::string &extra,
 			std::string &fname,
 			int verbose_level);
 

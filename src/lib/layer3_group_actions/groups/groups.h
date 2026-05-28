@@ -867,11 +867,11 @@ public:
 	void report_quick(
 			std::ostream &ost, int verbose_level);
 	void export_something(
-			std::string &what, int data1,
+			std::string &what, std::string &extra,
 			std::string &fname, int verbose_level);
 	void export_something_worker(
 			std::string &fname_base,
-			std::string &what, int data1,
+			std::string &what, std::string &extra,
 			std::string &fname,
 			int verbose_level);
 

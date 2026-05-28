@@ -26,7 +26,7 @@ orbits_activity_description::orbits_activity_description()
 
 	f_export_something = false;
 	//std::string export_something_what;
-	export_something_data1 = 0;
+	//std::string export_something_extra;
 
 	f_export_trees = false;
 
@@ -120,11 +120,12 @@ int orbits_activity_description::read_arguments(
 		else if (ST.stringcmp(argv[i], "-export_something") == 0) {
 			f_export_something = true;
 			export_something_what.assign(argv[++i]);
-			export_something_data1 = ST.strtoi(argv[++i]);
+			export_something_extra.assign(argv[++i]);
+			//export_something_data1 = ST.strtoi(argv[++i]);
 			if (f_v) {
 				cout << "-export_something "
 						<< export_something_what
-						<< " " << export_something_data1
+						<< " " << export_something_extra
 						<< endl;
 			}
 		}
@@ -248,7 +249,7 @@ void orbits_activity_description::print()
 		cout << "-export_levels " << export_levels_orbit_idx << endl;
 	}
 	if (f_export_something) {
-		cout << "-export_something " << export_something_what << " " << export_something_data1 << endl;
+		cout << "-export_something " << export_something_what << " " << export_something_extra << endl;
 	}
 	if (f_draw_tree) {
 		cout << "-draw_tree " << draw_tree_idx << " " << draw_tree_draw_options << endl;

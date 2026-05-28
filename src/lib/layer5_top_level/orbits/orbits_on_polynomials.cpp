@@ -880,12 +880,75 @@ void orbits_on_polynomials::prepare_data(
 
 
 
+void orbits_on_polynomials::prepare_data_detailed(
+		geometry::projective_geometry::projective_space *P,
+		std::string &headings,
+		std::string *&Table,
+		int &nb_rows, int &nb_cols,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+	int f_vv = (verbose_level >= 2);
+
+	if (f_v) {
+		cout << "orbits_on_polynomials::prepare_data_detailed" << endl;
+		cout << "orbits_on_polynomials::prepare_data_detailed verbose_level=" << verbose_level << endl;
+	}
+	int orbit_idx;
+
+	nb_rows = T->nb_orbits;
+
+	create_heading_detailed(headings, nb_cols);
+
+	Table = new string[nb_rows * nb_cols];
+
+
+	for (orbit_idx = 0; orbit_idx < nb_rows; orbit_idx++) {
+
+		if (f_vv) {
+			cout << "orbits_on_polynomials::prepare_data_detailed counter = " << orbit_idx
+					<< " / " << nb_rows << endl;
+		}
+
+
+		std::vector<std::string> v;
+
+		create_vector_of_strings_detailed(
+				orbit_idx,
+				P,
+				v,
+				verbose_level - 1);
+
+
+		int j;
+
+		for (j = 0; j < nb_cols; j++) {
+			Table[orbit_idx * nb_cols + j] = v[j];
+		}
+
+	}
+	if (f_v) {
+		cout << "orbits_on_polynomials::prepare_data_detailed done" << endl;
+	}
+}
+
+
+
+
 
 void orbits_on_polynomials::create_heading(
 		std::string &heading, int &nb_cols)
 {
 	heading = "OrbIdx,Go,EqnCode,EqnVec,EqnAf,NbPts,Pts";
 	nb_cols = 7;
+
+}
+
+void orbits_on_polynomials::create_heading_detailed(
+		std::string &heading, int &nb_cols)
+{
+	heading = "OrbIdx,Go,EqnCode,EqnVec,EqnAf,NbPts,Pts,NbLines,Lines,NbSingularPts,SingPts";
+	nb_cols = 11;
 
 }
 
@@ -950,6 +1013,199 @@ void orbits_on_polynomials::create_vector_of_strings(
 		cout << "orbits_on_polynomials::create_vector_of_strings done" << endl;
 	}
 }
+
+
+
+void orbits_on_polynomials::create_vector_of_strings_detailed(
+		int orbit_idx,
+		geometry::projective_geometry::projective_space *P,
+		std::vector<std::string> &v,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "orbits_on_polynomials::create_vector_of_strings_detailed" << endl;
+	}
+
+	int *coeff;
+
+	coeff = NEW_int(HPD->get_nb_monomials());
+
+
+	int nb_cols;
+
+	nb_cols = 11;
+
+	v.resize(nb_cols);
+
+	v[0] = std::to_string(orbit_idx);
+
+	algebra::ring_theory::longinteger_object go;
+	T->Reps[orbit_idx].Strong_gens->group_order(go);
+
+	v[1] = go.stringify();
+
+	v[2] = std::to_string(T->Reps[orbit_idx].data[0]);
+	//v[2] = Lint_vec_stringify(T->Reps[orbit_idx].data, T->Reps[orbit_idx].sz);
+
+	HPD->unrank_coeff_vector(coeff, T->Reps[orbit_idx].data[0]);
+
+	v[3] = "\"" + Int_vec_stringify(coeff, HPD->get_nb_monomials()) + "\"";
+
+
+	string s_eqn_af;
+
+	s_eqn_af = HPD->stringify_equation(coeff, verbose_level);
+
+	v[4] = "\"" + s_eqn_af + "\"";
+
+
+	v[5] = std::to_string(Points[orbit_idx].size());
+
+	string s_points;
+
+	s_points = Lint_vec_stl_stringify(Points[orbit_idx]);
+
+	v[6] = "\"" + s_points + "\"";
+
+
+
+	{
+
+		geometry::algebraic_geometry::variety_description *Descr;
+		geometry::algebraic_geometry::variety_object *V;
+
+
+		Descr = NEW_OBJECT(geometry::algebraic_geometry::variety_description);
+
+#if 0
+		int f_label_txt;
+		std::string label_txt;
+
+		int f_label_tex;
+		std::string label_tex;
+
+		int f_projective_space;
+		std::string projective_space_label;
+
+		// not to be documented:
+		int f_projective_space_pointer;
+		geometry::projective_geometry::projective_space *Projective_space_pointer;
+
+		int f_ring;
+		std::string ring_label;
+
+		// not to be documented:
+		int f_ring_pointer;
+		algebra::ring_theory::homogeneous_polynomial_domain *Ring_pointer;
+
+		int f_equation_in_algebraic_form;
+		std::string equation_in_algebraic_form_text;
+
+		int f_set_parameters;
+		std::string set_parameters_label;
+		std::string set_parameters_label_tex;
+		std::string set_parameters_values;
+
+		int f_equation_by_coefficients;
+		std::string equation_by_coefficients_text;
+
+		int f_equation_by_rank;
+		std::string equation_by_rank_text;
+
+		// unused:
+		int f_second_equation_in_algebraic_form;
+		std::string second_equation_in_algebraic_form_text;
+
+		// unused:
+		int f_second_equation_by_coefficients;
+		std::string second_equation_by_coefficients_text;
+
+		int f_points;
+		std::string points_txt;
+
+		int f_bitangents;
+		std::string bitangents_txt;
+
+		int f_compute_lines;
+
+		std::vector<int> transformation_inverse;
+		std::vector<std::string> transformations;
+
+#endif
+
+		Descr->f_projective_space_pointer = true;
+		Descr->Projective_space_pointer = P;
+
+		Descr->f_ring_pointer = true;
+		Descr->Ring_pointer = HPD;
+
+		Descr->f_compute_lines = true;
+
+		Descr->f_equation_by_rank = true;
+		Descr->equation_by_rank_text = std::to_string(T->Reps[orbit_idx].data[0]);
+
+
+		V = NEW_OBJECT(geometry::algebraic_geometry::variety_object);
+
+
+		if (f_v) {
+			cout << "orbits_on_polynomials::create_vector_of_strings_detailed before V->init" << endl;
+		}
+		V->init(
+				Descr,
+				verbose_level);
+		// Does not perform the transformations.
+		// Called from variety_object_with_action::create_variety
+		if (f_v) {
+			cout << "orbits_on_polynomials::create_vector_of_strings_detailed after V->init" << endl;
+		}
+
+		v[7] = std::to_string(V->Line_sets->Set_size[0]);
+
+		string s_lines;
+
+		s_lines = Lint_vec_stringify(V->Line_sets->Sets[0], V->Line_sets->Set_size[0]);
+
+		v[8] = "\"" + s_lines + "\"";
+
+
+		if (f_v) {
+			cout << "orbits_on_polynomials::create_vector_of_strings_detailed before V->compute_singular_points" << endl;
+		}
+		V->compute_singular_points(
+				verbose_level - 3);
+		if (f_v) {
+			cout << "orbits_on_polynomials::create_vector_of_strings_detailed after V->compute_singular_points" << endl;
+		}
+
+
+		v[9] = std::to_string(V->Singular_points.size());
+
+
+		string s_singular_points;
+
+		s_singular_points = Lint_vec_stl_stringify(V->Singular_points);
+
+		v[10] = "\"" + s_lines + "\"";
+
+
+		FREE_OBJECT(V);
+		FREE_OBJECT(Descr);
+
+	}
+
+
+
+	FREE_int(coeff);
+
+
+	if (f_v) {
+		cout << "orbits_on_polynomials::create_vector_of_strings_detailed done" << endl;
+	}
+}
+
 
 
 
@@ -1072,7 +1328,7 @@ void orbits_on_polynomials::report_detailed_list(
 
 
 void orbits_on_polynomials::export_something(
-		std::string &what, int data1,
+		std::string &what, std::string &extra,
 		std::string &fname, int verbose_level)
 {
 	int f_v = (verbose_level >= 1);
@@ -1096,7 +1352,7 @@ void orbits_on_polynomials::export_something(
 		cout << "orbits_on_polynomials::export_something "
 				"before export_something_worker" << endl;
 	}
-	export_something_worker(fname_base, what, data1, fname, verbose_level);
+	export_something_worker(fname_base, what, extra, fname, verbose_level);
 	if (f_v) {
 		cout << "orbits_on_polynomials::export_something "
 				"after export_something_worker" << endl;
@@ -1110,7 +1366,8 @@ void orbits_on_polynomials::export_something(
 
 void orbits_on_polynomials::export_something_worker(
 		std::string &fname_base,
-		std::string &what, int data1,
+		std::string &what,
+		std::string &extra,
 		std::string &fname,
 		int verbose_level)
 {
@@ -1135,6 +1392,10 @@ void orbits_on_polynomials::export_something_worker(
 			if (f_v) {
 				cout << "orbits_on_polynomials::export_something_worker f_has_Sch" << endl;
 			}
+
+			int data1;
+
+			data1 = std::stoi(extra);
 
 			fname = fname_base + "_orbit_" + std::to_string(data1) + ".csv";
 
@@ -1163,6 +1424,10 @@ void orbits_on_polynomials::export_something_worker(
 			if (f_v) {
 				cout << "orbits_on_polynomials::export_something_worker f_has_Orb" << endl;
 			}
+
+			int data1;
+
+			data1 = std::stoi(extra);
 
 			fname = fname_base + "_orbit_" + std::to_string(data1) + ".csv";
 
@@ -1235,53 +1500,12 @@ void orbits_on_polynomials::export_something_worker(
 				Ago_dist->print_bare(true);
 				cout << endl;
 
-				int i, f, l, a;
 
-				cout << "\\left( ";
-				for (i = Ago_dist->nb_types - 1; i >= 0; i--) {
-					f = Ago_dist->type_first[i];
-					l = Ago_dist->type_len[i];
-					a = Ago_dist->data_sorted[f];
-					cout << "\\frac{" << l << "}{" << a << "}";
-					if (i) {
-						cout << " + ";
-					}
-#if 0
-					ost << a;
-					if (l > 1) {
-						ost << "^" << l;
-					}
-					if (i) {
-						ost << ", ";
-					}
-#endif
-				}
-				cout << " \\right)";
+				Ago_dist->print_ago_sum_latex();
 				cout << endl;
 
-
-				cout << "( ";
-				for (i = Ago_dist->nb_types - 1; i >= 0; i--) {
-					f = Ago_dist->type_first[i];
-					l = Ago_dist->type_len[i];
-					a = Ago_dist->data_sorted[f];
-					cout << " " << l << " / " << a << " ";
-					if (i) {
-						cout << " + ";
-					}
-#if 0
-					ost << a;
-					if (l > 1) {
-						ost << "^" << l;
-					}
-					if (i) {
-						ost << ", ";
-					}
-#endif
-				}
-				cout << " )";
+				Ago_dist->print_ago_sum();
 				cout << endl;
-
 
 			}
 
@@ -1299,6 +1523,80 @@ void orbits_on_polynomials::export_something_worker(
 			exit(1);
 		}
 
+	}
+	else if (ST.stringcmp(what, "representatives_detailed") == 0) {
+
+		if (f_v) {
+			cout << "orbits_on_polynomials::export_something_worker what=representatives_detailed" << endl;
+		}
+
+		if (f_has_Sch) {
+
+			if (f_v) {
+				cout << "orbits_on_polynomials::export_something_worker f_has_Sch" << endl;
+			}
+
+			std::string *Table;
+			std::string Headings;
+			int nb_rows, nb_cols;
+
+			//geometry::projective_geometry::projective_space *P;
+
+			layer5_applications::projective_geometry::projective_space_with_action *PA;
+
+
+			PA = Get_projective_space(extra);
+
+			prepare_data_detailed(
+					PA->P,
+					Headings,
+					Table,
+					nb_rows, nb_cols,
+					verbose_level);
+
+			fname = fname_base + ".csv";
+
+			Fio.Csv_file_support->write_table_of_strings(
+					fname,
+					nb_rows, nb_cols, Table,
+					Headings,
+					verbose_level);
+
+			other::data_structures::tally *Ago_dist;
+			long int *Ago;
+
+
+			Ago_dist = T->get_ago_distribution(
+					Ago,
+					verbose_level);
+
+			if (f_v) {
+				cout << "orbits_on_polynomials::export_something_worker Ago_dist = ";
+				Ago_dist->print_bare(true);
+				cout << endl;
+
+
+				Ago_dist->print_ago_sum_latex();
+				cout << endl;
+
+				Ago_dist->print_ago_sum();
+				cout << endl;
+
+			}
+
+
+		}
+		else if (f_has_Orb) {
+			if (f_v) {
+				cout << "orbits_on_polynomials::export_something_worker f_has_Orb" << endl;
+			}
+			cout << "orbits_on_polynomials::export_something_worker not implemented for this type of orbit" << endl;
+			exit(1);
+		}
+		else {
+			cout << "orbits_on_polynomials::export_something_worker neither f_has_Sch nor f_has_Orb" << endl;
+			exit(1);
+		}
 	}
 	else {
 		cout << "orbits_on_polynomials::export_something_worker "

@@ -950,10 +950,12 @@ public:
 			int n, int q, int vector_space_dimension,
 			int level, int verbose_level);
 	void export_something(
-			std::string &what, int data1,
+			std::string &what,
+			std::string &export_something_extra,
 			std::string &fname, int verbose_level);
 	void export_something_worker(
-			std::string &what, int data1,
+			std::string &what,
+			std::string &export_something_extra,
 			std::string &fname,
 			int verbose_level);
 	std::string make_fname_for_representatives_at_level(
