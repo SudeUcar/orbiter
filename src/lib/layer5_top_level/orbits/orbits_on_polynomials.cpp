@@ -621,7 +621,7 @@ int orbits_on_polynomials::complete_orbits(
 
 
 
-	int cur_eqn_idx;
+	long int cur_eqn_idx;
 
 	cur_eqn_idx = B->get_first_entry_zero();
 

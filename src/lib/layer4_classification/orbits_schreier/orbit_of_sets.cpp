@@ -106,7 +106,7 @@ void orbit_of_sets::compute(
 		int verbose_level)
 {
 	int f_v = (verbose_level >= 1);
-	int f_vv = false; //(verbose_level >= 2);
+	int f_vv = (verbose_level >= 2);
 	int i, cur, j;
 	long int *cur_set;
 	long int *new_set;
@@ -142,19 +142,27 @@ void orbit_of_sets::compute(
 
 
 	while (Q_len) {
+
 		if (f_vv) {
 			cout << "orbit_of_sets::compute "
 					"Q_len = " << Q_len << " : used_length="
-					<< used_length << " : ";
-			Lint_vec_print(cout, Q, Q_len);
-			cout << endl;
+					<< used_length << " : Q[0] = " << Q[0] << endl;
+			//Lint_vec_print(cout, Q, Q_len);
+			//cout << endl;
 		}
+
 		cur = Q[0];
 		for (i = 1; i < Q_len; i++) {
 			Q[i - 1] = Q[i];
 		}
 		Q_len--;
 		Lint_vec_copy(Sets[cur], cur_set, sz);
+
+		if (f_vv) {
+			cout << "orbit_of_sets::compute current set = ";
+			Lint_vec_print(cout, cur_set, sz);
+			cout << endl;
+		}
 
 		for (j = 0; j < gens->len; j++) {
 			if (f_vv) {
@@ -174,7 +182,7 @@ void orbit_of_sets::compute(
 				cout << "orbit_of_sets::compute "
 						"Q_len = " << Q_len << " : used_length="
 						<< used_length << " : ";
-				cout << "after applying generator " << j << " : ";
+				cout << "after applying generator " << j << " : image = ";
 				Lint_vec_print(cout, new_set, sz);
 				cout << endl;
 			}
@@ -200,7 +208,16 @@ void orbit_of_sets::compute(
 #else
 		    int pos, f_found;
 
+			if (f_vv) {
+				cout << "orbit_of_sets::compute before find_set" << endl;
+			}
 			f_found = find_set(new_set, pos, h);
+			if (f_vv) {
+				cout << "orbit_of_sets::compute after find_set" << endl;
+				cout << "orbit_of_sets::compute f_found = " << f_found << endl;
+				cout << "orbit_of_sets::compute pos = " << pos << endl;
+				cout << "orbit_of_sets::compute h = " << h << endl;
+			}
 #endif
 
 
