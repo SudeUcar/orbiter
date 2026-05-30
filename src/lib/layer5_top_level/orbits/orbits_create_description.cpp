@@ -49,8 +49,15 @@ orbits_create_description::orbits_create_description()
 	on_partition_k = 0;
 	//std::string on_partition_poset_classification_control_label;
 
+	f_on_polynomials_with_bitvector_continue = false;
+	//std::string on_polynomials_with_bitvector_first_ring;
+	on_polynomials_with_bitvector_continue_previous_orbit = 0;
+
 	f_on_polynomials = false;
 	//std::string on_polynomials_ring;
+
+	f_on_polynomials_with_bitvector_first = false;
+	//std::string on_polynomials_with_bitvector_first_ring;
 
 	f_of_one_polynomial = false;
 	//std::string of_one_polynomial_ring;
@@ -183,6 +190,22 @@ int orbits_create_description::read_arguments(
 			on_polynomials_ring.assign(argv[++i]);
 			if (f_v) {
 				cout << "-on_polynomials " << on_polynomials_ring << endl;
+			}
+		}
+		else if (ST.stringcmp(argv[i], "-on_polynomials_with_bitvector_first") == 0) {
+			f_on_polynomials_with_bitvector_first = true;
+			on_polynomials_with_bitvector_first_ring.assign(argv[++i]);
+			if (f_v) {
+				cout << "-on_polynomials_with_bitvector_first " << on_polynomials_with_bitvector_first_ring << endl;
+			}
+		}
+		else if (ST.stringcmp(argv[i], "-on_polynomials_with_bitvector_continue") == 0) {
+			f_on_polynomials_with_bitvector_continue = true;
+			on_polynomials_with_bitvector_continue_ring.assign(argv[++i]);
+			on_polynomials_with_bitvector_continue_previous_orbit = ST.strtoi(argv[++i]);
+			if (f_v) {
+				cout << "-on_polynomials_with_bitvector_continue " << on_polynomials_with_bitvector_continue_ring
+					<< " " << on_polynomials_with_bitvector_continue_previous_orbit << endl;
 			}
 		}
 		else if (ST.stringcmp(argv[i], "-of_one_polynomial") == 0) {
@@ -378,6 +401,13 @@ void orbits_create_description::print()
 	}
 	if (f_on_polynomials) {
 		cout << "-on_polynomials " << on_polynomials_ring << endl;
+	}
+	if (f_on_polynomials_with_bitvector_first) {
+		cout << "-on_polynomials_with_bitvector_first " << on_polynomials_with_bitvector_first_ring << endl;
+	}
+	if (f_on_polynomials_with_bitvector_continue) {
+		cout << "-on_polynomials_with_bitvector_continue " << on_polynomials_with_bitvector_continue_ring
+			<< " " << on_polynomials_with_bitvector_continue_previous_orbit << endl;
 	}
 	if (f_of_one_polynomial) {
 		cout << "-of_one_polynomial " << of_one_polynomial_ring

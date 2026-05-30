@@ -305,6 +305,8 @@ interface_toolkit::interface_toolkit()
 	f_eliminate_duplicate_columns = false;
 	//std::string eliminate_duplicate_columns_fname;
 
+	f_density_of_ones_in_bitvector_file = false;
+	//std::string density_of_ones_in_bitvector_file_fname;
 
 }
 
@@ -507,6 +509,9 @@ void interface_toolkit::print_help(
 	else if (ST.stringcmp(argv[i], "-eliminate_duplicate_columns") == 0) {
 		cout << "-eliminate_duplicate_columns <string : fname>" << endl;
 	}
+	else if (ST.stringcmp(argv[i], "-density_of_ones_in_bitvector_file") == 0) {
+		cout << "-density_of_ones_in_bitvector_file <string : fname>" << endl;
+	}
 
 }
 
@@ -704,6 +709,9 @@ int interface_toolkit::recognize_keyword(
 		return true;
 	}
 	else if (ST.stringcmp(argv[i], "-eliminate_duplicate_columns") == 0) {
+		return true;
+	}
+	else if (ST.stringcmp(argv[i], "-density_of_ones_in_bitvector_file") == 0) {
 		return true;
 	}
 	return false;
@@ -1573,6 +1581,16 @@ void interface_toolkit::read_arguments(
 					<< endl;
 		}
 	}
+	else if (ST.stringcmp(argv[i], "-density_of_ones_in_bitvector_file") == 0) {
+		f_density_of_ones_in_bitvector_file = true;
+		density_of_ones_in_bitvector_file_fname.assign(argv[++i]);
+		if (f_v) {
+			cout << "-density_of_ones_in_bitvector_file "
+					<< density_of_ones_in_bitvector_file_fname << " "
+					<< endl;
+		}
+	}
+
 
 
 	if (f_v) {
@@ -1927,6 +1945,11 @@ void interface_toolkit::print()
 	if (f_eliminate_duplicate_columns) {
 		cout << "-eliminate_duplicate_columns "
 				<< eliminate_duplicate_columns_fname << " "
+				<< endl;
+	}
+	if (f_density_of_ones_in_bitvector_file) {
+		cout << "-density_of_ones_in_bitvector_file "
+				<< density_of_ones_in_bitvector_file_fname << " "
 				<< endl;
 	}
 }
@@ -3608,6 +3631,25 @@ int interface_toolkit::worker3(
 		cout << "Written file " << fname_out << " of size "
 				<< Fio.file_size(fname_out) << endl;
 
+
+	}
+	else if (f_density_of_ones_in_bitvector_file) {
+		if (f_v) {
+			cout << "-density_of_ones_in_bitvector_file "
+				<< density_of_ones_in_bitvector_file_fname << " "
+				<< endl;
+		}
+
+		double d;
+		long int length;
+
+		other::data_structures::algorithms Algo;
+
+		d = Algo.ratio_of_ones_in_bitvector_file(
+				density_of_ones_in_bitvector_file_fname, length, verbose_level);
+
+		cout << "length of bitvector " << density_of_ones_in_bitvector_file_fname << " is " << length << endl;
+		cout << "density_of_ones_in_bitvector_file " << density_of_ones_in_bitvector_file_fname << " is " << d << endl;
 
 	}
 	else {

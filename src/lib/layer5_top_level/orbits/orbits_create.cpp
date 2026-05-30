@@ -495,9 +495,9 @@ void orbits_create::init(
 
 		if (f_v) {
 			cout << "orbits_create::init "
-					"before On_polynomials->init" << endl;
+					"before On_polynomials->init_Schreier" << endl;
 		}
-		On_polynomials->init(
+		On_polynomials->init_Schreier(
 				Group->LG,
 				HPD,
 				Descr->print_interval,
@@ -505,7 +505,7 @@ void orbits_create::init(
 
 		if (f_v) {
 			cout << "orbits_create::init "
-					"after On_polynomials->init" << endl;
+					"after On_polynomials->init_Schreier" << endl;
 		}
 
 		f_has_On_polynomials = true;
@@ -514,6 +514,119 @@ void orbits_create::init(
 
 
 	}
+
+	if (Descr->f_on_polynomials_with_bitvector_first) {
+
+
+		if (f_v) {
+			cout << "orbits_create::init f_on_polynomials_with_bitvector_first" << endl;
+		}
+		if (f_v) {
+			cout << "orbits_create::init ring = " << Descr->on_polynomials_with_bitvector_first_ring << endl;
+		}
+
+		if (!Descr->f_group) {
+			cout << "orbits_create::init please specify the group using -group <label>" << endl;
+			exit(1);
+		}
+
+		if (!Group->f_linear_group) {
+			cout << "orbits_create::init group must be linear" << endl;
+			exit(1);
+		}
+
+		On_polynomials = NEW_OBJECT(orbits_on_polynomials);
+
+
+
+		algebra::ring_theory::homogeneous_polynomial_domain *HPD;
+
+
+		HPD = Get_ring(Descr->on_polynomials_with_bitvector_first_ring);
+
+
+
+
+		if (f_v) {
+			cout << "orbits_create::init "
+					"before On_polynomials->init_bitvector_first" << endl;
+		}
+		On_polynomials->init_bitvector_first(
+				Group->LG,
+				HPD,
+				Descr->print_interval,
+				verbose_level);
+
+		if (f_v) {
+			cout << "orbits_create::init "
+					"after On_polynomials->init_bitvector_first" << endl;
+		}
+
+
+		f_has_On_polynomials = true;
+
+
+
+
+	}
+
+
+	if (Descr->f_on_polynomials_with_bitvector_continue) {
+
+
+		if (f_v) {
+			cout << "orbits_create::init f_on_polynomials_with_bitvector_continue" << endl;
+		}
+		if (f_v) {
+			cout << "orbits_create::init ring = " << Descr->on_polynomials_with_bitvector_continue_ring << endl;
+		}
+
+		if (!Descr->f_group) {
+			cout << "orbits_create::init please specify the group using -group <label>" << endl;
+			exit(1);
+		}
+
+		if (!Group->f_linear_group) {
+			cout << "orbits_create::init group must be linear" << endl;
+			exit(1);
+		}
+
+		On_polynomials = NEW_OBJECT(orbits_on_polynomials);
+
+
+
+		algebra::ring_theory::homogeneous_polynomial_domain *HPD;
+
+
+		HPD = Get_ring(Descr->on_polynomials_with_bitvector_continue_ring);
+
+
+
+
+		if (f_v) {
+			cout << "orbits_create::init "
+					"before On_polynomials->init_bitvector_continue" << endl;
+		}
+		On_polynomials->init_bitvector_continue(
+				Group->LG,
+				HPD,
+				Descr->print_interval,
+				Descr->on_polynomials_with_bitvector_continue_previous_orbit,
+				verbose_level);
+
+		if (f_v) {
+			cout << "orbits_create::init "
+					"after On_polynomials->init_bitvector_continue" << endl;
+		}
+
+
+		f_has_On_polynomials = true;
+
+
+
+
+	}
+
 
 
 	if (Descr->f_of_one_polynomial) {

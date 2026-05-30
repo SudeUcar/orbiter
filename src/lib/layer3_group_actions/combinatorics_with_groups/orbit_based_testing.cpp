@@ -241,7 +241,7 @@ void orbit_based_testing::early_test_func_by_using_group(
 		nb_candidates, candidates,
 		0/*verbose_level*/);
 
-	int i, j, node, f, l, nb_good_orbits;
+	int i, j, f, l, nb_good_orbits;
 	long int pt;
 	int f_orbit_is_good;
 

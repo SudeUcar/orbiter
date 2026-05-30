@@ -612,6 +612,7 @@ void orbit_of_equations::get_transporter(
 
 void orbit_of_equations::get_random_schreier_generator(
 		int *Elt, int verbose_level)
+// needs get_transporter, map_an_equation, search_data
 {
 	int f_v = (verbose_level >= 1);
 	int f_vv = false; //(verbose_level >= 2);

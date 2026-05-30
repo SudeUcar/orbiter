@@ -628,6 +628,13 @@ public:
 			data_structures_groups::vector_ge *gens,
 			algebra::ring_theory::longinteger_object &go,
 			int verbose_level);
+	void all_point_orbits_Schreier_from_generators_first_next(
+			actions::action *A,
+			groups::schreier &Schreier,
+			data_structures_groups::vector_ge *gens,
+			algebra::ring_theory::longinteger_object &go,
+			std::string &fname_bitvector,
+			int verbose_level);
 	void all_point_orbits_from_single_generator(
 			actions::action *A,
 			groups::schreier &Schreier,

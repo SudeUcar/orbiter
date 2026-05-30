@@ -85,13 +85,12 @@ void packings_global::orbits_under_conjugation(
 	Classes.init(A_conj_restricted, verbose_level - 2);
 	Classes.Generators_and_images->init_generators(*SG->gens, verbose_level - 2);
 
-	int print_interval = 10000;
 
 	if (f_v) {
 		cout << "packings_global::orbits_under_conjugation "
 				"before Classes.compute_all_point_orbits" << endl;
 	}
-	Classes.compute_all_point_orbits(print_interval, 1 /*verbose_level - 1*/);
+	Classes.compute_all_point_orbits(1 /*verbose_level - 1*/);
 	if (f_v) {
 		cout << "packings_global::orbits_under_conjugation "
 				"after Classes.compute_all_point_orbits" << endl;

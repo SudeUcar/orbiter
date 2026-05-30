@@ -280,9 +280,8 @@ void singer_cycle::init_lines(
 	//Sch->initialize_tables();
 	Sch->Generators_and_images->init_single_generator(nice_gens->ith(0), verbose_level - 2);
 
-	int print_interval = 10000;
 
-	Sch->compute_all_point_orbits(print_interval, 0);
+	Sch->compute_all_point_orbits(0);
 	if (f_v) {
 		cout << "Found " << Sch->Forest->nb_orbits << " orbits on lines" << endl;
 		for (i = 0; i < Sch->Forest->nb_orbits; i++) {

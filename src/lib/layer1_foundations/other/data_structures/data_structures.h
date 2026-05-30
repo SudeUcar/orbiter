@@ -164,6 +164,8 @@ public:
 		int *pts_inv, int *depth, int *ancestor, int pos);
 	int Hamming_weight(
 			long int a);
+	double ratio_of_ones_in_bitvector_file(
+			std::string &fname, long int &length, int verbose_level);
 
 };
 
@@ -384,6 +386,10 @@ public:
 			long int i);
 	int s_i(
 			long int i);
+	long int get_first_entry_zero();
+	long int count_number_of_ones();
+	long int count_number_of_zeros();
+	double ratio_of_ones();
 	void write_file(
 			std::string &fname, int verbose_level);
 	void read_file(

@@ -1636,6 +1636,54 @@ int vector_ge::test_if_all_elements_stabilize_a_set(
 
 groups::schreier *vector_ge::compute_all_point_orbits_schreier(
 		actions::action *A_given,
+		//int print_interval,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+	groups::schreier *Sch;
+
+	if (f_v) {
+		cout << "vector_ge::compute_all_point_orbits_schreier "
+				"degree = " << A_given->degree << endl;
+	}
+	if (f_v) {
+		cout << "vector_ge::compute_all_point_orbits_schreier "
+				"action ";
+		A_given->print_info();
+		cout << endl;
+	}
+
+
+	Sch = NEW_OBJECT(groups::schreier);
+
+	Sch->init(A_given, verbose_level - 2);
+	//Sch->initialize_tables();
+	Sch->Generators_and_images->init_generators(
+			*this, verbose_level - 2);
+	//Sch.print_interval = print_interval;
+	if (f_v) {
+		cout << "vector_ge::compute_all_point_orbits_schreier "
+				"before Sch->compute_all_point_orbits" << endl;
+	}
+	Sch->compute_all_point_orbits(/*print_interval,*/ verbose_level);
+	if (f_v) {
+		cout << "vector_ge::compute_all_point_orbits_schreier "
+				"after Sch->compute_all_point_orbits" << endl;
+	}
+
+	if (f_v) {
+		cout << "vector_ge::compute_all_point_orbits_schreier "
+				"we found " << Sch->Forest->nb_orbits << " orbits" << endl;
+	}
+
+	if (f_v) {
+		cout << "vector_ge::compute_all_point_orbits_schreier done" << endl;
+	}
+	return Sch;
+}
+
+groups::schreier *vector_ge::compute_all_point_orbits_schreier_with_print_interval(
+		actions::action *A_given,
 		int print_interval,
 		int verbose_level)
 {
@@ -1660,11 +1708,12 @@ groups::schreier *vector_ge::compute_all_point_orbits_schreier(
 	//Sch->initialize_tables();
 	Sch->Generators_and_images->init_generators(
 			*this, verbose_level - 2);
+	Sch->print_interval = print_interval;
 	if (f_v) {
 		cout << "vector_ge::compute_all_point_orbits_schreier "
 				"before Sch->compute_all_point_orbits" << endl;
 	}
-	Sch->compute_all_point_orbits(print_interval, verbose_level);
+	Sch->compute_all_point_orbits(/*print_interval,*/ verbose_level);
 	if (f_v) {
 		cout << "vector_ge::compute_all_point_orbits_schreier "
 				"after Sch->compute_all_point_orbits" << endl;
@@ -1680,6 +1729,8 @@ groups::schreier *vector_ge::compute_all_point_orbits_schreier(
 	}
 	return Sch;
 }
+
+
 
 void vector_ge::reverse_isomorphism_exterior_square(
 		int verbose_level)

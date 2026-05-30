@@ -236,12 +236,11 @@ void difference_set_in_heisenberg_group::do_n2q3(
 	cout << "The order of U is " << U_go << endl;
 
 
-	int print_interval = 10000;
 
 	Sch = NEW_OBJECT(groups::schreier);
 	Sch->init(A, verbose_level - 2);
 	Sch->Generators_and_images->init_generators(*U_gens, verbose_level - 2);
-	Sch->compute_all_point_orbits(print_interval, 0 /*verbose_level*/);
+	Sch->compute_all_point_orbits(0 /*verbose_level*/);
 	cout << "The orbits of U are:" << endl;
 	Sch->Forest->print_and_list_orbits_tex(cout);
 	Sch->Forest->print_orbit_lengths(cout);
@@ -550,12 +549,11 @@ void difference_set_in_heisenberg_group::check_overgroups_of_order_nine(
 		}
 
 
-		int print_interval = 10000;
 
 		Sch1 = NEW_OBJECT(groups::schreier);
 		Sch1->init(N_on_orbits, verbose_level - 2);
 		Sch1->Generators_and_images->init_generators(*O_gens, verbose_level - 2);
-		Sch1->compute_all_point_orbits(print_interval, 0 /*verbose_level*/);
+		Sch1->compute_all_point_orbits(0 /*verbose_level*/);
 		cout << "The orbits of O are:" << endl;
 		Sch1->Forest->print_and_list_orbits_tex(cout);
 		Sch1->Forest->print_orbit_lengths(cout);
@@ -1068,7 +1066,6 @@ void difference_set_in_heisenberg_group::create_minimal_overgroups(
 
 
 				groups::schreier *Sch_overgroups;
-				int print_interval = 10000;
 
 				if (f_v) {
 					cout << "difference_set_in_heisenberg_group::create_minimal_overgroups "
@@ -1076,7 +1073,7 @@ void difference_set_in_heisenberg_group::create_minimal_overgroups(
 							"overgroups of order " << oo << ":" << endl;
 				}
 				Sch_overgroups = N->Strong_gens->compute_all_point_orbits_schreier(
-						A_on_overgroups, print_interval, 0 /*verbose_level*/);
+						A_on_overgroups, 0 /*verbose_level*/);
 
 				if (f_v) {
 					cout << "difference_set_in_heisenberg_group::create_minimal_overgroups "

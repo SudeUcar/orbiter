@@ -240,13 +240,13 @@ void group_action_on_combinatorial_object::init(
 				"after Sch_points->Generators_and_images->init_generators" << endl;
 	}
 
-	int print_interval = 10000;
+	//int print_interval = 10000;
 
 	if (f_v) {
 		cout << "group_action_on_combinatorial_object::init "
 				"before Sch_points->compute_all_point_orbits" << endl;
 	}
-	Sch_points->compute_all_point_orbits(print_interval, 0 /*verbose_level - 2*/);
+	Sch_points->compute_all_point_orbits(/*print_interval,*/ 0 /*verbose_level - 2*/);
 	if (f_v) {
 		cout << "group_action_on_combinatorial_object::init "
 				"after Sch_points->compute_all_point_orbits" << endl;
@@ -274,7 +274,7 @@ void group_action_on_combinatorial_object::init(
 		cout << "group_action_on_combinatorial_object::init "
 				"before Sch_lines->compute_all_point_orbits" << endl;
 	}
-	Sch_lines->compute_all_point_orbits(print_interval, 0 /*verbose_level - 2*/);
+	Sch_lines->compute_all_point_orbits(/*print_interval,*/ 0 /*verbose_level - 2*/);
 	if (f_v) {
 		cout << "group_action_on_combinatorial_object::init "
 				"after Sch_lines->compute_all_point_orbits" << endl;

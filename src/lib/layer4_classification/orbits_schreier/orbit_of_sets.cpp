@@ -795,6 +795,72 @@ void orbit_of_sets::export_tree_as_layered_graph_to_file(
 	}
 }
 
+other::data_structures::bitvector *orbit_of_sets::compute_bitvector(
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "orbit_of_sets::compute_bitvector" << endl;
+	}
+	other::data_structures::bitvector *B;
+
+	B = NEW_OBJECT(other::data_structures::bitvector);
+
+	B->allocate(A2->degree);
+
+	int i;
+	long int a;
+
+	if (sz != 1) {
+		cout << "orbit_of_sets::compute_bitvector requires sz = 1" << endl;
+		exit(1);
+	}
+
+	for (i = 0; i < used_length; i++) {
+		a = Sets[i][0];
+		B->set_bit(a);
+	}
+
+	if (f_v) {
+		cout << "orbit_of_sets::compute_bitvector done" << endl;
+	}
+	return B;
+}
+
+void orbit_of_sets::add_to_existing_bitvector(
+		other::data_structures::bitvector *B,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "orbit_of_sets::add_to_existing_bitvector" << endl;
+	}
+
+	if (B->get_length() != A2->degree) {
+		cout << "orbit_of_sets::add_to_existing_bitvector bitvector length mismatch" << endl;
+		exit(1);
+	}
+
+	int i;
+	long int a;
+
+	if (sz != 1) {
+		cout << "orbit_of_sets::add_to_existing_bitvector requires sz = 1" << endl;
+		exit(1);
+	}
+
+	for (i = 0; i < used_length; i++) {
+		a = Sets[i][0];
+		B->set_bit(a);
+	}
+
+	if (f_v) {
+		cout << "orbit_of_sets::add_to_existing_bitvector done" << endl;
+	}
+}
+
 
 
 }}}

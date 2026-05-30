@@ -159,6 +159,13 @@ public:
 	int f_on_polynomials;
 	std::string on_polynomials_ring;
 
+	int f_on_polynomials_with_bitvector_first;
+	std::string on_polynomials_with_bitvector_first_ring;
+
+	int f_on_polynomials_with_bitvector_continue;
+	std::string on_polynomials_with_bitvector_continue_ring;
+	int on_polynomials_with_bitvector_continue_previous_orbit;
+
 	int f_of_one_polynomial;
 	std::string of_one_polynomial_ring;
 	std::string of_one_polynomial_equation;
@@ -513,6 +520,11 @@ public:
 	int *Elt2;
 	int *Elt3;
 
+
+	int f_has_small_generating_set;
+	data_structures_groups::vector_ge *generating_set_small;
+	algebra::ring_theory::longinteger_object target_go;
+
 	// initialized by init:
 	int f_has_Sch;
 	groups::schreier *Sch;
@@ -533,10 +545,24 @@ public:
 
 	orbits_on_polynomials();
 	~orbits_on_polynomials();
-	void init(
+	void init_Schreier(
 			group_constructions::linear_group *LG,
 			algebra::ring_theory::homogeneous_polynomial_domain *HPD,
 			int print_interval,
+			int verbose_level);
+	void init_bitvector_first(
+			group_constructions::linear_group *LG,
+			algebra::ring_theory::homogeneous_polynomial_domain *HPD,
+			int print_interval,
+			int verbose_level);
+	int init_bitvector_continue(
+			group_constructions::linear_group *LG,
+			algebra::ring_theory::homogeneous_polynomial_domain *HPD,
+			int print_interval,
+			int idx_of_last_orbit,
+			int verbose_level);
+	int complete_orbits(
+			int &idx_of_last_orbit,
 			int verbose_level);
 	void orbit_of_one_polynomial(
 			group_constructions::linear_group *LG,
@@ -583,6 +609,8 @@ public:
 			std::string &what,
 			std::string &extra,
 			std::string &fname,
+			int verbose_level);
+	void compute_small_generating_set(
 			int verbose_level);
 
 

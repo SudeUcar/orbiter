@@ -41,8 +41,11 @@ public:
 
 
 	actions::action *A;
+
 	induced_actions::action_on_homogeneous_polynomials *AonHPD;
+
 	algebra::field_theory::finite_field *F;
+
 	groups::strong_generators *SG;
 
 	int nb_monomials;
@@ -108,6 +111,7 @@ public:
 		// the orbit representative to the given subspace.
 	void get_random_schreier_generator(
 			int *Elt, int verbose_level);
+		// needs get_transporter, map_an_equation, search_data
 	void get_canonical_form(
 			int *canonical_equation,
 			int *transporter_to_canonical_form,
@@ -152,7 +156,7 @@ public:
 
 
 
-//! orbit of sets using a Schreier tree, used in packing::make_spread_table
+//! orbit of sets using a Schreier tree; useful for objects which can be encoded as sets of a fixed size; the set size can be one
 
 
 class orbit_of_sets {
@@ -173,15 +177,20 @@ public:
 	int used_length;
 		// number of sets currently stored in Sets
 	long int **Sets;
+		// Sets[used_length][sz]
 		// the sets are stored in the order in which they
 		// are discovered and added to the tree
 	int *Extra;
 		// [allocation_length * 2]
-		// Extra[i * 2 + 0] is the index of the ancestor node of node i.
+		// Extra[i * 2 + 0] is the index of the ancestor node of node i (aka prev).
 		// Extra[i * 2 + 1] is the label of the generator that maps
-		// the ancestor of node i to node i.
+		// the ancestor of node i to node i (aka label).
 		// Here, node i means the set in Sets[i].
 		// Node 0 is the root node, i.e. the set in 'set'.
+
+		//prev = Extra[2 * j + 0];
+		//label = Extra[2 * j + 1];
+
 	int *cosetrep; // the result of coset_rep()
 	int *cosetrep_tmp; // temporary storage for coset_rep()
 
@@ -244,6 +253,11 @@ public:
 			int verbose_level);
 	void export_tree_as_layered_graph_to_file(
 			std::string &fname,
+			int verbose_level);
+	other::data_structures::bitvector *compute_bitvector(
+			int verbose_level);
+	void add_to_existing_bitvector(
+			other::data_structures::bitvector *B,
 			int verbose_level);
 
 };

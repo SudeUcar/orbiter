@@ -125,6 +125,50 @@ int bitvector::s_i(
 	}
 }
 
+long int bitvector::get_first_entry_zero()
+{
+	long int i;
+
+	for (i = 0; i < length; i++) {
+		if (s_i(i) == 0) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+long int bitvector::count_number_of_ones()
+{
+	long int i, cnt;
+
+	cnt = 0;
+	for (i = 0; i < length; i++) {
+		if (s_i(i)) {
+			cnt++;
+		}
+	}
+	return cnt;
+}
+
+long int bitvector::count_number_of_zeros()
+{
+	long int N1, N0;
+
+	N1 = count_number_of_ones();
+	N0 = length - N1;
+	return N0;
+}
+
+double bitvector::ratio_of_ones()
+{
+	double d;
+	long int N;
+
+	N = count_number_of_ones();
+	d = (double) N / (double) length;
+	return d;
+}
+
 void bitvector::write_file(
 		std::string &fname, int verbose_level)
 {

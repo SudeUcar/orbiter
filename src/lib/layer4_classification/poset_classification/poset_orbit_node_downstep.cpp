@@ -394,13 +394,13 @@ void poset_orbit_node::compute_schreier_vector(
 				"calling compute_all_point_orbits" << endl;
 	}
 
-	int print_interval = 10000;
+	//int print_interval = 10000;
 
 	if (lvl == 0) {
-		Schreier->compute_all_point_orbits(print_interval, 0 /*verbose_level - 1 */);
+		Schreier->compute_all_point_orbits(/*print_interval,*/ 0 /*verbose_level - 1 */);
 	}
 	else {
-		Schreier->compute_all_point_orbits(print_interval, 0 /* verbose_level */);
+		Schreier->compute_all_point_orbits(/*print_interval,*/ 0 /* verbose_level */);
 	}
 	if (f_v) {
 		cout << "poset_orbit_node::compute_schreier_vector "
@@ -780,13 +780,13 @@ void poset_orbit_node::schreier_forest(
 	}
 #else
 
-	int print_interval = 10000;
+	//int print_interval = 10000;
 
 	if (f_v) {
 		gen->print_level_info(lvl, node);
 		cout << " : poset_orbit_node::schreier_forest before Schreier.compute_all_point_orbits" << endl;
 	}
-	Schreier.compute_all_point_orbits(print_interval, verbose_level - 1);
+	Schreier.compute_all_point_orbits(/*print_interval,*/ verbose_level - 1);
 	if (f_v) {
 		gen->print_level_info(lvl, node);
 		cout << " : poset_orbit_node::schreier_forest after Schreier.compute_all_point_orbits" << endl;

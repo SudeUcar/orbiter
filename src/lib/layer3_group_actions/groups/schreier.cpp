@@ -27,6 +27,9 @@ schreier::schreier()
 
 	Forest = NULL;
 
+	print_interval = 10000;
+
+
 	f_print_function = false;
 	print_function = NULL;
 	print_function_data = NULL;
@@ -276,7 +279,7 @@ void schreier::extend_orbit(
 }
 
 void schreier::compute_all_point_orbits(
-		int print_interval,
+		//int print_interval,
 		int verbose_level)
 {
 	int f_v = (verbose_level >= 1);
@@ -389,6 +392,287 @@ void schreier::compute_all_point_orbits(
 	}
 
 }
+
+
+
+other::data_structures::bitvector *schreier::compute_bitvector(
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "schreier::compute_bitvector" << endl;
+	}
+	other::data_structures::bitvector *B;
+
+	B = NEW_OBJECT(other::data_structures::bitvector);
+
+	B->allocate(Generators_and_images->degree);
+
+	int idx, fst, len, i;
+	long int a;
+
+	for (idx = 0; idx < Forest->nb_orbits; idx++) {
+		fst = Forest->orbit_first[idx];
+		len = Forest->orbit_len[idx];
+		for (i = 0; i < len; i++) {
+			a = Forest->orbit[fst + i];
+			B->set_bit(a);
+		}
+	}
+
+	if (f_v) {
+		cout << "schreier::compute_bitvector done" << endl;
+	}
+	return B;
+}
+
+void schreier::compute_first_point_orbit(
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+	//int f_vv = (verbose_level >= 2);
+
+	if (f_v) {
+		cout << "schreier::compute_first_point_orbit "
+				"verbose_level=" << verbose_level << endl;
+		cout << "schreier::compute_first_point_orbit action=";
+		Generators_and_images->A->print_info();
+		//<< " degree=" << degree << endl;
+	}
+
+
+#if 0
+	if (degree > ONE_MILLION) {
+		f_vv = false;
+	}
+#endif
+
+	if (f_v) {
+		cout << "schreier::compute_first_point_orbit "
+				"before initialize_tables" << endl;
+	}
+	Forest->initialize_tables(verbose_level - 2);
+	if (f_v) {
+		cout << "schreier::compute_first_point_orbit "
+				"after initialize_tables" << endl;
+	}
+
+
+	int pt, pt_loc, cur;
+
+	pt = 0;
+
+	pt_loc = Forest->orbit_inv[pt];
+
+	cur = Forest->orbit_first[Forest->nb_orbits];
+
+
+
+	int pt_pref;
+
+	if (f_preferred_choice_function) {
+
+		if (true) {
+			cout << "schreier::compute_first_point_orbit "
+					"before preferred_choice_function, pt=" << pt << endl;
+		}
+		(*preferred_choice_function)(
+				pt, pt_pref,
+				this,
+				preferred_choice_function_data,
+				preferred_choice_function_data2,
+				verbose_level);
+		if (true) {
+			cout << "schreier::compute_first_point_orbit "
+					"before preferred_choice_function, "
+					"pt=" << pt << " pt_pref=" << pt_pref << endl;
+		}
+
+		if (Forest->orbit_inv[pt_pref] < cur) {
+			cout << "schreier::compute_first_point_orbit "
+					"preferred point is already in "
+					"some other orbit" << endl;
+			exit(1);
+		}
+
+	}
+	else {
+		pt_pref = pt;
+	}
+
+	compute_point_orbit(pt_pref, print_interval, 0 /*verbose_level - 2*/);
+
+
+#if 0
+	int pt, pt_loc, cur, pt0;
+
+	for (pt0 = 0, pt = 0; pt < Generators_and_images->degree; pt++) {
+
+		pt_loc = Forest->orbit_inv[pt];
+
+		cur = Forest->orbit_first[Forest->nb_orbits];
+
+		if (pt_loc < cur) {
+			continue;
+		}
+
+		int pt_pref;
+
+		if (f_preferred_choice_function) {
+
+			if (true) {
+				cout << "schreier::compute_first_point_orbit "
+						"before preferred_choice_function, pt=" << pt << endl;
+			}
+			(*preferred_choice_function)(
+					pt, pt_pref,
+					this,
+					preferred_choice_function_data,
+					preferred_choice_function_data2,
+					verbose_level);
+			if (true) {
+				cout << "schreier::compute_first_point_orbit "
+						"before preferred_choice_function, "
+						"pt=" << pt << " pt_pref=" << pt_pref << endl;
+			}
+
+			if (Forest->orbit_inv[pt_pref] < cur) {
+				cout << "schreier::compute_first_point_orbit "
+						"preferred point is already in "
+						"some other orbit" << endl;
+				exit(1);
+			}
+
+		}
+		else {
+			pt_pref = pt;
+		}
+
+		//int f_preferred_choice_function;
+		//void (*preferred_choice_function)(int pt, int &pt_pref, void *data);
+		//void *preferred_choice_function_data;
+
+
+		if (false) {
+			cout << "schreier::compute_first_point_orbit pt = "
+					<< pt << " / " << Generators_and_images->degree
+					<< " nb_orbits=" << Forest->nb_orbits
+					<< " cur=" << cur
+					<< ", computing orbit of "
+							"pt_pref=" << pt_pref << endl;
+		}
+		if (Generators_and_images->degree > ONE_MILLION && (pt - pt0) > 50000) {
+			cout << "schreier::compute_first_point_orbit pt = "
+					<< pt << " / " << Generators_and_images->degree
+					<< " nb_orbits=" << Forest->nb_orbits
+					<< " cur=" << cur
+					<< ", computing orbit of "
+							"pt_pref=" << pt_pref << endl;
+			pt0 = pt;
+		}
+		compute_point_orbit(pt_pref, print_interval, 0 /*verbose_level - 2*/);
+	}
+
+	if (f_v) {
+		cout << "schreier::compute_first_point_orbit found "
+				<< Forest->nb_orbits << " orbits" << endl;
+		other::data_structures::tally Cl;
+
+		Cl.init(Forest->orbit_len, Forest->nb_orbits, false, 0);
+		cout << "The distribution of orbit lengths is: ";
+		Cl.print(false);
+	}
+#endif
+
+
+	if (f_v) {
+		cout << "schreier::compute_first_point_orbit done" << endl;
+	}
+}
+
+
+
+int schreier::compute_next_point_orbit(
+		int verbose_level)
+// returns true when all orbits have been computed, false otherwise
+{
+	int f_v = (verbose_level >= 1);
+	//int f_vv = (verbose_level >= 2);
+
+	if (f_v) {
+		cout << "schreier::compute_next_point_orbit "
+				"verbose_level=" << verbose_level << endl;
+	}
+
+
+
+	int ret;
+	int pt, pt_loc, cur, pt0;
+
+	for (pt = 0; pt < Generators_and_images->degree; pt++) {
+
+		pt_loc = Forest->orbit_inv[pt];
+
+		cur = Forest->orbit_first[Forest->nb_orbits];
+
+		if (pt_loc < cur) {
+			continue;
+		}
+		break;
+	}
+
+	if (pt == Generators_and_images->degree) {
+		ret = true;
+	}
+	else {
+		ret = false;
+
+
+
+		int pt_pref;
+
+		if (f_preferred_choice_function) {
+
+			if (true) {
+				cout << "schreier::compute_next_point_orbit "
+						"before preferred_choice_function, pt=" << pt << endl;
+			}
+			(*preferred_choice_function)(
+					pt, pt_pref,
+					this,
+					preferred_choice_function_data,
+					preferred_choice_function_data2,
+					verbose_level);
+			if (true) {
+				cout << "schreier::compute_next_point_orbit "
+						"before preferred_choice_function, "
+						"pt=" << pt << " pt_pref=" << pt_pref << endl;
+			}
+
+			if (Forest->orbit_inv[pt_pref] < cur) {
+				cout << "schreier::compute_next_point_orbit "
+						"preferred point is already in "
+						"some other orbit" << endl;
+				exit(1);
+			}
+
+		}
+		else {
+			pt_pref = pt;
+		}
+
+		compute_point_orbit(pt_pref, print_interval, 0 /*verbose_level - 2*/);
+
+	}
+
+
+	if (f_v) {
+		cout << "schreier::compute_next_point_orbit done" << endl;
+	}
+	return ret;
+}
+
 
 void schreier::compute_all_point_orbits_with_preferred_labels(
 	long int *preferred_labels, int verbose_level)
@@ -721,7 +1005,9 @@ void schreier::compute_point_orbit(
 						<< " processed = " << cur1 << " nb_orbits="
 						<< Forest->nb_orbits << " cur_pt=" << cur_pt << " next_pt="
 						<< next_pt << " orbit_first[nb_orbits]="
-						<< Forest->orbit_first[Forest->nb_orbits] << endl;
+						<< Forest->orbit_first[Forest->nb_orbits]
+						<< " remaining = " << Generators_and_images->degree - Forest->orbit_first[Forest->nb_orbits]
+						<< endl;
 			}
 
 			if (false) {
@@ -1115,9 +1401,9 @@ void schreier::orbits_on_invariant_subset(
 	int *&orbit_perm, int *&orbit_perm_inv)
 {
 	int i, j, a, pos;
-	int print_interval = 100000;
+	//int print_interval = 100000;
 	
-	compute_all_point_orbits(print_interval, 0);
+	compute_all_point_orbits(/*print_interval,*/ 0);
 
 	nb_orbits_on_subset = 0;
 
@@ -1125,11 +1411,7 @@ void schreier::orbits_on_invariant_subset(
 	orbit_perm_inv = NEW_int(Forest->nb_orbits);
 
 	Int_vec_mone(orbit_perm_inv, Forest->nb_orbits);
-#if 0
-	for (i = 0; i < Forest->nb_orbits; i++) {
-		orbit_perm_inv[i] = -1;
-	}
-#endif
+
 	for (i = 0; i < Forest->nb_orbits; i++) {
 		j = Forest->orbit_first[i];
 		a = Forest->orbit[j];

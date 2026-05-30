@@ -894,6 +894,8 @@ public:
 
 	other::data_structures::forest *Forest;
 
+	int print_interval;
+
 
 	int f_print_function;
 	void (*print_function)(std::ostream &ost, int pt, void *data);
@@ -928,8 +930,16 @@ public:
 	void extend_orbit(
 			int *elt, int verbose_level);
 	void compute_all_point_orbits(
-			int print_interval,
+			//int print_interval,
 			int verbose_level);
+	other::data_structures::bitvector *compute_bitvector(
+			int verbose_level);
+	void compute_first_point_orbit(
+			int verbose_level);
+	int compute_next_point_orbit(
+			int verbose_level);
+	// returns true when all orbits have been computed, false otherwise
+
 	void compute_all_point_orbits_with_preferred_labels(
 		long int *preferred_labels, int verbose_level);
 	void compute_all_orbits_on_invariant_subset(
@@ -2025,6 +2035,10 @@ public:
 			actions::action *A_given,
 		int &nb_orbits, int *&orbit_reps, int verbose_level);
 	schreier *compute_all_point_orbits_schreier(
+			actions::action *A_given,
+			//int print_interval,
+			int verbose_level);
+	schreier *compute_all_point_orbits_schreier_with_print_interval(
 			actions::action *A_given,
 			int print_interval,
 			int verbose_level);

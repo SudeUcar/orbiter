@@ -1017,6 +1017,8 @@ class interface_toolkit {
 	int f_eliminate_duplicate_columns;
 	std::string eliminate_duplicate_columns_fname;
 
+	int f_density_of_ones_in_bitvector_file;
+	std::string density_of_ones_in_bitvector_file_fname;
 
 public:
 

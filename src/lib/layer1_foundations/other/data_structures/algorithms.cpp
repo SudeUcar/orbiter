@@ -2114,7 +2114,28 @@ int algorithms::Hamming_weight(
 	return w;
 }
 
+double algorithms::ratio_of_ones_in_bitvector_file(
+		std::string &fname, long int &length, int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
 
+	if (f_v) {
+		cout << "algorithms::ratio_of_ones_in_bitvector_file" << endl;
+	}
+
+	other::data_structures::bitvector *B;
+	double d;
+
+	B = NEW_OBJECT(other::data_structures::bitvector);
+
+	B->read_file(fname, verbose_level);
+	d = B->ratio_of_ones();
+
+	length = B->get_length();
+
+	FREE_OBJECT(B);
+	return d;
+}
 
 
 

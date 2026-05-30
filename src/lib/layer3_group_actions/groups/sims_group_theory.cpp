@@ -1848,13 +1848,13 @@ void sims::compute_conjugacy_classes(
 	Sch->Generators_and_images->init_generators(*SG->gens, verbose_level - 2);
 
 
-	int print_interval = 10000;
+	//int print_interval = 10000;
 
 	if (f_v) {
 		cout << "sims::compute_conjugacy_classes "
 				"Computing conjugacy classes:" << endl;
 	}
-	Sch->compute_all_point_orbits(print_interval, verbose_level);
+	Sch->compute_all_point_orbits(/*print_interval,*/ verbose_level);
 
 
 	nb_classes = Sch->Forest->nb_orbits;

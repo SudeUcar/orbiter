@@ -383,8 +383,9 @@ void surface_object_orbits::init_orbits_on_points(
 			cout << "surface_object_orbits::init_orbits_on_points "
 					"computing orbits on points using nice gens:" << endl;
 		}
-		Orbits_on_points = SOG->nice_gens->compute_all_point_orbits_schreier(
-				A_on_points, print_interval, 0 /*verbose_level*/);
+		Orbits_on_points = SOG->nice_gens->compute_all_point_orbits_schreier_with_print_interval(
+				A_on_points, print_interval,
+				0 /*verbose_level*/);
 
 	}
 	else {
@@ -398,7 +399,7 @@ void surface_object_orbits::init_orbits_on_points(
 					"before Aut_gens->compute_all_point_orbits_schreier" << endl;
 		}
 
-		Orbits_on_points = SOG->Aut_gens->compute_all_point_orbits_schreier(
+		Orbits_on_points = SOG->Aut_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_on_points, print_interval, verbose_level - 2);
 		if (f_v) {
 			cout << "surface_object_orbits::init_orbits_on_points "
@@ -454,11 +455,11 @@ void surface_object_orbits::init_orbits_on_Eckardt_points(
 			cout << "surface_object_orbits::init_orbits_on_Eckardt_points "
 					"computing orbits on points using nice gens:" << endl;
 		}
-		Orbits_on_Eckardt_points = SOG->nice_gens->compute_all_point_orbits_schreier(
+		Orbits_on_Eckardt_points = SOG->nice_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_on_Eckardt_points, print_interval, 0 /*verbose_level*/);
 	}
 	else {
-		Orbits_on_Eckardt_points = SOG->Aut_gens->compute_all_point_orbits_schreier(
+		Orbits_on_Eckardt_points = SOG->Aut_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_on_Eckardt_points, print_interval, 0 /*verbose_level*/);
 	}
 	if (f_v) {
@@ -505,11 +506,11 @@ void surface_object_orbits::init_orbits_on_Double_points(
 		cout << "computing orbits on Double points:" << endl;
 	}
 	if (SOG->f_has_nice_gens) {
-		Orbits_on_Double_points = SOG->nice_gens->compute_all_point_orbits_schreier(
+		Orbits_on_Double_points = SOG->nice_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_on_Double_points, print_interval, 0 /*verbose_level*/);
 	}
 	else {
-		Orbits_on_Double_points = SOG->Aut_gens->compute_all_point_orbits_schreier(
+		Orbits_on_Double_points = SOG->Aut_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_on_Double_points, print_interval, 0 /*verbose_level*/);
 	}
 	if (f_v) {
@@ -556,11 +557,11 @@ void surface_object_orbits::init_orbits_on_Single_points(
 		cout << "computing orbits on Single points:" << endl;
 	}
 	if (SOG->f_has_nice_gens) {
-		Orbits_on_Single_points = SOG->nice_gens->compute_all_point_orbits_schreier(
+		Orbits_on_Single_points = SOG->nice_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_on_Single_points, print_interval, 0 /*verbose_level*/);
 	}
 	else {
-		Orbits_on_Single_points = SOG->Aut_gens->compute_all_point_orbits_schreier(
+		Orbits_on_Single_points = SOG->Aut_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_on_Single_points, print_interval, 0 /*verbose_level*/);
 	}
 	if (f_v) {
@@ -608,11 +609,11 @@ void surface_object_orbits::init_orbits_on_lines(
 		cout << "computing orbits on lines:" << endl;
 	}
 	if (SOG->f_has_nice_gens) {
-		Orbits_on_lines = SOG->nice_gens->compute_all_point_orbits_schreier(
+		Orbits_on_lines = SOG->nice_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_on_the_lines, print_interval, 0 /*verbose_level*/);
 	}
 	else {
-		Orbits_on_lines = SOG->Aut_gens->compute_all_point_orbits_schreier(
+		Orbits_on_lines = SOG->Aut_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_on_the_lines, print_interval, 0 /*verbose_level*/);
 	}
 	if (f_v) {
@@ -650,11 +651,11 @@ void surface_object_orbits::init_orbits_on_half_double_sixes(
 		cout << "computing orbits on single sixes:" << endl;
 	}
 	if (SOG->f_has_nice_gens) {
-		Orbits_on_single_sixes = SOG->nice_gens->compute_all_point_orbits_schreier(
+		Orbits_on_single_sixes = SOG->nice_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_single_sixes, print_interval, 0 /*verbose_level*/);
 	}
 	else {
-		Orbits_on_single_sixes = SOG->Aut_gens->compute_all_point_orbits_schreier(
+		Orbits_on_single_sixes = SOG->Aut_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_single_sixes, print_interval, 0 /*verbose_level*/);
 	}
 	if (f_v) {
@@ -706,11 +707,11 @@ void surface_object_orbits::init_orbits_on_double_sixes(
 		cout << "computing orbits on double sixes:" << endl;
 	}
 	if (SOG->f_has_nice_gens) {
-		Orbits_on_double_sixes = SOG->nice_gens->compute_all_point_orbits_schreier(
+		Orbits_on_double_sixes = SOG->nice_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_double_sixes, print_interval, 0 /*verbose_level*/);
 	}
 	else {
-		Orbits_on_double_sixes = SOG->Aut_gens->compute_all_point_orbits_schreier(
+		Orbits_on_double_sixes = SOG->Aut_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_double_sixes, print_interval, 0 /*verbose_level*/);
 	}
 	if (f_v) {
@@ -751,11 +752,11 @@ void surface_object_orbits::init_orbits_on_tritangent_planes(
 	}
 
 	if (SOG->f_has_nice_gens) {
-		Orbits_on_tritangent_planes = SOG->nice_gens->compute_all_point_orbits_schreier(
+		Orbits_on_tritangent_planes = SOG->nice_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_on_tritangent_planes, print_interval, 0 /*verbose_level*/);
 	}
 	else {
-		Orbits_on_tritangent_planes = SOG->Aut_gens->compute_all_point_orbits_schreier(
+		Orbits_on_tritangent_planes = SOG->Aut_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_on_tritangent_planes, print_interval, 0 /*verbose_level*/);
 	}
 	if (f_v) {
@@ -805,11 +806,11 @@ void surface_object_orbits::init_orbits_on_Hesse_planes(
 	}
 
 	if (SOG->f_has_nice_gens) {
-		Orbits_on_Hesse_planes = SOG->nice_gens->compute_all_point_orbits_schreier(
+		Orbits_on_Hesse_planes = SOG->nice_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_on_Hesse_planes, print_interval, 0 /*verbose_level*/);
 	}
 	else {
-		Orbits_on_Hesse_planes = SOG->Aut_gens->compute_all_point_orbits_schreier(
+		Orbits_on_Hesse_planes = SOG->Aut_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_on_Hesse_planes, print_interval, 0 /*verbose_level*/);
 	}
 	if (f_v) {
@@ -867,11 +868,11 @@ void surface_object_orbits::init_orbits_on_axes(
 	}
 
 	if (SOG->f_has_nice_gens) {
-		Orbits_on_axes = SOG->nice_gens->compute_all_point_orbits_schreier(
+		Orbits_on_axes = SOG->nice_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_on_axes, print_interval, 0 /*verbose_level*/);
 	}
 	else {
-		Orbits_on_axes = SOG->Aut_gens->compute_all_point_orbits_schreier(
+		Orbits_on_axes = SOG->Aut_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_on_axes, print_interval, 0 /*verbose_level*/);
 	}
 	if (f_v) {
@@ -913,11 +914,11 @@ void surface_object_orbits::init_orbits_on_trihedral_pairs(
 	}
 
 	if (SOG->f_has_nice_gens) {
-		Orbits_on_trihedral_pairs = SOG->nice_gens->compute_all_point_orbits_schreier(
+		Orbits_on_trihedral_pairs = SOG->nice_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_on_trihedral_pairs, print_interval, 0 /*verbose_level*/);
 	}
 	else {
-		Orbits_on_trihedral_pairs = SOG->Aut_gens->compute_all_point_orbits_schreier(
+		Orbits_on_trihedral_pairs = SOG->Aut_gens->compute_all_point_orbits_schreier_with_print_interval(
 				A_on_trihedral_pairs, print_interval, 0 /*verbose_level*/);
 	}
 	if (f_v) {
@@ -966,12 +967,12 @@ void surface_object_orbits::init_orbits_on_points_not_on_lines(
 
 	if (SOG->f_has_nice_gens) {
 		Orbits_on_points_not_on_lines =
-				SOG->nice_gens->compute_all_point_orbits_schreier(
+				SOG->nice_gens->compute_all_point_orbits_schreier_with_print_interval(
 						A_on_pts_not_on_lines, print_interval, 0 /*verbose_level*/);
 	}
 	else {
 		Orbits_on_points_not_on_lines =
-				SOG->Aut_gens->compute_all_point_orbits_schreier(
+				SOG->Aut_gens->compute_all_point_orbits_schreier_with_print_interval(
 						A_on_pts_not_on_lines,  print_interval, 0 /*verbose_level*/);
 	}
 	if (f_v) {
@@ -2190,19 +2191,19 @@ void surface_object_orbits::cheat_sheet_group_elements(
 			cout << "surface_object_orbits::cheat_sheet_group_elements "
 					"before compute_all_point_orbits_schreier" << endl;
 		}
-		Orbits[0] = gens->compute_all_point_orbits_schreier(SOG->Surf_A->A, print_interval, verbose_level - 2);
-		Orbits[1] = gens->compute_all_point_orbits_schreier(A_on_points, print_interval, verbose_level - 2);
-		Orbits[2] = gens->compute_all_point_orbits_schreier(A_on_Eckardt_points, print_interval, verbose_level - 2);
-		Orbits[3] = gens->compute_all_point_orbits_schreier(A_on_Double_points, print_interval, verbose_level - 2);
-		Orbits[4] = gens->compute_all_point_orbits_schreier(A_on_Single_points, print_interval, verbose_level - 2);
-		Orbits[5] = gens->compute_all_point_orbits_schreier(A_on_the_lines, print_interval, verbose_level - 2);
-		Orbits[6] = gens->compute_all_point_orbits_schreier(A_single_sixes, print_interval, verbose_level - 2);
-		Orbits[7] = gens->compute_all_point_orbits_schreier(A_double_sixes, print_interval, verbose_level - 2);
-		Orbits[8] = gens->compute_all_point_orbits_schreier(A_on_tritangent_planes, print_interval, verbose_level - 2);
-		Orbits[9] = gens->compute_all_point_orbits_schreier(A_on_Hesse_planes, print_interval, verbose_level - 2);
-		Orbits[10] = gens->compute_all_point_orbits_schreier(A_on_axes, print_interval, verbose_level - 2);
-		Orbits[11] = gens->compute_all_point_orbits_schreier(A_on_trihedral_pairs, print_interval, verbose_level - 2);
-		Orbits[12] = gens->compute_all_point_orbits_schreier(A_on_pts_not_on_lines, print_interval, verbose_level - 2);
+		Orbits[0] = gens->compute_all_point_orbits_schreier_with_print_interval(SOG->Surf_A->A, print_interval, verbose_level - 2);
+		Orbits[1] = gens->compute_all_point_orbits_schreier_with_print_interval(A_on_points, print_interval, verbose_level - 2);
+		Orbits[2] = gens->compute_all_point_orbits_schreier_with_print_interval(A_on_Eckardt_points, print_interval, verbose_level - 2);
+		Orbits[3] = gens->compute_all_point_orbits_schreier_with_print_interval(A_on_Double_points, print_interval, verbose_level - 2);
+		Orbits[4] = gens->compute_all_point_orbits_schreier_with_print_interval(A_on_Single_points, print_interval, verbose_level - 2);
+		Orbits[5] = gens->compute_all_point_orbits_schreier_with_print_interval(A_on_the_lines, print_interval, verbose_level - 2);
+		Orbits[6] = gens->compute_all_point_orbits_schreier_with_print_interval(A_single_sixes, print_interval, verbose_level - 2);
+		Orbits[7] = gens->compute_all_point_orbits_schreier_with_print_interval(A_double_sixes, print_interval, verbose_level - 2);
+		Orbits[8] = gens->compute_all_point_orbits_schreier_with_print_interval(A_on_tritangent_planes, print_interval, verbose_level - 2);
+		Orbits[9] = gens->compute_all_point_orbits_schreier_with_print_interval(A_on_Hesse_planes, print_interval, verbose_level - 2);
+		Orbits[10] = gens->compute_all_point_orbits_schreier_with_print_interval(A_on_axes, print_interval, verbose_level - 2);
+		Orbits[11] = gens->compute_all_point_orbits_schreier_with_print_interval(A_on_trihedral_pairs, print_interval, verbose_level - 2);
+		Orbits[12] = gens->compute_all_point_orbits_schreier_with_print_interval(A_on_pts_not_on_lines, print_interval, verbose_level - 2);
 
 		for (j = 0; j < nb_col; j++) {
 

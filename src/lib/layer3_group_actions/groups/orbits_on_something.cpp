@@ -126,14 +126,15 @@ void orbits_on_something::init(
 
 		if (f_v) {
 			cout << "orbits_on_something::init "
-					"before compute_all_point_orbits_schreier" << endl;
+					"before compute_all_point_orbits_schreier_with_print_interval" << endl;
 		}
 
-		Sch = SG->compute_all_point_orbits_schreier(
+
+		Sch = SG->compute_all_point_orbits_schreier_with_print_interval(
 				A, print_interval, verbose_level - 2);
 		if (f_v) {
 			cout << "orbits_on_something::init "
-					"after compute_all_point_orbits_schreier" << endl;
+					"after compute_all_point_orbits_schreier_with_print_interval" << endl;
 		}
 
 		if (f_v) {
@@ -253,15 +254,15 @@ void orbits_on_something::init_from_vector_ge(
 
 		if (f_v) {
 			cout << "orbits_on_something::init_from_vector_ge "
-					"before compute_all_point_orbits_schreier" << endl;
+					"before compute_all_point_orbits_schreier_with_print_interval" << endl;
 		}
 
-		Sch = gens->compute_all_point_orbits_schreier(
+		Sch = gens->compute_all_point_orbits_schreier_with_print_interval(
 				A, print_interval, verbose_level - 2);
 
 		if (f_v) {
 			cout << "orbits_on_something::init_from_vector_ge "
-					"after compute_all_point_orbits_schreier" << endl;
+					"after compute_all_point_orbits_schreier_with_print_interval" << endl;
 			cout << "We found " << Sch->Forest->nb_orbits
 					<< " orbits of the group" << endl;
 		}

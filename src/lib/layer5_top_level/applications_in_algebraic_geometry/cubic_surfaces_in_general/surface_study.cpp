@@ -697,7 +697,7 @@ void surface_study::study_orbits_on_lines(
 	int print_interval = 10000;
 
 
-	Orb = SaS->Strong_gens->compute_all_point_orbits_schreier(
+	Orb = SaS->Strong_gens->compute_all_point_orbits_schreier_with_print_interval(
 			A_on_lines, print_interval, verbose_level);
 
 	cout << "orbits on lines:" << endl;
@@ -1061,7 +1061,7 @@ void surface_study::study_surface_with_6_eckardt_points(
 
 
 	cout << "computing orbits on double points off the triangle:" << endl;
-	Orb2 = SaS->Strong_gens->compute_all_point_orbits_schreier(
+	Orb2 = SaS->Strong_gens->compute_all_point_orbits_schreier_with_print_interval(
 			A_on_double_pts, print_interval, verbose_level);
 	cout << "orbits on double points off the triangle:" << endl;
 	Orb2->Forest->print_and_list_orbits(cout);

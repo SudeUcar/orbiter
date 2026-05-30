@@ -1242,11 +1242,12 @@ void action_global::perm_print_cycles_sorted_by_length_offset(
 	}
 	
 	groups::schreier S;
-	int print_interval = 10000;
+	//int print_interval = 10000;
 	
 	S.init(A, verbose_level - 2);
 	S.Generators_and_images->init_generators(Gens, verbose_level - 2);
-	S.compute_all_point_orbits(print_interval,
+	//S.print_interval = print_interval;
+	S.compute_all_point_orbits(//print_interval,
 			verbose_level);
 	if (f_v) {
 		cout << "after S.compute_all_point_orbits, "
@@ -2231,7 +2232,7 @@ void action_global::orbits_on_equations(
 				"degree = " << A_on_equations->degree << endl;
 	}
 
-	int print_interval = 10000;
+	//int print_interval = 10000;
 
 
 	if (f_v) {
@@ -2240,7 +2241,7 @@ void action_global::orbits_on_equations(
 	}
 	Orb = gens->compute_all_point_orbits_schreier(
 			A_on_equations,
-			print_interval,
+			//print_interval,
 			verbose_level - 2);
 	if (f_v) {
 		cout << "action_global::orbits_on_equations "
@@ -3790,7 +3791,7 @@ void action_global::all_point_orbits(
 		cout << "action_global::all_point_orbits" << endl;
 	}
 
-	int print_interval = 10000;
+	//int print_interval = 10000;
 
 	Schreier.init(A, verbose_level - 2);
 	if (!A->f_has_strong_generators) {
@@ -3805,7 +3806,7 @@ void action_global::all_point_orbits(
 		cout << "action_global::all_point_orbits "
 				"before Schreier.compute_all_point_orbits" << endl;
 	}
-	Schreier.compute_all_point_orbits(print_interval, verbose_level);
+	Schreier.compute_all_point_orbits(/*print_interval,*/ verbose_level);
 	if (f_v) {
 		cout << "action_global::all_point_orbits "
 				"after Schreier.compute_all_point_orbits" << endl;
@@ -3876,7 +3877,7 @@ void action_global::all_point_orbits_from_strong_generators(
 	}
 
 
-	int print_interval = 10000;
+	//int print_interval = 10000;
 	Schreier.init(A, verbose_level - 2);
 
 	Schreier.Generators_and_images->init_generators(
@@ -3887,7 +3888,7 @@ void action_global::all_point_orbits_from_strong_generators(
 		cout << "action_global::all_point_orbits_from_strong_generators "
 				"before Schreier.compute_all_point_orbits" << endl;
 	}
-	Schreier.compute_all_point_orbits(print_interval, verbose_level - 1);
+	Schreier.compute_all_point_orbits(/*print_interval,*/ verbose_level - 1);
 	if (f_v) {
 		cout << "action_global::all_point_orbits_from_strong_generators "
 				"after Schreier.compute_all_point_orbits" << endl;
@@ -3907,19 +3908,19 @@ void action_global::all_point_orbits_from_generators(
 	int f_v = (verbose_level >= 1);
 
 	if (f_v) {
-		cout << "action_global::all_point_orbits_from_strong_generators" << endl;
+		cout << "action_global::all_point_orbits_from_generators" << endl;
 	}
 	if (f_v) {
-		cout << "action_global::all_point_orbits_from_strong_generators "
+		cout << "action_global::all_point_orbits_from_generators "
 				"verbose_level = " << verbose_level << endl;
 	}
 	if (f_v) {
-		cout << "action_global::all_point_orbits_from_strong_generators "
+		cout << "action_global::all_point_orbits_from_generators "
 				"group order = " << go << endl;
 	}
 
 
-	int print_interval = 10000;
+	//int print_interval = 10000;
 
 	Schreier.init(A, verbose_level - 2);
 
@@ -3928,18 +3929,111 @@ void action_global::all_point_orbits_from_generators(
 			verbose_level);
 
 	if (f_v) {
-		cout << "action_global::all_point_orbits_from_strong_generators "
+		cout << "action_global::all_point_orbits_from_generators "
 				"before Schreier.compute_all_point_orbits" << endl;
 	}
-	Schreier.compute_all_point_orbits(print_interval, verbose_level - 1);
+	Schreier.compute_all_point_orbits(/*print_interval, */ verbose_level - 1);
 	if (f_v) {
-		cout << "action_global::all_point_orbits_from_strong_generators "
+		cout << "action_global::all_point_orbits_from_generators "
 				"after Schreier.compute_all_point_orbits" << endl;
 	}
 	if (f_v) {
-		cout << "action_global::all_point_orbits_from_strong_generators done" << endl;
+		cout << "action_global::all_point_orbits_from_generators done" << endl;
 	}
 }
+
+
+void action_global::all_point_orbits_Schreier_from_generators_first_next(
+		actions::action *A,
+		groups::schreier &Schreier,
+		data_structures_groups::vector_ge *gens,
+		algebra::ring_theory::longinteger_object &go,
+		std::string &fname_bitvector,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "action_global::all_point_orbits_Schreier_from_generators_first_next" << endl;
+	}
+	if (f_v) {
+		cout << "action_global::all_point_orbits_Schreier_from_generators_first_next "
+				"verbose_level = " << verbose_level << endl;
+	}
+	if (f_v) {
+		cout << "action_global::all_point_orbits_Schreier_from_generators_first_next "
+				"group order = " << go << endl;
+	}
+
+
+	other::data_structures::string_tools String;
+	std::string fname_base;
+
+	fname_base = fname_bitvector;
+
+	String.chop_off_extension(
+			fname_base);
+
+
+
+	Schreier.init(A, verbose_level - 2);
+
+	Schreier.Generators_and_images->init_generators(
+			*gens /* *strong_generators */,
+			verbose_level);
+
+	if (f_v) {
+		cout << "action_global::all_point_orbits_Schreier_from_generators_first_next "
+				"before Schreier.compute_first_point_orbit" << endl;
+	}
+	Schreier.compute_first_point_orbit(
+			verbose_level - 1);
+
+	if (f_v) {
+		cout << "action_global::all_point_orbits_Schreier_from_generators_first_next "
+				"after Schreier.compute_first_point_orbit" << endl;
+	}
+
+	{
+		other::data_structures::bitvector *B;
+		std::string fname;
+
+		B = Schreier.compute_bitvector(
+				verbose_level - 1);
+
+
+		fname = fname_base + "_nborb" + std::to_string(Schreier.Forest->nb_orbits) + ".bitvector";
+		B->write_file(fname, verbose_level - 1);
+
+		FREE_OBJECT(B);
+	}
+
+	while (true) {
+
+		int ret;
+
+		if (f_v) {
+			cout << "action_global::all_point_orbits_Schreier_from_generators_first_next "
+					"before Schreier.compute_next_point_orbit" << endl;
+		}
+		ret = Schreier.compute_next_point_orbit(
+				verbose_level - 1);
+		if (f_v) {
+			cout << "action_global::all_point_orbits_Schreier_from_generators_first_next "
+					"after Schreier.compute_next_point_orbit" << endl;
+		}
+
+		if (ret) {
+			break;
+		}
+	}
+
+	if (f_v) {
+		cout << "action_global::all_point_orbits_Schreier_from_generators_first_next done" << endl;
+	}
+}
+
+
 
 
 void action_global::all_point_orbits_from_single_generator(
@@ -3949,7 +4043,7 @@ void action_global::all_point_orbits_from_single_generator(
 		int verbose_level)
 {
 	int f_v = (verbose_level >= 1);
-	int print_interval = 10000;
+	//int print_interval = 10000;
 
 	if (f_v) {
 		cout << "action_global::all_point_orbits_from_single_generator" << endl;
@@ -3967,7 +4061,7 @@ void action_global::all_point_orbits_from_single_generator(
 		cout << "action_global::all_point_orbits_from_single_generator "
 				"before Schreier.compute_all_point_orbits" << endl;
 	}
-	Schreier.compute_all_point_orbits(print_interval, verbose_level);
+	Schreier.compute_all_point_orbits(/*print_interval,*/ verbose_level);
 	if (f_v) {
 		cout << "action_global::all_point_orbits_from_single_generator "
 				"after Schreier.compute_all_point_orbits" << endl;
@@ -5359,7 +5453,7 @@ void action_global::compute_orbits_on_points(
 {
 	int f_v = (verbose_level >= 1);
 
-	int print_interval = 10000;
+	//int print_interval = 10000;
 
 	if (f_v) {
 		cout << "action_global::compute_orbits_on_points" << endl;
@@ -5384,7 +5478,7 @@ void action_global::compute_orbits_on_points(
 				"before Sch->compute_all_point_orbits, "
 				"degree = " << A->degree << endl;
 	}
-	Sch->compute_all_point_orbits(print_interval, verbose_level - 3);
+	Sch->compute_all_point_orbits(/*print_interval,*/ verbose_level - 3);
 	if (f_v) {
 		cout << "action_global::compute_orbits_on_points "
 				"after Sch->compute_all_point_orbits" << endl;
@@ -5413,14 +5507,14 @@ void action_global::point_stabilizer_any_point(
 
 	int f; //, len;
 	algebra::ring_theory::longinteger_object go;
-	int print_interval = 10000;
+	//int print_interval = 10000;
 
 	if (f_v) {
 		cout << "action_global::point_stabilizer_any_point "
 				"before compute_all_point_orbits_schreier" << endl;
 	}
 	Sch = A->Strong_gens->compute_all_point_orbits_schreier(
-			A, print_interval,
+			A, //print_interval,
 			0 /* verbose_level */);
 	if (f_v) {
 		cout << "action_global::point_stabilizer_any_point "
@@ -5493,13 +5587,13 @@ void action_global::point_stabilizer_any_point_with_given_group(
 
 	int f; //, len;
 	algebra::ring_theory::longinteger_object go;
-	int print_interval = 10000;
+	//int print_interval = 10000;
 
 	if (f_v) {
 		cout << "action_global::point_stabilizer_any_point_with_given_group "
 				"before compute_all_point_orbits_schreier" << endl;
 	}
-	Sch = input_gens->compute_all_point_orbits_schreier(A, print_interval,
+	Sch = input_gens->compute_all_point_orbits_schreier(A, //print_interval,
 			0 /* verbose_level */);
 	if (f_v) {
 		cout << "action_global::point_stabilizer_any_point_with_given_group "
@@ -5591,10 +5685,9 @@ void action_global::move_a_to_b_and_stabilizer_of_b(
 				"before compute_all_point_orbits_schreier" << endl;
 	}
 
-	int print_interval = 10000;
 
 	Schreier = SG->gens->compute_all_point_orbits_schreier(
-			A2, print_interval,
+			A2,
 			verbose_level - 2);
 
 	if (f_v) {
