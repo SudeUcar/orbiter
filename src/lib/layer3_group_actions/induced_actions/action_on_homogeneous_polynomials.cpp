@@ -178,6 +178,10 @@ void action_on_homogeneous_polynomials::init_invariant_set_of_equations(
 void action_on_homogeneous_polynomials::unrank_point(
 		int *v, long int rk)
 {
+	if (rk < 0) {
+		cout << "action_on_homogeneous_polynomials::unrank_point rk < 0" << endl;
+		exit(1);
+	}
 	HPD->unrank_coeff_vector(v, rk);
 	//PG_element_unrank_modified(*F, v, 1, dimension, rk);
 }
@@ -191,7 +195,14 @@ long int action_on_homogeneous_polynomials::rank_point(
 	PG_element_rank_modified(*F, v, 1, dimension, rk);
 	return rk;
 #else
-	return HPD->rank_coeff_vector(v);
+	long int rk;
+
+	rk = HPD->rank_coeff_vector(v);
+	if (rk < 0) {
+		cout << "action_on_homogeneous_polynomials::rank_point rk < 0" << endl;
+		exit(1);
+	}
+	return rk;
 #endif
 }
 
@@ -200,7 +211,7 @@ long int action_on_homogeneous_polynomials::compute_image_int(
 {
 	int f_v = (verbose_level >= 1);
 	int f_vv = (verbose_level >= 2);
-	int b;
+	long int b;
 	other::data_structures::sorting Sorting;
 	
 	if (f_v) {
@@ -240,7 +251,9 @@ long int action_on_homogeneous_polynomials::compute_image_int(
 		}
 #endif
 
-		if (!Table_of_equations->search(v2, b, 0 /* verbose_level */)) {
+		int b2;
+
+		if (!Table_of_equations->search(v2, b2, 0 /* verbose_level */)) {
 			cout << "action_on_homogeneous_polynomials::compute_image_int "
 					"Table_of_equations->search is false, "
 					"could not find equation" << endl;
@@ -268,6 +281,8 @@ long int action_on_homogeneous_polynomials::compute_image_int(
 #endif
 			exit(1);
 		}
+
+		b = b2;
 
 #if 0
 		if (b == nb_equations) {
