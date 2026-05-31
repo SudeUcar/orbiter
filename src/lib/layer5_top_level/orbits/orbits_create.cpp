@@ -22,7 +22,12 @@ orbits_create::orbits_create()
 
 	Group = NULL;
 	Group_action = NULL;
+
+	f_has_generators = false;
+	f_generators_is_group = false;
 	Generators = NULL;
+	f_generators_is_vector_ge = false;
+	Generators_vector_ge = NULL;
 
 
 	f_has_Orb = false;
@@ -107,8 +112,42 @@ void orbits_create::init(
 
 	if (Descr->f_generators) {
 
-		Generators = Get_any_group(Descr->generators_label);
-		prefix += "_subgroup_" + Generators->label;
+		int idx;
+
+		idx = user_interface::core_system::The_Orbiter_top_level_session->find_symbol(Descr->generators_label);
+		if (idx == -1) {
+			cout << "orbits_create::init "
+					"cannot find symbol " << Descr->generators_label << endl;
+			exit(1);
+		}
+		if (user_interface::core_system::The_Orbiter_top_level_session->get_object_type(idx) == layer1_foundations::other::orbiter_kernel_system::symbol_table_object_type::t_any_group) {
+
+			cout << "orbiter_top_level_session::get_any_group "
+					"gnerators are of type group" << endl;
+
+			f_generators_is_group = true;
+			Generators = Get_any_group(Descr->generators_label);
+		}
+		else if (user_interface::core_system::The_Orbiter_top_level_session->get_object_type(idx) == layer1_foundations::other::orbiter_kernel_system::symbol_table_object_type::t_vector_ge) {
+
+			cout << "orbiter_top_level_session::get_any_group "
+					"gnerators are of type vector_ge" << endl;
+
+			f_generators_is_vector_ge = true;
+
+			apps_algebra::vector_ge_builder *VB;
+
+			VB = Get_object_of_type_vector_ge(Descr->generators_label);
+			Generators_vector_ge = VB->V;
+		}
+		else {
+			cout << "orbiter_top_level_session::get_any_group "
+					"generators must be either a group or a vector_ge" << endl;
+			exit(1);
+		}
+		prefix += "_gens_" + Descr->generators_label;
+		f_has_generators = true;
+
 	}
 
 
@@ -484,28 +523,59 @@ void orbits_create::init(
 			exit(1);
 		}
 
+
 		On_polynomials = NEW_OBJECT(orbits_on_polynomials);
-
-
 
 		algebra::ring_theory::homogeneous_polynomial_domain *HPD;
 
 
 		HPD = Get_ring(Descr->on_polynomials_ring);
 
-		if (f_v) {
-			cout << "orbits_create::init "
-					"before On_polynomials->init_Schreier" << endl;
-		}
-		On_polynomials->init_Schreier(
-				Group->LG,
-				HPD,
-				Descr->print_interval,
-				verbose_level);
 
-		if (f_v) {
-			cout << "orbits_create::init "
-					"after On_polynomials->init_Schreier" << endl;
+		if (f_has_generators) {
+
+
+			data_structures_groups::vector_ge *generators = NULL;
+
+			if (f_generators_is_group) {
+				generators = Generators->Subgroup_gens->gens;
+			}
+			else if (f_generators_is_vector_ge) {
+				generators = Generators_vector_ge;
+			}
+			if (f_v) {
+				cout << "orbits_create::init "
+						"before On_polynomials->init_Schreier_with_generators" << endl;
+			}
+			On_polynomials->init_Schreier_with_generators(
+					Group->LG,
+					HPD,
+					generators,
+					Descr->print_interval,
+					verbose_level);
+
+			if (f_v) {
+				cout << "orbits_create::init "
+						"after On_polynomials->init_Schreier_with_generators" << endl;
+			}
+
+		}
+
+		else {
+			if (f_v) {
+				cout << "orbits_create::init "
+						"before On_polynomials->init_Schreier" << endl;
+			}
+			On_polynomials->init_Schreier(
+					Group->LG,
+					HPD,
+					Descr->print_interval,
+					verbose_level);
+
+			if (f_v) {
+				cout << "orbits_create::init "
+						"after On_polynomials->init_Schreier" << endl;
+			}
 		}
 
 		f_has_On_polynomials = true;

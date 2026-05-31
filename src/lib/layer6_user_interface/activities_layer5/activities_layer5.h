@@ -1117,6 +1117,10 @@ public:
 
 	// TABLES/group_theoretic_activity_2.tex
 
+	int f_find_small_generating_set;
+	int find_small_generating_set_desired_size;
+	int find_small_generating_set_max_attempts;
+
 	int f_find_singer_cycle;
 
 
@@ -1346,8 +1350,6 @@ public:
 	// ToDo undocumented
 	int f_permutation_subgroup;
 
-	// ToDo undocumented
-	int f_find_small_generating_set;
 
 
 	group_theoretic_activity_description();

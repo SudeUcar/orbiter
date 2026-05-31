@@ -854,7 +854,44 @@ int group_theoretic_activity::perform_activity_part2(
 	int ret = true;
 
 
-	if (Descr->f_find_singer_cycle) {
+
+	if (Descr->f_find_small_generating_set) {
+
+		if (f_v) {
+			cout << "group_theoretic_activity::perform_activity "
+					"f_find_small_generating_set" << endl;
+			cout << "group_theoretic_activity::perform_activity desired_size = " << Descr->find_small_generating_set_desired_size << endl;
+			cout << "group_theoretic_activity::perform_activity max_attempts = " << Descr->find_small_generating_set_max_attempts << endl;
+		}
+
+		int f_success;
+		data_structures_groups::vector_ge *generating_set_small;
+
+
+		if (f_v) {
+			cout << "group_theoretic_activity::perform_activity "
+					"before AG->find_small_generating_set" << endl;
+		}
+		f_success = AG->find_small_generating_set(
+				Descr->find_small_generating_set_desired_size,
+				Descr->find_small_generating_set_max_attempts,
+				generating_set_small,
+				verbose_level);
+		if (f_v) {
+			cout << "group_theoretic_activity::perform_activity "
+					"after AG->find_small_generating_set" << endl;
+		}
+
+		if (f_success) {
+			cout << "group_theoretic_activity::perform_activity find_small_generating_set success!" << endl;
+			generating_set_small->print_quick(cout);
+		}
+		else {
+			cout << "group_theoretic_activity::perform_activity find_small_generating_set failure" << endl;
+		}
+	}
+
+	else if (Descr->f_find_singer_cycle) {
 
 		if (f_v) {
 			cout << "group_theoretic_activity::perform_activity "
@@ -2481,6 +2518,7 @@ int group_theoretic_activity::perform_activity_part5(
 
 
 	}
+#if 0
 	else if (Descr->f_find_small_generating_set) {
 		if (f_v) {
 			cout << "group_theoretic_activity::perform_activity "
@@ -2530,7 +2568,7 @@ int group_theoretic_activity::perform_activity_part5(
 
 
 	}
-
+#endif
 
 
 	else {

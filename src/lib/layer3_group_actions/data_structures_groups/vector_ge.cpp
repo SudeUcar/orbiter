@@ -61,6 +61,16 @@ void vector_ge::init(
 	}
 }
 
+data_structures_groups::vector_ge *vector_ge::duplicate(
+		int verbose_level)
+{
+	data_structures_groups::vector_ge *v;
+
+	copy(v, verbose_level);
+
+	return v;
+}
+
 void vector_ge::copy(
 		vector_ge *&vector_copy, int verbose_level)
 {

@@ -3220,7 +3220,7 @@ void algebra_global_with_action::compute_subgroup_lattice_wrapper(
 
 }
 
-
+#if 0
 void algebra_global_with_action::find_small_generating_set(
 		groups::any_group *Any_group,
 		groups::strong_generators *Subgroup_gens,
@@ -3270,6 +3270,7 @@ void algebra_global_with_action::find_small_generating_set(
 		cout << "algebra_global_with_action::find_small_generating_set done" << endl;
 	}
 }
+#endif
 
 
 

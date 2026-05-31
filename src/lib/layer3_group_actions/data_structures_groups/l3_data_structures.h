@@ -679,6 +679,8 @@ public:
 	void null();
 	void init(
 			actions::action *A, int verbose_level);
+	data_structures_groups::vector_ge *duplicate(
+			int verbose_level);
 	void copy(
 			vector_ge *&vector_copy, int verbose_level);
 	void extract_subset(

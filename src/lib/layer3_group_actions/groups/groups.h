@@ -151,6 +151,11 @@ public:
 	void do_find_subgroups(
 			int order_of_subgroup,
 			int verbose_level);
+	int find_small_generating_set(
+			int desired_size,
+			int max_attempts,
+			data_structures_groups::vector_ge *&generating_set_small,
+			int verbose_level);
 	void print_elements(
 			int verbose_level);
 	void print_elements_tex(

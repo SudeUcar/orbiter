@@ -1354,6 +1354,107 @@ void any_group::do_find_subgroups(
 	}
 }
 
+int any_group::find_small_generating_set(
+		int desired_size,
+		int max_attempts,
+		data_structures_groups::vector_ge *&generating_set_small,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "any_group::find_small_generating_set" << endl;
+	}
+
+	int f_success = false;
+
+
+	algebra::ring_theory::longinteger_domain D;
+	groups::sims *Sims;
+	groups::strong_generators *SG;
+
+	SG = get_strong_generators();
+
+	int cnt;
+
+
+	Sims = SG->create_sims(verbose_level);
+
+	cnt = 0;
+
+	algebra::ring_theory::longinteger_object target_go;
+
+	Sims->group_order(target_go);
+
+	while (true) {
+
+		if (f_v) {
+			cout << "any_group::find_small_generating_set attempt " << cnt << endl;
+		}
+
+		data_structures_groups::vector_ge *gens;
+
+		gens = NEW_OBJECT(data_structures_groups::vector_ge);
+
+		gens->init(A, 0/*verbose_level*/);
+		gens->allocate(desired_size, 0/*verbose_level*/);
+
+		int i;
+
+		for (i = 0; i < desired_size; i++) {
+
+			A->Group_element->random_element(
+					Sims, gens->ith(i), verbose_level - 2);
+
+		}
+
+
+		algebra::ring_theory::longinteger_object go;
+		groups::sims *S;
+
+		A->generate_group_without_target_go(gens, S, verbose_level - 2);
+
+
+		S->group_order(go);
+
+		if (D.compare(
+				go, target_go) == 0) {
+
+			if (f_v) {
+				cout << "any_group::find_small_generating_set success "
+						"success: attempt " << cnt << " we found a small generating set of size " << desired_size << endl;
+				cout << "any_group::find_small_generating_set success "
+						"go = " << go << endl;
+				cout << "any_group::find_small_generating_set success "
+						"target_go = " << target_go << endl;
+			}
+
+			f_success = true;
+			generating_set_small = gens;
+			FREE_OBJECT(S);
+			break;
+		}
+
+
+		FREE_OBJECT(S);
+		FREE_OBJECT(gens);
+
+		cnt++;
+
+		if (cnt >= max_attempts) {
+			f_success = false;
+			break;
+		}
+	}
+
+	FREE_OBJECT(Sims);
+
+	if (f_v) {
+		cout << "any_group::find_small_generating_set f_success = " << f_success << " number of attempts = " << cnt << endl;
+	}
+	return f_success;
+}
+
 
 void any_group::print_elements(
 		int verbose_level)

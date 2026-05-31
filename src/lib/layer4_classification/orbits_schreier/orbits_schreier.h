@@ -156,7 +156,7 @@ public:
 
 
 
-//! orbit of sets using a Schreier tree; useful for objects which can be encoded as sets of a fixed size; the set size can be one
+//! orbit of sets using a Schreier tree; useful for objects which can be encoded as sets of a fixed size; the set size may be one
 
 
 class orbit_of_sets {
@@ -454,17 +454,6 @@ public:
 	layer1_foundations::combinatorics::graph_theory::layered_graph *Layered_graph;
 
 	layer1_foundations::combinatorics::graph_theory::distance_information *Distance_information;
-
-#if 0
-	int nb_layers;
-	int *Nb_nodes;
-
-	int nb_nodes_total;
-	int *perm;
-	int *perm_inv;
-	int *depth;
-	int *Fst;
-#endif
 
 	schreier_poset();
 	~schreier_poset();

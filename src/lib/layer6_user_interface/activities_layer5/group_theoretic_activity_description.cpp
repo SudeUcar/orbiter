@@ -116,6 +116,10 @@ group_theoretic_activity_description::group_theoretic_activity_description()
 
 	// part 2:
 
+	f_find_small_generating_set = false;
+	find_small_generating_set_desired_size = 2;
+	find_small_generating_set_max_attempts = 1000;
+
 
 	f_find_singer_cycle = false;
 
@@ -343,7 +347,6 @@ group_theoretic_activity_description::group_theoretic_activity_description()
 
 	f_permutation_subgroup = false;
 
-	f_find_small_generating_set = false;
 }
 
 group_theoretic_activity_description::~group_theoretic_activity_description()
@@ -583,6 +586,17 @@ int group_theoretic_activity_description::read_arguments(
 
 
 		// 2
+
+		else if (ST.stringcmp(argv[i], "-find_small_generating_set") == 0) {
+			f_find_small_generating_set = true;
+			find_small_generating_set_desired_size = ST.strtoi(argv[++i]);
+			find_small_generating_set_max_attempts = ST.strtoi(argv[++i]);
+			if (f_v) {
+				cout << "-find_small_generating_set " << find_small_generating_set_desired_size
+					<< " " << find_small_generating_set_max_attempts << endl;
+			}
+		}
+
 
 		else if (ST.stringcmp(argv[i], "-find_singer_cycle") == 0) {
 			f_find_singer_cycle = true;
@@ -1168,13 +1182,6 @@ int group_theoretic_activity_description::read_arguments(
 			}
 		}
 
-		else if (ST.stringcmp(argv[i], "-find_small_generating_set") == 0) {
-			f_find_small_generating_set = true;
-			if (f_v) {
-				cout << "-find_small_generating_set " << endl;
-			}
-		}
-
 
 
 
@@ -1296,6 +1303,10 @@ void group_theoretic_activity_description::print()
 	//  2
 
 
+	if (f_find_small_generating_set) {
+		cout << "-find_small_generating_set " << find_small_generating_set_desired_size
+			<< " " << find_small_generating_set_max_attempts << endl;
+	}
 	if (f_find_singer_cycle) {
 		cout << "-find_singer_cycle " << endl;
 	}
@@ -1599,9 +1610,6 @@ void group_theoretic_activity_description::print()
 		cout << "-permutation_subgroup " << endl;
 	}
 
-	if (f_find_small_generating_set) {
-		cout << "-find_small_generating_set " << endl;
-	}
 
 
 }

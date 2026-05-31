@@ -246,7 +246,14 @@ public:
 
 	groups::any_group *Group;
 	groups::any_group *Group_action;
+
+	int f_has_generators;
+	int f_generators_is_group;
 	groups::any_group *Generators;
+	int f_generators_is_vector_ge;
+	data_structures_groups::vector_ge *Generators_vector_ge;
+
+
 
 	std::string prefix;
 	std::string label_txt;
@@ -548,6 +555,12 @@ public:
 	void init_Schreier(
 			group_constructions::linear_group *LG,
 			algebra::ring_theory::homogeneous_polynomial_domain *HPD,
+			int print_interval,
+			int verbose_level);
+	void init_Schreier_with_generators(
+			group_constructions::linear_group *LG,
+			algebra::ring_theory::homogeneous_polynomial_domain *HPD,
+			data_structures_groups::vector_ge *generating_set,
 			int print_interval,
 			int verbose_level);
 	void init_bitvector_first(

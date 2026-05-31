@@ -282,6 +282,205 @@ void orbits_on_polynomials::init_Schreier(
 
 
 
+void orbits_on_polynomials::init_Schreier_with_generators(
+		group_constructions::linear_group *LG,
+		algebra::ring_theory::homogeneous_polynomial_domain *HPD,
+		data_structures_groups::vector_ge *generating_set,
+		int print_interval,
+		int verbose_level)
+{
+	int f_v = (verbose_level >= 1);
+
+	if (f_v) {
+		cout << "orbits_on_polynomials::init_Schreier" << endl;
+	}
+
+	orbits_on_polynomials::LG = LG;
+	orbits_on_polynomials::HPD = HPD;
+
+
+	f_has_small_generating_set = true;
+	generating_set_small = generating_set->duplicate(0 /* verbose_level */);
+
+
+	A = LG->A_linear;
+	F = A->matrix_group_finite_field();
+	A->group_order(go);
+
+	n = A->matrix_group_dimension();
+
+	if (f_v) {
+		cout << "n = " << n << endl;
+	}
+
+	A->Strong_gens->group_order(target_go);
+
+
+	degree_of_poly = HPD->degree;
+	if (f_v) {
+		cout << "orbits_on_polynomials::init_Schreier "
+				"degree_of_poly = " << degree_of_poly << endl;
+	}
+
+	if (f_v) {
+		cout << "strong generators:" << endl;
+		//A->Strong_gens->print_generators();
+		A->Strong_gens->print_generators_tex();
+	}
+
+
+	A2 = A->Induced_action->induced_action_on_homogeneous_polynomials(
+		HPD,
+		false /* f_induce_action */, NULL,
+		verbose_level - 2);
+
+	if (f_v) {
+		cout << "created action A2" << endl;
+		A2->print_info();
+	}
+
+
+	Elt1 = NEW_int(A->elt_size_in_int);
+	Elt2 = NEW_int(A->elt_size_in_int);
+	Elt3 = NEW_int(A->elt_size_in_int);
+
+
+	fname_base =  "poly_orbits_d" + std::to_string(degree_of_poly)
+			+ "_n" + std::to_string(n - 1)
+			+ "_q" + std::to_string(F->q);
+	fname_csv = fname_base + ".csv";
+
+
+	//Sch = new schreier;
+	//A2->all_point_orbits(*Sch, verbose_level);
+
+#if 0
+	if (f_v) {
+		cout << "orbits_on_polynomials::init_Schreier "
+				"before compute_small_generating_set" << endl;
+	}
+	compute_small_generating_set(verbose_level - 1);
+	if (f_v) {
+		cout << "orbits_on_polynomials::init_Schreier "
+				"after compute_small_generating_set" << endl;
+	}
+#endif
+
+
+	actions::action_global Action_global;
+
+	Sch = NEW_OBJECT(groups::schreier);
+
+	f_has_Sch = true;
+
+
+
+	string fname_bitvector;
+
+	fname_bitvector = fname_csv;
+
+	if (f_v) {
+		cout << "orbits_on_polynomials::init_Schreier "
+				"before Action_global.all_point_orbits_Schreier_from_generators_first_next" << endl;
+	}
+
+	Action_global.all_point_orbits_Schreier_from_generators_first_next(
+			A2,
+			*Sch,
+			generating_set_small,
+			target_go,
+			fname_bitvector,
+			verbose_level - 2);
+
+	if (f_v) {
+		cout << "orbits_on_polynomials::init_Schreier "
+				"after Action_global.all_point_orbits_Schreier_from_generators_first_next" << endl;
+	}
+
+
+
+#if 0
+	Action_global.all_point_orbits_from_strong_generators(
+			A,
+			*Sch,
+			A->Strong_gens,
+			verbose_level - 2);
+#endif
+
+
+#if 0
+	if (f_v) {
+		cout << "orbits_on_polynomials::init_Schreier "
+				"before A->Strong_gens->compute_all_point_orbits_schreier" << endl;
+	}
+	Sch = A->Strong_gens->compute_all_point_orbits_schreier(
+			A2, print_interval, verbose_level - 2);
+
+	if (f_v) {
+		cout << "orbits_on_polynomials::init_Schreier "
+				"after A->Strong_gens->compute_all_point_orbits_schreier" << endl;
+	}
+#endif
+
+
+
+	if (f_v) {
+		cout << "orbits_on_polynomials::init_Schreier "
+				"before Sch->write_orbit_summary" << endl;
+	}
+	Sch->write_orbit_summary(
+			fname_csv,
+			A /*default_action*/,
+			go,
+			verbose_level);
+	if (f_v) {
+		cout << "orbits_on_polynomials::init_Schreier "
+				"after Sch->write_orbit_summary" << endl;
+	}
+
+
+
+	A->group_order(full_go);
+	T = NEW_OBJECT(data_structures_groups::orbit_transversal);
+
+	if (f_v) {
+		cout << "orbits_on_polynomials::init_Schreier "
+				"before T->init_from_schreier" << endl;
+	}
+
+	T->init_from_schreier(
+			Sch,
+			A,
+			full_go,
+			verbose_level);
+
+	if (f_v) {
+		cout << "orbits_on_polynomials::init_Schreier "
+				"after T->init_from_schreier" << endl;
+	}
+
+
+
+	Sch->Forest->print_orbit_reps(cout);
+
+
+	if (f_v) {
+		cout << "orbits_on_polynomials::init_Schreier "
+				"before compute_points" << endl;
+	}
+	compute_points(verbose_level);
+	if (f_v) {
+		cout << "orbits_on_polynomials::init_Schreier "
+				"after compute_points" << endl;
+	}
+
+
+
+	if (f_v) {
+		cout << "orbits_on_polynomials::init_Schreier done" << endl;
+	}
+}
+
 
 
 
@@ -563,6 +762,7 @@ int orbits_on_polynomials::init_bitvector_continue(
 		cout << "orbits_on_polynomials::init_bitvector_continue done" << endl;
 		cout << "orbits_on_polynomials::init_bitvector_continue idx_of_last_orbit = " << idx_of_last_orbit << endl;
 	}
+	return true;
 }
 
 
@@ -610,13 +810,13 @@ int orbits_on_polynomials::complete_orbits(
 
 
 	other::data_structures::bitvector *B;
-	long int length;
+	//long int length;
 
 	B = NEW_OBJECT(other::data_structures::bitvector);
 
 	B->read_file(fname_bitvector_old, verbose_level);
 
-	length = B->get_length();
+	//length = B->get_length();
 
 
 
